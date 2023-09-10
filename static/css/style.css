@@ -1,0 +1,24 @@
+.tgme_widget_message_bubble {
+    border-radius: 10px;
+}
+
+.tgme_channel_history {
+    width: 100%;
+}
+
+.tgme_container {
+    max-width: 100%;
+}
+
+.tgme_channel_history {
+    margin-right: 0;
+}
+
+.tgme_widget_message {
+    display: block;
+}
+
+.tgme_widget_message_bubble {
+    margin: auto;
+    max-width: 610px;
+}
