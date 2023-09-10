@@ -1,6 +1,7 @@
+from flask import Response
+
 from app import app
 from misc.proxy import proxy
-from flask import Response
 
 
 @app.route('/')

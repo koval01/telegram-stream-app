@@ -6,7 +6,7 @@ from flask import Request
 from misc.crypt import Crypt
 
 
-def __get_file_extension(url):
+def __get_file_extension(url: str) -> str:
     # Split the URL by the dot (.) to get the parts of the URL
     parts = url.split('.')
     # The last part should be the file extension
@@ -17,7 +17,7 @@ def __get_file_extension(url):
         return ""
 
 
-def process_location_header(location_header: str, request: Request):
+def process_location_header(location_header: str, request: Request) -> str:
     proxy_url = request.host_url
 
     # Check if the location_header already contains the proxy URL
@@ -37,21 +37,28 @@ def replace_origin_host(html_content: str, request: Request) -> str:
     soup = BeautifulSoup(html_content, 'lxml')
 
     # Define a function to update a single link
-    def update_link(tag, attribute):
-        original_url = tag.get(attribute)
+    def update_link(tag_element: BeautifulSoup, attribute: str) -> None:
+        original_url = tag_element.get(attribute)
+
+        if original_url.split("/")[0] == "static":
+            return
+
         if original_url:
             # Check if the URL starts with "//" and add "http:" if needed
             if original_url.startswith('//'):
                 original_url = 'https:' + original_url
 
             # Replace the original URL with the proxy URL
-            tag[attribute] = f'{proxy_url}{Crypt().enc(original_url) + __get_file_extension(original_url)}'
+            tag_element[attribute] = f'{proxy_url}{Crypt().enc(original_url) + __get_file_extension(original_url)}'
 
     # Update links in different HTML elements
-    for tag in soup.find_all(['script', 'link', 'img', 'video'], src=True):
+    for tag in soup.find_all(['script', 'img', 'video'], src=True):
         update_link(tag, 'src')
 
-    def replace_url(match):
+    for tag in soup.find_all(['link'], href=True):
+        update_link(tag, 'href')
+
+    def replace_url(match: re.Match) -> str:
         # Extract the URL from the match
         original_url = match.group(1)
 

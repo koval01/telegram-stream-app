@@ -1,11 +1,13 @@
-from flask import request, Response
 from urllib.parse import urlparse
-from app import app
+
 import requests
 import validators
+from flask import request, Response
+
+from app import app
 from misc.bs4_methods import *
-from misc.regex import *
 from misc.crypt import Crypt
+from misc.regex import *
 
 
 def __style(res: requests.Response) -> bytes | str:
@@ -14,30 +16,36 @@ def __style(res: requests.Response) -> bytes | str:
 
     c_type = res.headers.get("Content-Type").split(";")[0].strip()
 
-    if c_type != "text/html":
-        return res.content
+    if c_type in ["text/html", "text/css"]:
+        body = res.text
 
-    body = res.text
+        if c_type == "text/css":
+            body = body.replace("/img/tgme/pattern.svg", "static/images/pattern.svg")
 
-    body = add_custom_css(body)
-    body = set_bg_canvas_colors(body)
-    body = remove_by_cls(body, [
-        'tgme_widget_message_bubble_tail',
-        'tgme_widget_message_user',
-        'tgme_header_right_column'
-    ])
+        elif c_type == "text/html":
+            body = add_custom_css(body)
+            body = set_bg_canvas_colors(body)
+            body = remove_by_cls(body, [
+                'tgme_widget_message_bubble_tail',
+                'tgme_widget_message_user',
+                'tgme_header_right_column'
+            ])
 
-    return body
+        return body
+
+    return res.content
 
 
-def proxy(url, internal_call: bool = False) -> Response | tuple[dict, int]:
+def proxy(url: str, internal_call: bool = False) -> Response | tuple[dict, int]:
     try:
         url = Crypt().dec(url.split(".")[0]) if not internal_call else url
     except Exception as e:
-        return {"code": 500, "message": f"Input invalid. Exception: {str(e) if app.debug else 'hidden'}"}, 500
+        return {"code": 500, "message": f"Input invalid. Exception: {str(e) if app.debug else '(hidden)'}"}, 500
+
+    url = url.replace("//", "https://") if (url[:2] == "//") else url
 
     if not validators.url(url, may_have_port=False):
-        return {"code": 400, "message": "invalid url"}, 400
+        return {"code": 400, "message": f"Invalid URL. URL: {url if app.debug else '(hidden)'}"}, 400
 
     allowed_hosts = ['telegram.org', 'cdn4.telegram-cdn.org']
 
@@ -46,7 +54,7 @@ def proxy(url, internal_call: bool = False) -> Response | tuple[dict, int]:
 
     host = urlparse(url).netloc.split(":")[0]
     if host not in allowed_hosts:
-        return {"code": 403, "message": f"host {host} is not allowed"}, 403
+        return {"code": 403, "message": f"host {host if app.debug else '(hidden)'} is not allowed"}, 403
 
     try:
         headers = {
@@ -80,7 +88,7 @@ def proxy(url, internal_call: bool = False) -> Response | tuple[dict, int]:
         return response
 
     except requests.exceptions.RequestException as e:
-        return {"code": 503, "message": str(e) if app.debug else 'hidden'}, 503
+        return {"code": 503, "message": str(e) if app.debug else '(hidden)'}, 503
 
     except Exception as e:
-        return {"code": 500, "message": str(e) if app.debug else 'hidden'}, 500
+        return {"code": 500, "message": str(e) if app.debug else '(hidden)'}, 500

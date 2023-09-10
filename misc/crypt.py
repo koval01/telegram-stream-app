@@ -1,4 +1,5 @@
 from cryptography.fernet import Fernet
+
 from misc.data_convert import *
 
 CRYPT_KEY = Fernet.generate_key()

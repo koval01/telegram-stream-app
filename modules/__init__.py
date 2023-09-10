@@ -1,6 +1,5 @@
-import os
 import importlib
-
+import os
 
 views = [
     f for f in os.listdir(os.path.dirname(os.path.abspath(__file__)))
