@@ -1,5 +1,4 @@
 import re
-import os
 
 from bs4 import BeautifulSoup
 from flask import Request
@@ -8,10 +7,14 @@ from misc.crypt import Crypt
 
 
 def __get_file_extension(url):
-    # Use os.path to extract the file extension
-    filename = os.path.basename(url)
-    _, extension = os.path.splitext(filename)
-    return extension.split("?")[0]
+    # Split the URL by the dot (.) to get the parts of the URL
+    parts = url.split('.')
+    # The last part should be the file extension
+    if len(parts) > 1:
+        extension = '.' + parts[-1]
+        return extension.split("?")[0]
+    else:
+        return ""
 
 
 def process_location_header(location_header: str, request: Request):
