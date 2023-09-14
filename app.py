@@ -1,8 +1,10 @@
 from flask import Flask
-from flask_minify import Minify
-from flask_log_request_id import RequestID
+
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+
+from flask_log_request_id import RequestID
+from flask_minify import Minify
 
 app = Flask(__name__)
 app.config['LOG_REQUEST_ID_LOG_ALL_REQUESTS'] = True
