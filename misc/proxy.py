@@ -25,13 +25,16 @@ def __style(res: requests.Response) -> bytes | str:
     c_type = res.headers.get("Content-Type").split(";")[0]
     position = request.args.get("before") or request.args.get("after")
 
-    if (c_type in ["text/html", "text/css"]) or position:
+    if (c_type in ("text/html", "text/css", "application/json",)) or position:
         body = res.text
 
         if c_type == "text/css":
             # Replace image URLs and update font links
             body = body.replace("/img/tgme/pattern.svg", "static/images/pattern.svg")
             body = re.sub(r"'(\.\.)(/fonts/.*?)'", font_link_update, body)
+
+        elif (c_type == "application/json") and (not position):
+            body = process_json(body)
 
         elif c_type == "text/html":
             # Apply custom CSS and manipulate the HTML content
@@ -113,11 +116,11 @@ def proxy(url: str, internal_call: bool = False) -> Response | typing.NoReturn:
         }
 
         body = __style(res)
+        content_type = headers.get('Content-Type').split(';')[0]
 
         position = request.args.get("before") or request.args.get("after")
 
-        if (((type(body) is str) and (headers.get('Content-Type').split(';')[0] == "text/html"))
-                or position):
+        if (isinstance(body, str) and (content_type == "text/html")) or position:
             body = replace_origin_host(body)
 
         response = Response(body, res.status_code, headers)

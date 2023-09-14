@@ -8,6 +8,37 @@ from app import app
 from misc.crypt import Crypt
 
 
+def __url_pack(url: str) -> str:
+    return f"{request.host_url}{Crypt().enc(url)}"
+
+
+def process_json(data: dict | list | str, url_pack=__url_pack) -> dict | list | str:
+    if isinstance(data, str):
+
+        if len(data) < 10:
+            return data
+
+        try:
+            data = json.loads(data)
+        except ValueError:
+            return data
+
+    if isinstance(data, dict):
+        new_data = {}
+        for key, value in data.items():
+            if isinstance(value, str) and value.startswith("http"):
+                new_data[key] = url_pack(value)
+            else:
+                new_data[key] = process_json(value, url_pack)
+
+        return json.dumps(new_data)
+
+    elif isinstance(data, list):
+        return json.dumps([process_json(item, url_pack) for item in data])
+
+    return data
+
+
 def get_file_extension(url: str) -> str:
     """
     Extracts the file extension from a URL.
@@ -83,10 +114,10 @@ def replace_origin_host(html_content: str) -> str:
                 original_url = 'https:' + original_url
             tag_element[attribute] = f'{proxy_url}{Crypt().enc(original_url) + get_file_extension(original_url)}'
 
-    for tag in soup.find_all(['script', 'img', 'video'], src=True):
+    for tag in soup.find_all(('script', 'img', 'video',), src=True):
         update_link(tag, 'src')
 
-    for tag in soup.find_all(['link'], href=True):
+    for tag in soup.find_all(('link',), href=True):
         update_link(tag, 'href')
 
     def replace_url(match: re.Match) -> str:
