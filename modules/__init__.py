@@ -1,4 +1,5 @@
 import importlib
+import logging
 import os
 
 views = [
@@ -13,4 +14,4 @@ for view in views:
             os.path.realpath(__file__)
         ).split('/')[-1] + "." + view[:-3]
     )
-    print(f'App imported {view} successfully.')
+    logging.info(f'App imported {view} successfully.')

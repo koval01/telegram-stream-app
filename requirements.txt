@@ -1,8 +1,12 @@
 Flask==2.3.3
 Flask-Minify==0.42
+Flask-Limiter==3.5.0
+Flask-Log-Request-ID==0.10.1
 gunicorn==21.2.0
 requests==2.31.0
 validators==0.22.0
 beautifulsoup4==4.12.2
 lxml==4.9.3
 cryptography==41.0.3
+
+werkzeug~=2.3.7

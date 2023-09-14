@@ -1,12 +1,15 @@
 import re
+import json
 
 from bs4 import BeautifulSoup
-from flask import Request
+from flask import request
 
 from misc.crypt import Crypt
 
+from app import app
 
-def __get_file_extension(url: str) -> str:
+
+def get_file_extension(url: str) -> str:
     # Split the URL by the dot (.) to get the parts of the URL
     parts = url.split('.')
     # The last part should be the file extension
@@ -17,7 +20,18 @@ def __get_file_extension(url: str) -> str:
         return ""
 
 
-def process_location_header(location_header: str, request: Request) -> str:
+def font_link_update(match: re.Match) -> str:
+    original_url = "https://telegram.org" + match.group(2)
+
+    edited_url = Crypt().enc(original_url) + get_file_extension(original_url)
+
+    # Construct the new URL with the proxy URL
+    new_url = f'{request.host_url}{edited_url}'
+
+    return new_url
+
+
+def process_location_header(location_header: str) -> str:
     proxy_url = request.host_url
 
     # Check if the location_header already contains the proxy URL
@@ -31,8 +45,11 @@ def process_location_header(location_header: str, request: Request) -> str:
     return location_header
 
 
-def replace_origin_host(html_content: str, request: Request) -> str:
+def replace_origin_host(html_content: str) -> str:
     proxy_url = request.host_url
+
+    if "before" in request.args.keys():
+        html_content = json.loads(html_content)
 
     soup = BeautifulSoup(html_content, 'lxml')
 
@@ -49,7 +66,7 @@ def replace_origin_host(html_content: str, request: Request) -> str:
                 original_url = 'https:' + original_url
 
             # Replace the original URL with the proxy URL
-            tag_element[attribute] = f'{proxy_url}{Crypt().enc(original_url) + __get_file_extension(original_url)}'
+            tag_element[attribute] = f'{proxy_url}{Crypt().enc(original_url) + get_file_extension(original_url)}'
 
     # Update links in different HTML elements
     for tag in soup.find_all(['script', 'img', 'video'], src=True):
@@ -64,7 +81,7 @@ def replace_origin_host(html_content: str, request: Request) -> str:
 
         # Edit the original URL if needed
         # For example, you can add query parameters or modify it in any other way
-        edited_url = Crypt().enc(original_url) + __get_file_extension(original_url)
+        edited_url = Crypt().enc(original_url) + get_file_extension(original_url)
 
         # Construct the new URL with the proxy URL
         new_url = f'url("{proxy_url}{edited_url}")'
@@ -77,5 +94,13 @@ def replace_origin_host(html_content: str, request: Request) -> str:
         updated_style = re.sub(r'url\([\'"]?([^\'")]+)[\'"]?\)', replace_url, style)
         tag['style'] = updated_style
 
+    output = str(soup)
+
+    output = output.replace(f'/s/{app.config["CHANNEL_NAME"]}', '/')
+
     # Return the updated HTML content
-    return str(soup)
+    if "before" in request.args.keys():
+        output = re.sub(r"</?html>|</?body>", "", output)
+        return json.dumps(output)
+
+    return output

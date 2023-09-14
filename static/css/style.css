@@ -22,3 +22,8 @@
     margin: auto;
     max-width: 610px;
 }
+
+.tgme_widget_message_inline_keyboard {
+    margin: auto;
+    max-width: 70%;
+}
