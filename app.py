@@ -13,7 +13,7 @@ app.config['CHANNEL_NAME'] = 'telelug'
 limiter = Limiter(
     get_remote_address,
     app=app,
-    default_limits=["300 per minute", "50 per second"],
+    default_limits=["350 per minute", "60 per second"],
     storage_uri="memory://",
     # Redis
     # storage_uri="redis://localhost:6379",

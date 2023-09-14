@@ -10,6 +10,15 @@ from misc.regex import *
 
 
 def __style(res: requests.Response) -> bytes | str:
+    """
+    Style the response content based on Content-Type.
+
+    Args:
+        res (requests.Response): The HTTP response.
+
+    Returns:
+        bytes | str: The styled content.
+    """
     if "Content-Type" not in res.headers.keys():
         return res.content
 
@@ -20,10 +29,12 @@ def __style(res: requests.Response) -> bytes | str:
         body = res.text
 
         if c_type == "text/css":
+            # Replace image URLs and update font links
             body = body.replace("/img/tgme/pattern.svg", "static/images/pattern.svg")
             body = re.sub(r"'(\.\.)(/fonts/.*?)'", font_link_update, body)
 
         elif c_type == "text/html":
+            # Apply custom CSS and manipulate the HTML content
             body = add_custom_css(body)
             body = set_bg_canvas_colors(body)
             body = remove_by_cls(body, [
@@ -33,6 +44,7 @@ def __style(res: requests.Response) -> bytes | str:
             ])
 
         elif position:
+            # Manipulate JSON response
             body = json.loads(body)
             body = remove_by_cls(body, [
                 'tgme_widget_message_bubble_tail',
@@ -46,7 +58,18 @@ def __style(res: requests.Response) -> bytes | str:
 
 
 def proxy(url: str, internal_call: bool = False) -> Response | typing.NoReturn:
+    """
+    Proxy a URL request with optional internal call.
+
+    Args:
+        url (str): The URL to proxy.
+        internal_call (bool, optional): Whether it's an internal call. Defaults to False.
+
+    Returns:
+        Response | typing.NoReturn: The proxied response or an error response.
+    """
     try:
+        # Decrypt the URL if not an internal call
         url = Crypt().dec(url.split(".")[0]) if not internal_call else url
     except Exception as e:
         return abort(500, f"Input invalid. Exception: {str(e) if app.debug else '(hidden)'}")
@@ -63,7 +86,7 @@ def proxy(url: str, internal_call: bool = False) -> Response | typing.NoReturn:
 
     host = urlparse(url).netloc.split(":")[0]
     if host not in allowed_hosts:
-        return abort(403, f"host {host if app.debug else '(hidden)'} is not allowed")
+        return abort(403, f"Host {host if app.debug else '(hidden)'} is not allowed")
 
     try:
         headers = {
