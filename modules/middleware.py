@@ -1,9 +1,42 @@
 from wsgiref.headers import Headers
 
-from flask import Response
+from flask import Response, request
 from flask_log_request_id import current_request_id
 
 from app import app
+
+from time import time
+
+
+@app.before_request
+def start_timer():
+    """
+    Record the start time of the request.
+    """
+    request.start_time = time()
+
+
+@app.after_request
+def add_processing_time(response):
+    """
+    Add the processing time to the response headers if the app is in debug mode.
+
+    Args:
+        response: The Flask response object.
+
+    Returns:
+        response: The response object with processing time added to headers.
+    """
+    if not app.debug:
+        return response
+
+    # Calculate the processing time in milliseconds
+    processing_time = (time() - request.start_time) * 1000
+
+    # Add the processing time to the response headers
+    response.headers['X-Processing-Time'] = f"{processing_time:.0f} ms"
+
+    return response
 
 
 @app.after_request
@@ -17,9 +50,26 @@ def append_request_id(response: Response) -> Response:
     Returns:
         Response: The modified response object with the request ID header added.
     """
-    if app.debug:
-        response.headers.add('X-APP-REQUEST-ID', current_request_id())
+    if not app.debug:
+        return response
 
+    response.headers.add('X-App-Request-ID', current_request_id())
+
+    return response
+
+
+@app.after_request
+def channel_name(response: Response) -> Response:
+    """
+    Add the Telegram channel name to the response headers.
+
+    Args:
+        response (Response): The Flask response object.
+
+    Returns:
+        Response: The response object with the 'TG-Channel-Name' header added.
+    """
+    response.headers.add('TG-Channel-Name', app.config["CHANNEL_NAME"])
     return response
 
 
