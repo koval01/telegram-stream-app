@@ -1,21 +1,33 @@
 from app import app
 
-
 from flask import json
+
 from werkzeug.wrappers.response import Response
 from werkzeug.exceptions import HTTPException
 
 
 @app.errorhandler(HTTPException)
 def handle_exception(e: HTTPException) -> Response:
-    """Return JSON instead of HTML for HTTP errors."""
-    # start with the correct headers and status code from the error
+    """
+    Custom error handler for handling HTTP exceptions and returning JSON responses.
+
+    Args:
+        e (HTTPException): The HTTP exception to handle.
+
+    Returns:
+        Response: A JSON response containing error code, name, and description.
+    """
+    # Get the appropriate response for the error
     response = e.get_response()
-    # replace the body with JSON
+
+    # Replace the response body with a JSON representation of the error
     response.data = json.dumps({
         "code": e.code,
         "name": e.name,
         "description": e.description,
     })
+
+    # Set the content type of the response to JSON
     response.content_type = "application/json"
+
     return response
