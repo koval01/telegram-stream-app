@@ -1,10 +1,28 @@
+import os
+import sentry_sdk
+
 from flask import Flask
+
+from sentry_sdk.integrations.flask import FlaskIntegration
 
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 
 from flask_log_request_id import RequestID
 from flask_minify import Minify
+
+sentry_sdk.init(
+    dsn=os.getenv("SENTRY_DSN"),
+    integrations=[FlaskIntegration()],
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    # We recommend adjusting this value in production.
+    traces_sample_rate=1.0,
+    # Set profiles_sample_rate to 1.0 to profile 100%
+    # of sampled transactions.
+    # We recommend adjusting this value in production.
+    profiles_sample_rate=1.0,
+)
 
 app = Flask(__name__)
 app.config['LOG_REQUEST_ID_LOG_ALL_REQUESTS'] = True
