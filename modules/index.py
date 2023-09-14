@@ -33,7 +33,7 @@ def view_send() -> Response | typing.NoReturn:
 
 
 @app.route('/i/<path:path>', methods=['GET'])
-@limiter.limit("30 per minute")
+@limiter.limit("50 per minute")
 def i_path(path: str) -> Response | typing.NoReturn:
     """
     Route for processing requests from the t.me host with a path starting with "/i/"
