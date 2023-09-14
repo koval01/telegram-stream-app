@@ -10,56 +10,42 @@ from misc.regex import *
 
 
 def __style(res: requests.Response) -> bytes | str:
-    """
-    Process the content of a HTTP response and apply specific transformations based on content type.
-
-    Args:
-        res (requests.Response): The HTTP response object.
-
-    Returns:
-        bytes | str: The processed content.
-    """
     if "Content-Type" not in res.headers.keys():
         return res.content
 
     c_type = res.headers.get("Content-Type").split(";")[0]
-    before = request.args.get("before")
+    position = request.args.get("before") or request.args.get("after")
 
-    body = res.text
+    if (c_type in ["text/html", "text/css"]) or position:
+        body = res.text
 
-    if c_type == "text/css":
-        body = body.replace("/img/tgme/pattern.svg", "static/images/pattern.svg")
-        body = re.sub(r"'(\.\.)(/fonts/.*?)'", font_link_update, body)
-    elif c_type == "text/html":
-        body = add_custom_css(body)
-        body = set_bg_canvas_colors(body)
-        body = remove_by_cls(body, [
-            'tgme_widget_message_bubble_tail',
-            'tgme_widget_message_user',
-            'tgme_header_right_column'
-        ])
-    elif before:
-        body = json.loads(body)
-        body = remove_by_cls(body, [
-            'tgme_widget_message_bubble_tail',
-            'tgme_widget_message_user'
-        ])
-        body = json.dumps(body)
+        if c_type == "text/css":
+            body = body.replace("/img/tgme/pattern.svg", "static/images/pattern.svg")
+            body = re.sub(r"'(\.\.)(/fonts/.*?)'", font_link_update, body)
 
-    return body
+        elif c_type == "text/html":
+            body = add_custom_css(body)
+            body = set_bg_canvas_colors(body)
+            body = remove_by_cls(body, [
+                'tgme_widget_message_bubble_tail',
+                'tgme_widget_message_user',
+                'tgme_header_right_column'
+            ])
+
+        elif position:
+            body = json.loads(body)
+            body = remove_by_cls(body, [
+                'tgme_widget_message_bubble_tail',
+                'tgme_widget_message_user'
+            ])
+            body = json.dumps(body)
+
+        return body
+
+    return res.content
 
 
 def proxy(url: str, internal_call: bool = False) -> Response | typing.NoReturn:
-    """
-    Proxy a request to a specified URL.
-
-    Args:
-        url (str): The URL to proxy.
-        internal_call (bool): Flag indicating whether it's an internal call.
-
-    Returns:
-        Response | typing.NoReturn: The response object or an error response.
-    """
     try:
         url = Crypt().dec(url.split(".")[0]) if not internal_call else url
     except Exception as e:
@@ -77,7 +63,7 @@ def proxy(url: str, internal_call: bool = False) -> Response | typing.NoReturn:
 
     host = urlparse(url).netloc.split(":")[0]
     if host not in allowed_hosts:
-        return abort(403, f"Host {host if app.debug else '(hidden)'} is not allowed")
+        return abort(403, f"host {host if app.debug else '(hidden)'} is not allowed")
 
     try:
         headers = {
@@ -105,8 +91,10 @@ def proxy(url: str, internal_call: bool = False) -> Response | typing.NoReturn:
 
         body = __style(res)
 
+        position = request.args.get("before") or request.args.get("after")
+
         if (((type(body) is str) and (headers.get('Content-Type').split(';')[0] == "text/html"))
-                or request.args.get("before")):
+                or position):
             body = replace_origin_host(body)
 
         response = Response(body, res.status_code, headers)

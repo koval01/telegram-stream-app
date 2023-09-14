@@ -70,7 +70,7 @@ def replace_origin_host(html_content: str) -> str:
         str: The HTML content with replaced URLs.
     """
     proxy_url = request.host_url
-    if "before" in request.args.keys():
+    if [k in ("before", "after",) for k in request.args.keys()]:
         html_content = json.loads(html_content)
     soup = BeautifulSoup(html_content, 'lxml')
 
@@ -103,7 +103,7 @@ def replace_origin_host(html_content: str) -> str:
     output = str(soup)
     output = output.replace(f'/s/{app.config["CHANNEL_NAME"]}', '/')
 
-    if "before" in request.args.keys():
+    if [k in ("before", "after",) for k in request.args.keys()]:
         output = re.sub(r"</?html>|</?body>", "", output)
         return json.dumps(output)
 
