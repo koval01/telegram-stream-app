@@ -32,7 +32,7 @@ limiter = Limiter(
     get_remote_address,
     app=app,
     default_limits=["350 per minute", "60 per second"],
-    storage_uri="memory://",
+    storage_uri="memory://" or os.getenv("REDIS_URL") or os.getenv("MONGODB_URL"),
     # Redis
     # storage_uri="redis://localhost:6379",
     # Redis cluster
