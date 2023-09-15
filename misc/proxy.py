@@ -38,6 +38,7 @@ def __style(res: requests.Response) -> bytes | str:
         elif c_type == "text/html":
             # Apply custom CSS and manipulate the HTML content
             body = add_custom_css(body)
+            body = update_meta_tags(body)
             body = set_bg_canvas_colors(body)
             body = remove_by_cls(body, [
                 'tgme_widget_message_bubble_tail',

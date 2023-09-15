@@ -119,7 +119,7 @@ def replace_origin_host(html_content: str) -> str:
     replace_url_attributes(soup, proxy_url)
     replace_style_urls(soup, proxy_url)
     output = str(soup)
-    output = output.replace(f'/s/{app.config["CHANNEL_NAME"]}', '/')
+    output = output.replace(f'/s/{app.config["CHANNEL_NAME"]}', '')
 
     if should_return_json():
         output = clean_html_for_json(output)
