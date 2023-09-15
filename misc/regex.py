@@ -5,12 +5,15 @@ from bs4 import BeautifulSoup
 from flask import request
 
 from app import app
-from misc.crypt import Crypt
+
+
+def schema_remove(url: str) -> str:
+    return re.sub(r"https?://", "", url)
 
 
 def __url_pack(url: str) -> str:
     """
-    Pack a URL with the host URL and encryption.
+    Pack a URL with the host URL
 
     Args:
         url (str): The URL to pack.
@@ -18,7 +21,7 @@ def __url_pack(url: str) -> str:
     Returns:
         str: The packed URL.
     """
-    return f"{request.host_url}{Crypt().enc(url)}"
+    return f"{request.host_url}{schema_remove(url)}"
 
 
 def process_json(data: dict | list | str, url_pack=__url_pack) -> dict | list | str:
@@ -27,7 +30,7 @@ def process_json(data: dict | list | str, url_pack=__url_pack) -> dict | list | 
 
     Args:
         data (dict | list | str): The JSON data to process.
-        url_pack (function): A function to pack URLs with the host URL and encryption.
+        url_pack (function): A function to pack URLs with the host URL
 
     Returns:
         dict | list | str: The processed JSON data.
@@ -84,8 +87,7 @@ def font_link_update(match: re.Match) -> str:
         str: The updated URL.
     """
     original_url = "https://telegram.org" + match.group(2)
-    edited_url = Crypt().enc(original_url) + get_file_extension(original_url)
-    new_url = f'{request.host_url}{edited_url}'
+    new_url = f'{request.host_url}{schema_remove(original_url)}'
     return new_url
 
 
@@ -102,7 +104,7 @@ def process_location_header(location_header: str) -> str:
     proxy_url = request.host_url
     if not re.match(r'^' + re.escape(proxy_url) + r'/http://', location_header):
         original_url = re.sub(r'^http://', '', location_header)
-        location_header = f'{proxy_url}/{original_url}'
+        location_header = f'{proxy_url}{schema_remove(original_url)}'
     return location_header
 
 
@@ -162,8 +164,8 @@ def replace_url_attributes(soup: BeautifulSoup, proxy_url: str) -> None:
             return
         if original_url:
             if original_url.startswith('//'):
-                original_url = 'https:' + original_url
-            tag_element[attribute] = f'{proxy_url}{Crypt().enc(original_url) + get_file_extension(original_url)}'
+                original_url = original_url.replace("//", "")
+            tag_element[attribute] = f'{proxy_url}{schema_remove(original_url)}'
 
     for tag in soup.find_all(('script', 'img', 'video'), src=True):
         update_link(tag, 'src')
@@ -182,8 +184,7 @@ def replace_style_urls(soup: BeautifulSoup, proxy_url: str) -> None:
     """
     def replace_url(match: re.Match) -> str:
         original_url = match.group(1)
-        edited_url = Crypt().enc(original_url) + get_file_extension(original_url)
-        new_url = f'url("{proxy_url}{edited_url}")'
+        new_url = f'url("{proxy_url}{schema_remove(original_url)}")'
         return new_url
 
     for tag in soup.find_all(style=True):

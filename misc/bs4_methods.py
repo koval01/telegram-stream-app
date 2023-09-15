@@ -42,7 +42,7 @@ def set_bg_canvas_colors(body: str) -> str:
     canvas = soup.find(id='tgme_background')
 
     # Define the new colors
-    new_colors = "aba048,557ead,b0a971,5c8dc4"
+    new_colors = "fdb219,3c3c86,fdb219,3c3c86"
 
     # Update the 'data-colors' attribute with the new colors
     canvas['data-colors'] = new_colors

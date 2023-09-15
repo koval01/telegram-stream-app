@@ -29,8 +29,7 @@ def __style(res: requests.Response) -> bytes | str:
         body = res.text
 
         if c_type == "text/css":
-            # Replace image URLs and update font links
-            body = body.replace("/img/tgme/pattern.svg", "static/images/pattern.svg")
+            # replace css from another source
             body = re.sub(r"'(\.\.)(/fonts/.*?)'", font_link_update, body)
 
         elif (c_type == "application/json") and (not position):
@@ -71,16 +70,10 @@ def proxy(url: str, internal_call: bool = False) -> Response | typing.NoReturn:
     Returns:
         Response | typing.NoReturn: The proxied response or an error response.
     """
-    try:
-        # Decrypt the URL if not an internal call
-        url = Crypt().dec(url.split(".")[0]) if not internal_call else url
-    except Exception as e:
-        return abort(500, f"Input invalid. Exception: {str(e) if app.debug else '(hidden)'}")
-
-    url = url.replace("//", "https://") if (url[:2] == "//") else url
+    url = f"https://{url}"
 
     if not validators.url(url, may_have_port=False):
-        return abort(400, f"Invalid URL. URL: {url if app.debug else '(hidden)'}")
+        return abort(400, f"Invalid URL. URL: {url}")
 
     allowed_hosts = ['telegram.org', 'cdn4.telegram-cdn.org']
 
@@ -89,7 +82,7 @@ def proxy(url: str, internal_call: bool = False) -> Response | typing.NoReturn:
 
     host = urlparse(url).netloc.split(":")[0]
     if host not in allowed_hosts:
-        return abort(403, f"Host {host if app.debug else '(hidden)'} is not allowed")
+        return abort(403, f"Host {host} is not allowed")
 
     try:
         headers = {

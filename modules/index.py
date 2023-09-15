@@ -16,7 +16,7 @@ def index() -> Response | typing.NoReturn:
     Returns:
         Response | typing.NoReturn: The response object or None.
     """
-    return proxy(f"https://t.me/s/{app.config['CHANNEL_NAME']}", internal_call=True)
+    return proxy(f"t.me/s/{app.config['CHANNEL_NAME']}", internal_call=True)
 
 
 @app.route('/v/', methods=['POST'])
@@ -29,7 +29,7 @@ def view_send() -> Response | typing.NoReturn:
     Returns:
         Response | typing.NoReturn: The response object or None.
     """
-    return proxy("https://t.me/v/", internal_call=True)
+    return proxy("t.me/v/", internal_call=True)
 
 
 @app.route('/i/<path:path>', methods=['GET'])
@@ -41,7 +41,7 @@ def i_path(path: str) -> Response | typing.NoReturn:
     Returns:
         Response | typing.NoReturn: The response object or None.
     """
-    return proxy(f"https://t.me/i/{path}", internal_call=True)
+    return proxy(f"t.me/i/{path}", internal_call=True)
 
 
 @app.route('/js/<path:path>', methods=['GET'])
@@ -53,7 +53,7 @@ def js_path(path: str) -> Response | typing.NoReturn:
     Returns:
         Response | typing.NoReturn: The response object or None.
     """
-    return proxy(f"https://t.me/js/{path}", internal_call=True)
+    return proxy(f"t.me/js/{path}", internal_call=True)
 
 
 @app.route('/<int:post>', methods=['GET'])
@@ -68,4 +68,4 @@ def select_post(post: int) -> Response | typing.NoReturn:
     Returns:
         Response | typing.NoReturn: The response object or None.
     """
-    return proxy(f"https://t.me/s/{app.config['CHANNEL_NAME']}/{post}", internal_call=True)
+    return proxy(f"t.me/s/{app.config['CHANNEL_NAME']}/{post}", internal_call=True)
