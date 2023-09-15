@@ -17,6 +17,9 @@ def handle_exception(e: HTTPException) -> Response:
     Returns:
         Response: A JSON response containing error code, name, and description.
     """
+    # TODO: If the request does not have a Referer header,
+    #  then you need to give a custom error page, that is, render html
+
     # Get the appropriate response for the error
     response = e.get_response()
 
