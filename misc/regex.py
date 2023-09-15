@@ -8,6 +8,15 @@ from app import app
 
 
 def schema_remove(url: str) -> str:
+    """
+    Remove the 'http://' or 'https://' schema from a URL.
+
+    Args:
+        url (str): The URL from which to remove the schema.
+
+    Returns:
+        str: The URL with the schema removed.
+    """
     return re.sub(r"https?://", "", url)
 
 
