@@ -67,24 +67,6 @@ def process_json(data: dict | list | str, url_pack=__url_pack) -> dict | list | 
     return data
 
 
-def get_file_extension(url: str) -> str:
-    """
-    Extracts the file extension from a URL.
-
-    Args:
-        url (str): The URL from which to extract the file extension.
-
-    Returns:
-        str: The extracted file extension (including the dot).
-    """
-    parts = url.split('.')
-    if len(parts) > 1:
-        extension = '.' + parts[-1]
-        return extension.split("?")[0]
-    else:
-        return ""
-
-
 def font_link_update(match: re.Match) -> str:
     """
     Update font links in HTML content.
