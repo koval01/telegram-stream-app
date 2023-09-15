@@ -121,7 +121,7 @@ def proxy(url: str, internal_call: bool = False) -> Response | typing.NoReturn:
         return response
 
     except requests.exceptions.RequestException as e:
-        return abort(503, str(e) if app.debug else '(hidden)')
+        return abort(503, str(e) if app.debug else 'hidden')
 
     except Exception as e:
-        return abort(500, str(e) if app.debug else '(hidden)')
+        return abort(500, str(e) if app.debug else 'hidden')
