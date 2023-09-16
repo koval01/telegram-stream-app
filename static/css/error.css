@@ -4,12 +4,13 @@
 }
 body{
     padding:0;
-    margin:0
+    margin:0;
+    background:#070510;
+    overscroll-behavior:contain
 }
 #error{
     position:relative;
-    height:100vh;
-    background:#070510
+    height:100vh
 }
 #error .error{
     position:absolute;
