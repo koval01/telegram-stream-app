@@ -53,21 +53,6 @@ def append_request_id(response: Response) -> Response:
 
 
 @app.after_request
-def channel_name(response: Response) -> Response:
-    """
-    Add the Telegram channel name to the response headers.
-
-    Args:
-        response (Response): The Flask response object.
-
-    Returns:
-        Response: The response object with the 'TG-Channel-Name' header added.
-    """
-    response.headers.add('TG-Channel-Name', app.config["CHANNEL_NAME"])
-    return response
-
-
-@app.after_request
 def headers_remove(response: Response) -> Response:
     """
     Removes specified headers from the response.
