@@ -1,4 +1,5 @@
 import typing
+import sentry_sdk
 from urllib.parse import urlparse
 
 import requests
