@@ -19,7 +19,7 @@ def start_timer():
 @app.after_request
 def add_processing_time(response):
     """
-    Add the processing time to the response headers if the app is in debug mode.
+    Add the processing time to the response headers.
 
     Args:
         response: The Flask response object.
@@ -27,9 +27,6 @@ def add_processing_time(response):
     Returns:
         response: The response object with processing time added to headers.
     """
-    if not app.debug:
-        return response
-
     # Calculate the processing time in milliseconds
     processing_time = (time() - request.start_time) * 1000
 
@@ -42,7 +39,7 @@ def add_processing_time(response):
 @app.after_request
 def append_request_id(response: Response) -> Response:
     """
-    Appends the current request ID to the response headers if the app is in debug mode.
+    Appends the current request ID to the response headers.
 
     Args:
         response (Response): The Flask response object.
@@ -50,9 +47,6 @@ def append_request_id(response: Response) -> Response:
     Returns:
         Response: The modified response object with the request ID header added.
     """
-    if not app.debug:
-        return response
-
     response.headers.add('X-App-Request-ID', current_request_id())
 
     return response
