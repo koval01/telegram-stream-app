@@ -130,6 +130,10 @@ footer small {
     font-family: system-ui, sans-serif;
     display:block
 }
+footer a {
+    text-decoration:none;
+    color:inherit
+}
 @media only screen and (max-width:767px){
     .error .error-code h2{
         font-size:24px
