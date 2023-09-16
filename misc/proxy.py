@@ -124,4 +124,5 @@ def proxy(url: str, internal_call: bool = False) -> Response | typing.NoReturn:
         return abort(503, str(e) if app.debug else 'hidden')
 
     except Exception as e:
+        sentry_sdk.capture_exception(e)
         return abort(500, str(e) if app.debug else 'hidden')
