@@ -1,3 +1,7 @@
+body.dark.tme_mode, html.theme_dark body.tme_mode {
+    --box-bg: rgba(30, 30, 30, .6);
+}
+
 .tgme_widget_message_bubble {
     border-radius: 10px;
 }
@@ -21,6 +25,8 @@
 .tgme_widget_message_bubble {
     margin: auto;
     max-width: 610px;
+    background-color: var(--box-bg);
+    backdrop-filter: blur(5px);
 }
 
 .tgme_widget_message_inline_keyboard {
