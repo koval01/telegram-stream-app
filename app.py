@@ -2,6 +2,7 @@ import os
 import sentry_sdk
 
 from flask import Flask
+from werkzeug.routing import BaseConverter
 
 from sentry_sdk.integrations.flask import FlaskIntegration
 
@@ -27,6 +28,15 @@ sentry_sdk.init(
 app = Flask(__name__)
 app.config['LOG_REQUEST_ID_LOG_ALL_REQUESTS'] = True
 app.config['CHANNEL_NAME'] = 'telelug'
+
+
+class RegexConverter(BaseConverter):
+    def __init__(self, url_map, *items):
+        super(RegexConverter, self).__init__(url_map)
+        self.regex = items[0]
+
+
+app.url_map.converters['regex'] = RegexConverter
 
 limiter = Limiter(
     get_remote_address,

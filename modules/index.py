@@ -19,6 +19,21 @@ def index() -> Response | typing.NoReturn:
     return proxy(f"t.me/s/{app.config['CHANNEL_NAME']}", internal_call=True)
 
 
+@app.route('/<int:post>', methods=['GET', 'POST'])
+@limiter.limit("8 per minute")
+def select_post(post: int) -> Response | typing.NoReturn:
+    """
+    Route for handling requests to view a specific post in the Telegram channel.
+
+    Args:
+        post (int): The post number to view.
+
+    Returns:
+        Response | typing.NoReturn: The response object or None.
+    """
+    return proxy(f"t.me/s/{app.config['CHANNEL_NAME']}/{post}", internal_call=True)
+
+
 @app.route('/v/', methods=['POST'])
 @limiter.limit("1 per 2 seconds")
 def view_send() -> Response | typing.NoReturn:
@@ -54,18 +69,3 @@ def js_path(path: str) -> Response | typing.NoReturn:
         Response | typing.NoReturn: The response object or None.
     """
     return proxy(f"t.me/js/{path}", internal_call=True)
-
-
-@app.route('/<int:post>', methods=['GET'])
-@limiter.limit("8 per minute")
-def select_post(post: int) -> Response | typing.NoReturn:
-    """
-    Route for handling requests to view a specific post in the Telegram channel.
-
-    Args:
-        post (int): The post number to view.
-
-    Returns:
-        Response | typing.NoReturn: The response object or None.
-    """
-    return proxy(f"t.me/s/{app.config['CHANNEL_NAME']}/{post}", internal_call=True)
