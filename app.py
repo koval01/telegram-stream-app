@@ -1,16 +1,13 @@
 import os
+import logging
+
 import sentry_sdk
-
 from flask import Flask
-from werkzeug.routing import BaseConverter
-
-from sentry_sdk.integrations.flask import FlaskIntegration
-
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-
 from flask_log_request_id import RequestID
 from flask_minify import Minify
+from sentry_sdk.integrations.flask import FlaskIntegration
 
 sentry_sdk.init(
     dsn=os.getenv("SENTRY_DSN"),
@@ -29,14 +26,7 @@ app = Flask(__name__)
 app.config['LOG_REQUEST_ID_LOG_ALL_REQUESTS'] = True
 app.config['CHANNEL_NAME'] = 'telelug'
 
-
-class RegexConverter(BaseConverter):
-    def __init__(self, url_map, *items):
-        super(RegexConverter, self).__init__(url_map)
-        self.regex = items[0]
-
-
-app.url_map.converters['regex'] = RegexConverter
+app.logger.setLevel(logging.INFO)
 
 limiter = Limiter(
     get_remote_address,

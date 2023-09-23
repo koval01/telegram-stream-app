@@ -1,6 +1,7 @@
 import importlib
-import logging
 import os
+
+from app import app
 
 # Get a list of Python files (views) in the current directory
 views = [
@@ -16,6 +17,6 @@ for view in views:
     try:
         # Import the module dynamically
         importlib.import_module(module_name)
-        logging.info(f'App imported {view} successfully.')
+        app.logger.info(f'App imported {view} successfully.')
     except ImportError as e:
-        logging.error(f'Error importing {view}: {str(e)}')
+        app.logger.error(f'Error importing {view}: {str(e)}')

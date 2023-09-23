@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+from flask import url_for
 
 
 def add_custom_css(body: str) -> str:
@@ -15,7 +16,7 @@ def add_custom_css(body: str) -> str:
     soup = BeautifulSoup(body, 'lxml')
 
     # Create a new 'link' tag for the custom CSS stylesheet
-    link_tag = soup.new_tag('link', href='static/css/style.css', rel='stylesheet')
+    link_tag = soup.new_tag('link', href=url_for('static', filename='css/style.css'), rel='stylesheet')
 
     # Find the 'head' element in the HTML document and append the 'link' tag
     head = soup.find('head')

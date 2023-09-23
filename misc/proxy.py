@@ -1,9 +1,10 @@
 import typing
-import sentry_sdk
 from urllib.parse import urlparse
 
 import requests
+import sentry_sdk
 import validators
+
 from flask import Response, abort
 
 from misc.bs4_methods import *
@@ -63,13 +64,14 @@ def __style(res: requests.Response) -> bytes | str:
 
 def proxy(url: str, internal_call: bool = False) -> Response | typing.NoReturn:
     """
-    Proxy a URL request with optional internal call.
+    proxy a URL request with optional internal call.
 
-    Args:
+    args:
         url (str): The URL to proxy.
-        internal_call (bool, optional): Whether it's an internal call. Defaults to False.
+        internal_call (bool, optional): Whether it's an internal call.
+        defaults to False.
 
-    Returns:
+    returns:
         Response | typing.NoReturn: The proxied response or an error response.
     """
     url = f"https://{url}"

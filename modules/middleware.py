@@ -1,17 +1,22 @@
-from wsgiref.headers import Headers
+from time import time
 
 from flask import Response, request
 from flask_log_request_id import current_request_id
 
 from app import app
 
-from time import time
-
 
 @app.before_request
 def start_timer():
     """
     Record the start time of the request.
+
+    This function is an `@app.before_request` handler, which means it is executed before each incoming request to the
+    Flask application.
+    Its purpose is to record the start time of the request in the `request.start_time` attribute.
+
+    Returns:
+        None
     """
     request.start_time = time()
 
@@ -20,6 +25,11 @@ def start_timer():
 def add_processing_time(response):
     """
     Add the processing time to the response headers.
+
+    This function is an `@app.after_request` handler,
+    which means it is executed after each request to the Flask application.
+    It calculates the processing time of the request in milliseconds
+    and adds it to the response headers as 'X-Processing-Time'.
 
     Args:
         response: The Flask response object.
@@ -41,6 +51,9 @@ def append_request_id(response: Response) -> Response:
     """
     Appends the current request ID to the response headers.
 
+    This function is an `@app.after_request` handler, executed after each request to the Flask application.
+    It adds the current request ID as 'X-App-Request-ID' to the response headers.
+
     Args:
         response (Response): The Flask response object.
 
@@ -56,6 +69,9 @@ def append_request_id(response: Response) -> Response:
 def headers_remove(response: Response) -> Response:
     """
     Removes specified headers from the response.
+
+    This function is an `@app.after_request` handler, executed after each request to the Flask application.
+    It removes specified headers (e.g., 'Date', 'Via', 'Server') from the response headers.
 
     Args:
         response (Response): The Flask response object.

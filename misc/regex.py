@@ -35,13 +35,13 @@ def __url_pack(url: str) -> str:
 
 def process_json(data: dict | list | str, url_pack=__url_pack) -> dict | list | str:
     """
-    Process JSON data by recursively modifying URLs within it.
+    process JSON data by recursively modifying URLs within it.
 
-    Args:
+    args:
         data (dict | list | str): The JSON data to process.
         url_pack (function): A function to pack URLs with the host URL
 
-    Returns:
+    returns:
         dict | list | str: The processed JSON data.
     """
     if isinstance(data, str):
@@ -111,7 +111,7 @@ def replace_origin_host(html_content: str) -> str:
     """
     proxy_url = request.host_url
 
-    if should_parse_json(html_content):
+    if should_parse_json():
         html_content = json.loads(html_content)
 
     soup = BeautifulSoup(html_content, 'lxml')
@@ -128,12 +128,9 @@ def replace_origin_host(html_content: str) -> str:
     return output
 
 
-def should_parse_json(html_content: str) -> bool:
+def should_parse_json() -> bool:
     """
     Check if JSON parsing is required based on request arguments.
-
-    Args:
-        html_content (str): The HTML content to be checked.
 
     Returns:
         bool: True if JSON parsing is required, False otherwise.
@@ -143,12 +140,13 @@ def should_parse_json(html_content: str) -> bool:
 
 def replace_url_attributes(soup: BeautifulSoup, proxy_url: str) -> None:
     """
-    Replace URLs in specified HTML tag attributes with proxy URLs.
+    replace URLs in specified HTML tag attributes with proxy URLs.
 
-    Args:
+    args:
         soup (BeautifulSoup): The BeautifulSoup object representing the HTML content.
         proxy_url (str): The proxy URL to prepend to the original URLs.
     """
+
     def update_link(tag_element: BeautifulSoup, attribute: str) -> None:
         original_url = tag_element.get(attribute)
         if original_url.split("/")[0] == "static":
@@ -167,12 +165,13 @@ def replace_url_attributes(soup: BeautifulSoup, proxy_url: str) -> None:
 
 def replace_style_urls(soup: BeautifulSoup, proxy_url: str) -> None:
     """
-    Replace URLs in style attributes of HTML tags with proxy URLs.
+    replace URLs in style attributes of HTML tags with proxy URLs.
 
-    Args:
+    args:
         soup (BeautifulSoup): The BeautifulSoup object representing the HTML content.
         proxy_url (str): The proxy URL to prepend to the original URLs.
     """
+
     def replace_url(match: re.Match) -> str:
         original_url = match.group(1)
         new_url = f'url("{proxy_url}{schema_remove(original_url)}")'
