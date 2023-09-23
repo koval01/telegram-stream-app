@@ -1,31 +1,16 @@
 
-| 🗺 Routes 🗺 | 🚧 Usage 🚧 | 
-| :-: | :-: |
-| `/api` | For API. |
-| `/file` | For streaming files. |
-| `/dl` | For downloading a file. |
-| `/<name>` | Says Hello! 🤚 |
-| `/code` | For redirection. |
-| `/cookies/set` | For setting cookies. |
-| `/cookies/get` | For retrieving cookies. |
-| `/cookies/del` | For deleting cookies. |
-| `/headers` | For working with Headers. |
-| `/ip` | For location based user interface. |
-| `/q` | For getting the parameters passed with URL. |
+|   🗺 Routes 🗺    |                   🚧 Usage 🚧                    | 🍕 Method 🍕 |
+|:-----------------:|:------------------------------------------------:|:------------:|
+|        `/`        |                    Home page.                    |  GET, POST   |
+|   `/<int:post>`   |              For select post by ID.              |  GET, POST   |
+|       `/v`        |            For send view to Telegram.            |     POST     |
+| `/i/<path:path>`  |                 Proxy t.me/i/...                 |     GET      |
+| `/js/<path:path>` |                Proxy t.me/js/...                 |     GET      |
+|  `/favicon.ico`   |            Redirect to local static.             |     GET      |
+|   `/<path:url>`   | Proxy other source (example /host.net/path/...). |  GET, POST   |
 
 ---
-## How to use this ? 
-- Don't be scared 😬 by watching a ton files, Most are just to configure the deploy settings. 🏋️‍♂️
-- Star this repository. ⭐️
-- Make a new repository by clicking [here.](https://github.com/jainamoswal/Flask-Example/generate) 👲
-- Go to [modules folder](modules). 📂
-- Add or modify the plugins. ✏️
-- Crawl any hosting provider. 🕷
-- Link your (Newly generated 🍽) repository with it. 🔗
-- Deploy it there or replace your username [here](#deployments) and deploy using buttons. 🚀 
-- And done. ✅
 
-#### OR 
 - Just [deploy](#deployments) this repository for testing. 🧪
 
 ### Deployments
@@ -35,47 +20,22 @@
 <details><summary>Heroku.com 🚀</summary>
 <br>
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/jainamoswal/Flask-Example)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/koval01/luga)
 </details>
  
 <details><summary>Replit.com 🌀</summary>
 <br>
 
-[![Run on Repl.it](https://repl.it/badge/github/jainamoswal/Flask-Example)](https://repl.it/github/jainamoswal/Flask-Example)
+[![Run on Repl.it](https://repl.it/badge/github/koval01/luga)](https://repl.it/github/koval01/luga)
 </details>
 
 <details><summary>Zeet.co 💪</summary>
 <br>
  
-[![Deploy](https://deploy.zeet.co/Flask-Example.svg)](https://deploy.zeet.co?url=https://github.com/jainamoswal/Flask-Example)
+[![Deploy](https://deploy.zeet.co/Flask-Example.svg)](https://deploy.zeet.co?url=https://github.com/koval01/luga)
 </details>
 
 #### Adding some other hosting providers too 🤧 soon.
-
-
-
-
----
-
-<details>
-<summary>Support ground. ⛹️‍♂️🤝</summary>
-<br>  
-  
-- [![Channel](https://img.shields.io/badge/Telegram-Channel-green?style=for-the-badge&logo=telegram)](https://t.me/J_projects)
-- [![Support](https://img.shields.io/badge/Telegram-Group-green?style=for-the-badge&logo=telegram)](https://t.me/J_projects_chat)
-</details>
-
-
-
-<details>
-<summary>Donate. 💰💷</summary>
-<br>  
-  
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/jainamoswal) 
-[![paypal](https://www.paypalobjects.com/webstatic/en_AU/i/buttons/btn_paywith_primary_s.png)](https://paypal.me/joswal105)
-</details>
-
-
 
 ## License 
 ### [Flask-Example](https://github.com/jainamoswal/Flask-Example) is licensed under [IDC v1](https://github.com/jainamoswal/idc) or later.
