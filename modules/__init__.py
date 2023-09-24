@@ -17,6 +17,6 @@ for view in views:
     try:
         # Import the module dynamically
         importlib.import_module(module_name)
-        app.logger.info(f'App imported {view} successfully.')
+        app.logger.debug(f'App imported {view} successfully.')
     except ImportError as e:
         app.logger.error(f'Error importing {view}: {str(e)}')
