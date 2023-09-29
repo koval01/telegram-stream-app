@@ -6,41 +6,6 @@ from app import app, limiter
 from misc.proxy import proxy
 
 
-@app.route('/', methods=['GET', 'POST'])
-@app.route('/<int:post>', methods=['GET', 'POST'])
-@limiter.limit("8 per minute")
-def index(post: int | None = None) -> Response | typing.NoReturn:
-    """
-    Proxy requests to an external channel feed.
-
-    This function serves as a route handler for proxying requests to an external channel feed, typically on the
-    Telegram CDN.
-    It can handle both GET and POST requests to the root route ('/') and routes with an integer 'post'
-    parameter.
-
-    :param post: An optional integer representing the post-ID.
-    If provided, the function will proxy to a specific post.
-                 If not provided (defaulting to None), the function will proxy to the channel's root feed.
-    :type post: Int | None
-
-    :return: A Flask Response object containing the proxied content from the external channel feed.
-    :rtype: Response
-
-    :raises: RateLimitExceeded if the rate limit imposed by the 'limiter.limit' decorator is exceeded.
-
-    This function is decorated with the following route patterns:
-    - '/' for handling both GET and POST requests to the root route.
-    - '/<int:post>' for handling both GET and POST requests with an integer 'post' parameter.
-
-    It is also rate-limited to allow only 8 requests per minute using the 'limiter.limit' decorator.
-
-    Example usage:
-    - A GET or POST request to '/' will proxy the channel's root feed.
-    - A GET or POST request to '/123' will proxy to the specific post with ID 123.
-    """
-    return proxy(f"t.me/s/{app.config['CHANNEL_NAME']}/{post}", internal_call=True)
-
-
 @app.route('/favicon.ico', methods=['GET'])
 def favicon() -> Response:
     """
@@ -112,3 +77,38 @@ def proxy_static(path: str) -> Response | typing.NoReturn:
     - If the route is accessed with '/js/some_script.js', it will proxy 'https://t.me/js/some_script.js'.
     """
     return proxy(f"t.me/{'i' if request.path.startswith('/i/') else 'js'}/{path}", internal_call=True)
+
+
+@app.route('/<int:post>', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
+@limiter.limit("8 per minute")
+def index(post: int | None = None) -> Response | typing.NoReturn:
+    """
+    Proxy requests to an external channel feed.
+
+    This function serves as a route handler for proxying requests to an external channel feed, typically on the
+    Telegram CDN.
+    It can handle both GET and POST requests to the root route ('/') and routes with an integer 'post'
+    parameter.
+
+    :param post: An optional integer representing the post-ID.
+    If provided, the function will proxy to a specific post.
+                 If not provided (defaulting to None), the function will proxy to the channel's root feed.
+    :type post: Int | None
+
+    :return: A Flask Response object containing the proxied content from the external channel feed.
+    :rtype: Response
+
+    :raises: RateLimitExceeded if the rate limit imposed by the 'limiter.limit' decorator is exceeded.
+
+    This function is decorated with the following route patterns:
+    - '/' for handling both GET and POST requests to the root route.
+    - '/<int:post>' for handling both GET and POST requests with an integer 'post' parameter.
+
+    It is also rate-limited to allow only 8 requests per minute using the 'limiter.limit' decorator.
+
+    Example usage:
+    - A GET or POST request to '/' will proxy the channel's root feed.
+    - A GET or POST request to '/123' will proxy to the specific post with ID 123.
+    """
+    return proxy(f"t.me/s/{app.config['CHANNEL_NAME']}/{post if post else ''}", internal_call=True)

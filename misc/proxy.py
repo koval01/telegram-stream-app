@@ -39,9 +39,7 @@ def __style(res: requests.Response) -> bytes | str:
 
         elif c_type == "text/html":
             # Apply custom CSS and manipulate the HTML content
-            body = add_custom_css(body)
-            body = update_meta_tags(body)
-            body = set_bg_canvas_colors(body)
+            body = bs_prepare(body)
             body = remove_by_cls(body, [
                 'tgme_widget_message_bubble_tail',
                 'tgme_widget_message_user',
@@ -111,6 +109,10 @@ def proxy(url: str, internal_call: bool = False) -> Response | typing.NoReturn:
             for k, v in res.raw.headers.items()
             if k.lower() not in excluded_headers
         }
+
+        for header in ["Date", "Via", "Server"]:
+            if header in headers:
+                del headers[header]
 
         body = __style(res)
         content_type = headers.get('Content-Type').split(';')[0]

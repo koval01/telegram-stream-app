@@ -67,21 +67,6 @@ def process_json(data: dict | list | str, url_pack=__url_pack) -> dict | list | 
     return data
 
 
-def font_link_update(match: re.Match) -> str:
-    """
-    Update font links in HTML content.
-
-    Args:
-        match (re.Match): A regex match object containing the link to be updated.
-
-    Returns:
-        str: The updated URL.
-    """
-    original_url = "https://telegram.org" + match.group(2)
-    new_url = f'{request.host_url}{schema_remove(original_url)}'
-    return new_url
-
-
 def process_location_header(location_header: str) -> str:
     """
     Process the 'Location' header in HTTP responses.

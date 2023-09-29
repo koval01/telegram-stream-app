@@ -1,29 +1,51 @@
 from bs4 import BeautifulSoup
 from flask import url_for
+import os
 
 
-def add_custom_css(body: str) -> str:
-    """
-    Adds a custom CSS stylesheet link to the HTML document's head.
-
-    Args:
-        body (str): The input HTML document as a string.
-
-    Returns:
-        str: The modified HTML document with the added CSS link.
-    """
-    # Parse the HTML document
+def _updater(
+        body: str, exclude: list, selectors: dict,
+        tag_s: str = "script", data: str = "src", location: str = "js"
+) -> str:
     soup = BeautifulSoup(body, 'lxml')
 
-    # Create a new 'link' tag for the custom CSS stylesheet
-    link_tag = soup.new_tag('link', href=url_for('static', filename='css/style.css'), rel='stylesheet')
+    tags = soup.find_all(tag_s, **selectors)
 
-    # Find the 'head' element in the HTML document and append the 'link' tag
-    head = soup.find('head')
-    head.append(link_tag)
+    for tag in tags:
+        old_src = tag[data].split("?")[0]
+        file_name = os.path.basename(old_src)
 
-    # Convert the modified HTML back to a string and return it
+        if any([(e in file_name) for e in exclude]):
+            tag.extract()
+            continue
+
+        # set new var
+        new_src = url_for('static', filename=f'{location}/{file_name}')[1:]
+        tag[data] = new_src
+
     return str(soup)
+
+
+def static_js(body: str) -> str:
+    return _updater(
+        body=body,
+        exclude=["tgwallpaper", "jquery"],
+        selectors={"src": True},
+        tag_s="script",
+        data="src",
+        location="js"
+    )
+
+
+def static_css(body: str) -> str:
+    return _updater(
+        body=body,
+        exclude=[],
+        selectors={"href": True, "rel": "stylesheet"},
+        tag_s="link",
+        data="href",
+        location="css"
+    )
 
 
 def update_meta_tags(body: str) -> str:
@@ -53,32 +75,6 @@ def update_meta_tags(body: str) -> str:
     return str(soup)
 
 
-def set_bg_canvas_colors(body: str) -> str:
-    """
-    Sets background canvas colors by updating the 'data-colors' attribute.
-
-    Args:
-        body (str): The input HTML document as a string.
-
-    Returns:
-        str: The modified HTML document with updated 'data-colors' attribute.
-    """
-    # Parse the HTML document
-    soup = BeautifulSoup(body, 'lxml')
-
-    # Find the canvas element with the specified id
-    canvas = soup.find(id='tgme_background')
-
-    # Define the new colors
-    new_colors = "fdb219,3c3c86,fdb219,3c3c86"
-
-    # Update the 'data-colors' attribute with the new colors
-    canvas['data-colors'] = new_colors
-
-    # Convert the modified HTML back to a string and return it
-    return str(soup)
-
-
 def remove_by_cls(body: str, cls_: list) -> str:
     """
     Removes elements with specified classes from the HTML document.
@@ -104,3 +100,11 @@ def remove_by_cls(body: str, cls_: list) -> str:
 
     # Convert the modified HTML back to a string and return it
     return str(soup)
+
+
+def bs_prepare(body: str) -> str:
+    body = update_meta_tags(body)
+    body = static_js(body)
+    body = static_css(body)
+
+    return body
