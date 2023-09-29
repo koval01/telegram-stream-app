@@ -1,0 +1,10 @@
+{
+    "configurations": [
+        {
+            "type": "flask",
+            "name": "Flask",
+            "target": "app:app"
+        },
+
+    ]
+}
