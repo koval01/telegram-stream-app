@@ -90,7 +90,7 @@ html.theme_dark body.twallpaper .tgme_background_pattern {
     position: relative;
     max-width: 100%;
     margin: 0 auto;
-    padding: 0 6px;
+    padding: 0;
 }
 
 .tgme_header_right_column {
@@ -361,7 +361,6 @@ a.tgme_header_link:hover {
 .tgme_widget_message {
     display: block;
     max-width: 100%;
-    padding-right: 6px;
     box-sizing: border-box;
     color: var(--text-color)
 }
@@ -1137,6 +1136,13 @@ a.tme_messages_more, a.tme_messages_more:hover {
 }
 
 @media (max-width: 720px) {
+    .tgme_widget_message_bubble {
+        border-left: none;
+        border-right: none;
+
+        max-width: 720px !important;
+    }
+
     .tgme_header_right_column {
         display: none
     }
