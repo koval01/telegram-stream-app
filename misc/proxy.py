@@ -30,11 +30,7 @@ def __style(res: requests.Response) -> bytes | str:
     if (c_type in ("text/html", "text/css", "application/json",)) or position:
         body = res.text
 
-        if c_type == "text/css":
-            # replace css from another source
-            body = re.sub(r"'(\.\.)(/fonts/.*?)'", font_link_update, body)
-
-        elif (c_type == "application/json") and (not position):
+        if (c_type == "application/json") and (not position):
             body = process_json(body)
 
         elif c_type == "text/html":

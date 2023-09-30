@@ -9,6 +9,8 @@ from flask_log_request_id import RequestID
 from flask_minify import Minify
 from sentry_sdk.integrations.flask import FlaskIntegration
 
+__version__ = "1.0"
+
 sentry_sdk.init(
     dsn=os.getenv("SENTRY_DSN"),
     integrations=[FlaskIntegration()],
