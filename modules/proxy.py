@@ -22,5 +22,6 @@ def proxy_method(url: str) -> Response | typing.NoReturn:
 
     Example usage:
     - A GET or POST request to '/some_url' will proxy the request to 'some_url' and return the response.
+    Examples: /cdn4.telegram.net/path/file.ext or /t.me/api_endpoint
     """
     return proxy(url)

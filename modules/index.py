@@ -6,16 +6,16 @@ from app import app, limiter
 from misc.proxy import proxy
 
 
-@app.route("/healthz", methods=["GET"])
-def healthz():
+@app.route("/healthz", methods=["GET", "HEAD"])
+def healthz() -> str:
     """
     Endpoint for health checks (healthz).
 
     This Flask route handles health checks at the "/healthz" endpoint. The route only supports the GET method.
 
     Returns:
-        Response: An empty response. The response is used to indicate the health status of the application during health
-                  checks.
+        Response: An empty string response. The response is used to indicate the health status of the application during
+        health checks.
     """
     return ""
 

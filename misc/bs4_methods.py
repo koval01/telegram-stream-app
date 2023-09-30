@@ -7,6 +7,21 @@ def _updater(
         body: str, exclude: list, selectors: dict,
         tag_s: str = "script", data: str = "src", location: str = "js"
 ) -> str:
+    """
+    Helper function to update attributes of HTML tags with specified selectors.
+
+    Args:
+        body (str): The HTML content as a string.
+        exclude (list): List of substrings to exclude from updates.
+        selectors (dict): Dictionary of attributes to select tags with.
+        tag_s (str): The HTML tag type to select (e.g., 'script' or 'link').
+        data (str): The attribute to update (e.g., 'src' or 'href').
+        location (str): The location to use for replacements (e.g., 'js' or 'css').
+
+    Returns:
+        str: The updated HTML content as a string.
+    """
+
     soup = BeautifulSoup(body, 'lxml')
 
     tags = soup.find_all(tag_s, **selectors)
@@ -22,6 +37,49 @@ def _updater(
         # set new var
         new_src = url_for('static', filename=f'{location}/{file_name}')[1:]
         tag[data] = new_src
+
+    return str(soup)
+
+
+def update_meta_tags(body: str) -> str:
+    """
+    Update the 'content' attribute of <meta> tags in an HTML document by replacing line breaks with spaces.
+
+    Args:
+        body (str): The HTML content as a string.
+
+    Returns:
+        str: The updated HTML content as a string.
+    """
+
+    soup = BeautifulSoup(body, 'lxml')
+
+    for tag in soup.find_all('meta'):
+        if 'content' in tag.attrs:
+            # Replace newline characters with spaces in the 'content' attribute
+            tag['content'] = tag['content'].replace('\n', ' ')
+
+    return str(soup)
+
+
+def remove_by_cls(body: str, cls_list: list) -> str:
+    """
+    Removes elements with specified classes from the HTML document.
+
+    Args:
+        body (str): The input HTML document as a string.
+        cls_list (list): A list of class names to be removed.
+
+    Returns:
+        str: The modified HTML document with specified elements removed.
+    """
+
+    soup = BeautifulSoup(body, 'lxml')
+
+    for cls in cls_list:
+        # Find and remove all elements with the specified class
+        for element in soup.find_all(class_=cls):
+            element.extract()
 
     return str(soup)
 
@@ -48,63 +106,5 @@ def static_css(body: str) -> str:
     )
 
 
-def update_meta_tags(body: str) -> str:
-    """
-    Update the 'content' attribute of <meta> tags in an HTML document by replacing line breaks with spaces.
-
-    Args:
-        body (str): The HTML content as a string.
-
-    Returns:
-        str: The updated HTML content as a string.
-    """
-    # Create a BeautifulSoup object
-    soup = BeautifulSoup(body, 'lxml')
-
-    # Find all <meta> tags
-    meta_tags = soup.find_all('meta')
-
-    # Iterate through all <meta> tags
-    for meta_tag in meta_tags:
-        # Check if the meta-tag has a 'content' attribute
-        if 'content' in meta_tag.attrs:
-            # Replace line breaks with spaces in the content
-            meta_tag['content'] = meta_tag['content'].replace('\n', ' ')
-
-    # Return the updated HTML as a string
-    return str(soup)
-
-
-def remove_by_cls(body: str, cls_: list) -> str:
-    """
-    Removes elements with specified classes from the HTML document.
-
-    Args:
-        body (str): The input HTML document as a string.
-        cls_ (list): A list of class names to be removed.
-
-    Returns:
-        str: The modified HTML document with specified elements removed.
-    """
-    # Parse the HTML document
-    soup = BeautifulSoup(body, 'lxml')
-
-    # Loop through the list of class names to remove
-    for cls_i in cls_:
-        # Find all elements with the specified class
-        elements_to_remove = soup.find_all(class_=cls_i)
-
-        # Remove each found element
-        for element in elements_to_remove:
-            element.extract()
-
-    # Convert the modified HTML back to a string and return it
-    return str(soup)
-
-
 def bs_prepare(body: str) -> str:
-    body = update_meta_tags(body)
-    body = static_js(body)
-    body = static_css(body)
-
-    return body
+    return static_css(static_js(update_meta_tags(body)))

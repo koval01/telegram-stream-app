@@ -8,29 +8,19 @@ from app import app
 
 
 def schema_remove(url: str) -> str:
-    """
-    Remove the 'http://' or 'https://' schema from a URL.
-
-    Args:
-        url (str): The URL from which to remove the schema.
-
-    Returns:
-        str: The URL with the schema removed.
-    """
     return re.sub(r"https?://", "", url)
 
 
 def __url_pack(url: str) -> str:
-    """
-    Pack a URL with the host URL
-
-    Args:
-        url (str): The URL to pack.
-
-    Returns:
-        str: The packed URL.
-    """
     return f"{request.host_url}{schema_remove(url)}"
+
+
+def should_json() -> bool:
+    return any(k in ("before", "after") for k in request.args.keys())
+
+
+def clean_html_for_json(html: str) -> str:
+    return re.sub(r"</?html>|</?body>", "", html)
 
 
 def process_json(data: dict | list | str, url_pack=__url_pack) -> dict | list | str:
@@ -44,6 +34,7 @@ def process_json(data: dict | list | str, url_pack=__url_pack) -> dict | list | 
     returns:
         dict | list | str: The processed JSON data.
     """
+
     if isinstance(data, str):
         if len(data) < 10:
             return data
@@ -77,10 +68,16 @@ def process_location_header(location_header: str) -> str:
     Returns:
         str: The processed 'Location' header value with the proxy URL if needed.
     """
+
     proxy_url = request.host_url
-    if not re.match(r'^' + re.escape(proxy_url) + r'/http://', location_header):
+
+    if not re.match(
+            r'^' + re.escape(proxy_url) + r'/http://',
+            location_header
+    ):
         original_url = re.sub(r'^http://', '', location_header)
         location_header = f'{proxy_url}{schema_remove(original_url)}'
+
     return location_header
 
 
@@ -94,33 +91,25 @@ def replace_origin_host(html_content: str) -> str:
     Returns:
         str: The HTML content with replaced URLs.
     """
+
     proxy_url = request.host_url
 
-    if should_parse_json():
+    if should_json():
         html_content = json.loads(html_content)
 
     soup = BeautifulSoup(html_content, 'lxml')
 
     replace_url_attributes(soup, proxy_url)
     replace_style_urls(soup, proxy_url)
+
     output = str(soup)
     output = output.replace(f'/s/{app.config["CHANNEL_NAME"]}', '')
 
-    if should_return_json():
+    if should_json():
         output = clean_html_for_json(output)
         return json.dumps(output)
 
     return output
-
-
-def should_parse_json() -> bool:
-    """
-    Check if JSON parsing is required based on request arguments.
-
-    Returns:
-        bool: True if JSON parsing is required, False otherwise.
-    """
-    return any(k in ("before", "after") for k in request.args.keys())
 
 
 def replace_url_attributes(soup: BeautifulSoup, proxy_url: str) -> None:
@@ -166,26 +155,3 @@ def replace_style_urls(soup: BeautifulSoup, proxy_url: str) -> None:
         style = tag['style']
         updated_style = re.sub(r'url\([\'"]?([^\'")]+)[\'"]?\)', replace_url, style)
         tag['style'] = updated_style
-
-
-def should_return_json() -> bool:
-    """
-    Check if JSON response should be returned based on request arguments.
-
-    Returns:
-        bool: True if JSON response should be returned, False otherwise.
-    """
-    return any(k in ("before", "after") for k in request.args.keys())
-
-
-def clean_html_for_json(html: str) -> str:
-    """
-    Remove HTML and body tags for JSON response.
-
-    Args:
-        html (str): The HTML content to be cleaned.
-
-    Returns:
-        str: The cleaned HTML content.
-    """
-    return re.sub(r"</?html>|</?body>", "", html)
