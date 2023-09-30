@@ -1,15 +1,15 @@
 (function () {
-    var lastTime = 0;
-    var vendors = ['ms', 'moz', 'webkit', 'o'];
-    for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+    let lastTime = 0;
+    let vendors = ['ms', 'moz', 'webkit', 'o'];
+    for (let x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
         window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
         window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame'];
     }
     if (!window.requestAnimationFrame)
-        window.requestAnimationFrame = function (callback, element) {
-            var currTime = new Date().getTime();
-            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-            var id = window.setTimeout(function () {
+        window.requestAnimationFrame = function (callback, _) {
+            let currTime = new Date().getTime();
+            let timeToCall = Math.max(0, 16 - (currTime - lastTime));
+            let id = window.setTimeout(function () {
                 callback(currTime + timeToCall);
             }, timeToCall);
             lastTime = currTime + timeToCall;
@@ -20,14 +20,14 @@
             clearTimeout(id);
         };
 }());/*! npm.im/iphone-inline-video 2.0.2 */
-var enableInlineVideo = function () {
+let enableInlineVideo = function () {
     "use strict";/*! npm.im/intervalometer */
     function e(e, i, n, r) {
         function t(n) {
             d = i(t, r), e(n - (a || n)), a = n
         }
 
-        var d, a;
+        let d, a;
         return {
             start: function () {
                 d || t(0)
@@ -74,7 +74,7 @@ var enableInlineVideo = function () {
     }
 
     function a(e) {
-        var i = new Audio;
+        let i = new Audio;
         return t(e, "play", i), t(e, "playing", i), t(e, "pause", i), i.crossOrigin = e.crossOrigin, i.src = e.src || e.currentSrc || "data:", i
     }
 
@@ -87,22 +87,22 @@ var enableInlineVideo = function () {
     }
 
     function s(e) {
-        var i = this;
+        let i = this;
         i.video.readyState >= i.video.HAVE_FUTURE_DATA ? (i.hasAudio || (i.driver.currentTime = i.video.currentTime + e * i.video.playbackRate / 1e3, i.video.loop && u(i) && (i.driver.currentTime = 0)), o(i.video, i.driver.currentTime)) : i.video.networkState === i.video.NETWORK_IDLE && 0 === i.video.buffered.length && i.video.load(), i.video.ended && (delete i.video[b], i.video.pause(!0))
     }
 
     function c() {
-        var e = this, i = e[h];
+        let e = this, i = e[h];
         return e.webkitDisplayingFullscreen ? void e[g]() : ("data:" !== i.driver.src && i.driver.src !== e.src && (o(e, 0, !0), i.driver.src = e.src), void (e.paused && (i.paused = !1, 0 === e.buffered.length && e.load(), i.driver.play(), i.updater.start(), i.hasAudio || (d(e, "play"), i.video.readyState >= i.video.HAVE_ENOUGH_DATA && d(e, "playing")))))
     }
 
     function v(e) {
-        var i = this, n = i[h];
+        let i = this, n = i[h];
         n.driver.pause(), n.updater.stop(), i.webkitDisplayingFullscreen && i[E](), n.paused && !e || (n.paused = !0, n.hasAudio || d(i, "pause"), i.ended && (i[b] = !0, d(i, "ended")))
     }
 
     function p(e, n) {
-        var r = e[h] = {};
+        let r = e[h] = {};
         r.paused = !0, r.hasAudio = n, r.video = e, r.updater = i(s.bind(r)), n ? r.driver = a(e) : (e.addEventListener("canplay", function () {
             e.paused || d(e, "playing")
         }), r.driver = {
@@ -114,7 +114,7 @@ var enableInlineVideo = function () {
                 return u(r)
             }
         }), e.addEventListener("emptied", function () {
-            var i = !r.driver.src || "data:" === r.driver.src;
+            let i = !r.driver.src || "data:" === r.driver.src;
             r.driver.src && r.driver.src !== e.src && (o(e, 0, !0), r.driver.src = e.src, i ? r.driver.play() : r.updater.stop())
         }, !1), e.addEventListener("webkitbeginfullscreen", function () {
             e.paused ? n && 0 === r.driver.buffered.length && r.driver.load() : (e.pause(), e[g]())
@@ -126,7 +126,7 @@ var enableInlineVideo = function () {
     }
 
     function l(e) {
-        var i = e[h];
+        let i = e[h];
         e[g] = e.play, e[E] = e.pause, e.play = c, e.pause = v, r(e, "paused", i.driver), r(e, "muted", i.driver, !0), r(e, "playbackRate", i.driver, !0), r(e, "ended", i.driver), r(e, "loop", i.driver, !0), n(e, "seeking"), n(e, "seeked"), n(e, "timeupdate", b, !1), n(e, "ended", b, !1)
     }
 
@@ -140,7 +140,7 @@ var enableInlineVideo = function () {
         }
     }
 
-    var m,
+    let m,
         y = "object" == typeof document && "object-fit" in document.head.style && !matchMedia("(-webkit-video-playable-inline)").matches,
         h = "bfred-it:iphone-inline-video", b = "bfred-it:iphone-inline-video:event",
         g = "bfred-it:iphone-inline-video:nativeplay", E = "bfred-it:iphone-inline-video:nativepause", w = [], T = 0;
@@ -153,7 +153,7 @@ if (!Array.isArray) {
 }
 (!this.CustomEvent || typeof this.CustomEvent === "object") && (function () {
     this.CustomEvent = function CustomEvent(type, eventInitDict) {
-        var event;
+        let event;
         eventInitDict = eventInitDict || {bubbles: false, cancelable: false, detail: undefined};
         try {
             event = document.createEvent('CustomEvent');
@@ -166,8 +166,8 @@ if (!Array.isArray) {
         return event;
     };
 })();
-var Keys = {BACKSPACE: 8, ESC: 27, TAB: 9, RETURN: 13, LEFT: 37, UP: 38, RIGHT: 39, DOWN: 40};
-var TWidget = {options: {}, isFocused: false};
+let Keys = {BACKSPACE: 8, ESC: 27, TAB: 9, RETURN: 13, LEFT: 37, UP: 38, RIGHT: 39, DOWN: 40};
+let TWidget = {options: {}, isFocused: false};
 
 function inFrame() {
     return (window.parent != null && window != window.parent);
@@ -187,30 +187,30 @@ function l(lang_key, params, def_value) {
         params = {};
     }
     params = params || {};
-    var value = l._keys[lang_key] || def_value || lang_key;
+    let value = l._keys[lang_key] || def_value || lang_key;
     value = value.replace(/\{\{([A-Za-z_\-\d]{1,32}):(.+?)\}\}/g, function (lang_value, token, options) {
-        var number = +params[token] || 0;
-        var numeric_options = options.split('|');
-        var i;
+        let number = +params[token] || 0;
+        let numeric_options = options.split('|');
+        let i;
         if (number == 1) i = 0; else i = 1;
         if (typeof numeric_options[i] === 'undefined') {
             i = 1;
         }
-        var numeric_option = numeric_options[i] || '#';
+        let numeric_option = numeric_options[i] || '#';
         return numeric_option.replace(/#/g, number);
     });
     value = value.replace(/\{([A-Za-z_\-\d]{1,32}):(.{1,256}?)\}/g, function (lang_value, token, options) {
-        var number = +params[token] || 0;
-        var numeric_options = options.split('|');
-        var i;
+        let number = +params[token] || 0;
+        let numeric_options = options.split('|');
+        let i;
         if (!number) i = 0; else if (number == 1) i = 1; else i = 2;
         if (typeof numeric_options[i] === 'undefined') {
             i = 0;
         }
-        var numeric_option = numeric_options[i] || '#';
+        let numeric_option = numeric_options[i] || '#';
         return numeric_option.replace(/#/g, number);
     });
-    for (var param in params) {
+    for (let param in params) {
         value = value.split('{' + param + '}').join(params[param]);
     }
     return value;
@@ -218,11 +218,11 @@ function l(lang_key, params, def_value) {
 
 l._keys = {};
 l.add = function (lang_values) {
-    for (var lang_key in lang_values) {
+    for (let lang_key in lang_values) {
         l._keys[lang_key] = lang_values[lang_key];
     }
 }
-var PostMessage = {
+let PostMessage = {
     _callbacks: {}, _lastId: 0, send: function (data, origin, callback) {
         if (typeof origin === 'function') {
             callback = origin;
@@ -240,9 +240,9 @@ var PostMessage = {
     }, onMessage: function (event) {
         if (event.source !== window.parent) return;
         try {
-            var data = JSON.parse(event.data);
+            let data = JSON.parse(event.data);
         } catch (e) {
-            var data = {};
+            let data = {};
         }
         if (data.event == 'visible') {
             if (!frameWasVisible) {
@@ -281,7 +281,7 @@ var PostMessage = {
         }
     }
 };
-var TPopups = {
+let TPopups = {
     _list: [], _lastId: 1000000, _inited: false, init: function () {
         if (!TPopups._inited) {
             TPopups._inited = true;
@@ -303,13 +303,13 @@ var TPopups = {
             return popup_el;
         }
         options = options || {};
-        var popup_id = popup_el.__puid;
+        let popup_id = popup_el.__puid;
         if (!popup_id) {
             popup_id = ++TPopups._lastId;
             popup_el.__puid = popup_id;
         }
         popup_el.__options = options;
-        var index = TPopups._list.indexOf(popup_id);
+        let index = TPopups._list.indexOf(popup_id);
         if (index >= 0) {
             TPopups._list.splice(index, 1);
         }
@@ -337,7 +337,7 @@ var TPopups = {
         return popup_el;
     }, close: function (popup_el) {
         if (!TPopups._list.length) return false;
-        var popup_id;
+        let popup_id;
         if (popup_el) {
             popup_id = popup_el.__puid;
         } else {
@@ -352,8 +352,8 @@ var TPopups = {
         if (!popup_el) {
             return false;
         }
-        var options = popup_el.__options;
-        var index = TPopups._list.indexOf(popup_id);
+        let options = popup_el.__options;
+        let index = TPopups._list.indexOf(popup_id);
         if (index >= 0) {
             TPopups._list.splice(index, 1);
         }
@@ -371,29 +371,29 @@ var TPopups = {
             TPopups.close();
         }
     }, setPosition: function (popul_el) {
-        var popup_box = ge1('.js-popup_box', popul_el);
+        let popup_box = ge1('.js-popup_box', popul_el);
         if (!popup_box) return;
         getCoords(function (coords) {
-            var style = window.getComputedStyle(popul_el);
-            var contTop = parseInt(style.paddingTop);
-            var contBottom = parseInt(style.paddingBottom);
-            var marginMax = popul_el.offsetHeight - contTop - contBottom - coords.elHeight;
-            var frameTop = coords.frameTop || 0;
-            var deltaY = (coords.clientHeight - coords.elHeight) / 2;
-            var marginTop = deltaY - contTop - frameTop;
+            let style = window.getComputedStyle(popul_el);
+            let contTop = parseInt(style.paddingTop);
+            let contBottom = parseInt(style.paddingBottom);
+            let marginMax = popul_el.offsetHeight - contTop - contBottom - coords.elHeight;
+            let frameTop = coords.frameTop || 0;
+            let deltaY = (coords.clientHeight - coords.elHeight) / 2;
+            let marginTop = deltaY - contTop - frameTop;
             marginTop = Math.max(0, Math.min(marginMax, marginTop));
             popup_box.style.marginTop = marginTop + 'px';
         }, popup_box);
     }, show: function (html, buttons, options) {
         options = options || {};
-        var popup_el = newEl('div', 'tgme_popup_container js-popup_container tgme_popup_alert hide', '<div class="tgme_popup js-popup_box"><div class="tgme_popup_body"><div class="tgme_popup_text js-popup_text"></div><div class="tgme_popup_buttons js-popup_buttons"></div></div></div>');
-        var text_el = ge1('.js-popup_text', popup_el);
-        var buttons_el = ge1('.js-popup_buttons', popup_el);
+        let popup_el = newEl('div', 'tgme_popup_container js-popup_container tgme_popup_alert hide', '<div class="tgme_popup js-popup_box"><div class="tgme_popup_body"><div class="tgme_popup_text js-popup_text"></div><div class="tgme_popup_buttons js-popup_buttons"></div></div></div>');
+        let text_el = ge1('.js-popup_text', popup_el);
+        let buttons_el = ge1('.js-popup_buttons', popup_el);
         setHtml(text_el, html);
-        var enterBtn = null, onEnterPress = null;
-        for (var i = 0; i < buttons.length; i++) {
-            var btn = buttons[i];
-            var button_el = newEl('div', 'tgme_popup_button' + (btn.close ? ' js-popup_close' : ''), btn.label);
+        let enterBtn = null, onEnterPress = null;
+        for (let i = 0; i < buttons.length; i++) {
+            let btn = buttons[i];
+            let button_el = newEl('div', 'tgme_popup_button' + (btn.close ? ' js-popup_close' : ''), btn.label);
             btn.el = button_el;
             buttons_el.appendChild(button_el);
             if (btn.enter) {
@@ -413,12 +413,12 @@ var TPopups = {
             };
             addEvent(document, 'keydown', onEnterPress);
         }
-        var onPopupClose = function (e) {
+        let onPopupClose = function (e) {
             if (enterBtn && onEnterPress) {
                 removeEvent(document, 'keydown', onEnterPress);
             }
-            for (var i = 0; i < buttons.length; i++) {
-                var btn = buttons[i];
+            for (let i = 0; i < buttons.length; i++) {
+                let btn = buttons[i];
                 if (btn.onPress) {
                     removeEvent(btn.el, 'click', btn.onPress);
                 }
@@ -436,7 +436,7 @@ function showAlert(html, onClose) {
 }
 
 function showConfirm(html, onConfirm, confirm_btn, onCancel, cancel_btn) {
-    var popup_el = TPopups.show(html, [{
+    let popup_el = TPopups.show(html, [{
         label: cancel_btn || l('WEB_CANCEL', 'Cancel'), onPress: function () {
             onCancel && onCancel(popup_el);
         }, close: true
@@ -451,8 +451,8 @@ function showConfirm(html, onConfirm, confirm_btn, onCancel, cancel_btn) {
 
 function addEvent(el, event, handler) {
     gec(el, function () {
-        var events = event.split(/\s+/);
-        for (var i = 0; i < events.length; i++) {
+        let events = event.split(/\s+/);
+        for (let i = 0; i < events.length; i++) {
             if (this.addEventListener) {
                 this.addEventListener(events[i], handler, false);
             } else {
@@ -464,8 +464,8 @@ function addEvent(el, event, handler) {
 
 function removeEvent(el, event, handler) {
     gec(el, function () {
-        var events = event.split(/\s+/);
-        for (var i = 0; i < events.length; i++) {
+        let events = event.split(/\s+/);
+        for (let i = 0; i < events.length; i++) {
             if (this.removeEventListener) {
                 this.removeEventListener(events[i], handler);
             } else {
@@ -476,7 +476,7 @@ function removeEvent(el, event, handler) {
 }
 
 function addEventOnce(el, event, handler) {
-    var once_handler = function (e) {
+    let once_handler = function (e) {
         removeEvent(el, event, once_handler);
         handler(e);
     };
@@ -485,7 +485,7 @@ function addEventOnce(el, event, handler) {
 
 function triggerEvent(el, event_type, init_dict) {
     gec(el, function () {
-        var event = new CustomEvent(event_type, init_dict);
+        let event = new CustomEvent(event_type, init_dict);
         this.dispatchEvent(event);
     });
 }
@@ -500,9 +500,9 @@ function geById(el_or_id) {
 }
 
 function gec(el, callback, context) {
-    var list = ge(el, context);
-    for (var i = 0, l = list.length; i < l; i++) {
-        var result = callback.call(list[i], list[i], i, list);
+    let list = ge(el, context);
+    for (let i = 0, l = list.length; i < l; i++) {
+        let result = callback.call(list[i], list[i], i, list);
         if (result === false) {
             break;
         }
@@ -510,7 +510,7 @@ function gec(el, callback, context) {
 }
 
 function ge(el, context) {
-    var list = [];
+    let list = [];
     if (typeof el === 'string') {
         list = (ge1(context) || document).querySelectorAll(el);
     } else if (el instanceof Node || el instanceof Window) {
@@ -546,10 +546,10 @@ function ge1(el, context) {
 }
 
 function newEl(tag, cl, html, styles) {
-    var el = document.createElement((tag || 'DIV').toUpperCase());
+    let el = document.createElement((tag || 'DIV').toUpperCase());
     if (cl) el.className = cl;
     if (styles) {
-        for (var k in styles) {
+        for (let k in styles) {
             el.style[k] = styles[k];
         }
     }
@@ -576,12 +576,12 @@ function elInBody(el) {
 }
 
 function getCoords(callback, el) {
-    var rect = {};
+    let rect = {};
     if (el = ge1(el)) {
         rect = el.getBoundingClientRect();
     }
-    var docEl = document.documentElement;
-    var coords = {};
+    let docEl = document.documentElement;
+    let coords = {};
     if (inFullFrame()) {
         PostMessage.send({event: 'get_coords'}, function (coords) {
             coords.inFrame = true;
@@ -623,8 +623,8 @@ function scrollToY(y) {
 
 function addClass(el, cl) {
     gec(el, function () {
-        var cls = cl.split(/\s+/);
-        for (var i = 0; i < cls.length; i++) {
+        let cls = cl.split(/\s+/);
+        for (let i = 0; i < cls.length; i++) {
             this.classList.add(cls[i]);
         }
     });
@@ -632,8 +632,8 @@ function addClass(el, cl) {
 
 function removeClass(el, cl) {
     gec(el, function () {
-        var cls = cl.split(/\s+/);
-        for (var i = 0; i < cls.length; i++) {
+        let cls = cl.split(/\s+/);
+        for (let i = 0; i < cls.length; i++) {
             this.classList.remove(cls[i]);
         }
     });
@@ -641,17 +641,17 @@ function removeClass(el, cl) {
 
 function toggleClass(el, cl, add) {
     gec(el, function () {
-        var cls = cl.split(/\s+/);
-        for (var i = 0; i < cls.length; i++) {
+        let cls = cl.split(/\s+/);
+        for (let i = 0; i < cls.length; i++) {
             cl = cls[i];
-            var add_cl = (typeof add !== 'undefined') ? add : !hasClass(this, cl);
+            let add_cl = (typeof add !== 'undefined') ? add : !hasClass(this, cl);
             add_cl ? this.classList.add(cl) : this.classList.remove(cl);
         }
     });
 }
 
 function hasClass(el, cl) {
-    var item = ge1(el);
+    let item = ge1(el);
     return (item && item.classList && item.classList.contains(cl));
 }
 
@@ -664,7 +664,7 @@ function removeEl(el) {
 }
 
 function getHtml(el, context) {
-    var item = ge1(el, context);
+    let item = ge1(el, context);
     return item ? item.innerHTML : null;
 }
 
@@ -677,7 +677,7 @@ function setHtml(el, html) {
 }
 
 function getAttr(el, attr) {
-    var item = ge1(el);
+    let item = ge1(el);
     return item ? item.getAttribute(attr) : null;
 }
 
@@ -698,13 +698,13 @@ function isLSEnabled() {
 }
 
 function parseHeaders(headers) {
-    var headers_strs = headers.replace(/^\s+|\s+$/g, '').split(/[\r\n]+/);
-    var headers_arr = [];
-    for (var i = 0; i < headers_strs.length; i++) {
-        var header_str = headers_strs[i];
-        var parts = header_str.split(': ');
-        var name = parts.shift().toLowerCase();
-        var value = parts.join(': ');
+    let headers_strs = headers.replace(/^\s+|\s+$/g, '').split(/[\r\n]+/);
+    let headers_arr = [];
+    for (let i = 0; i < headers_strs.length; i++) {
+        let header_str = headers_strs[i];
+        let parts = header_str.split(': ');
+        let name = parts.shift().toLowerCase();
+        let value = parts.join(': ');
         headers_arr.push({name: name, value: value});
     }
     return headers_arr;
@@ -713,13 +713,13 @@ function parseHeaders(headers) {
 function setLS(xhr) {
     if (!isLSEnabled()) return;
     try {
-        var headers = parseHeaders(xhr.getAllResponseHeaders());
-        for (var i = 0; i < headers.length; i++) {
-            var header = headers[i];
+        let headers = parseHeaders(xhr.getAllResponseHeaders());
+        for (let i = 0; i < headers.length; i++) {
+            let header = headers[i];
             if (header.name == 'x-set-local-storage') {
-                var arr = header.value.split('=');
-                var key = decodeURIComponent(arr[0]);
-                var val = decodeURIComponent(arr[1]);
+                let arr = header.value.split('=');
+                let key = decodeURIComponent(arr[0]);
+                let val = decodeURIComponent(arr[1]);
                 if (val.length) {
                     localStorage.setItem(key, val);
                 } else {
@@ -733,9 +733,9 @@ function setLS(xhr) {
 
 function getLSString() {
     if (!isLSEnabled()) return false;
-    var arr = [];
-    for (var i = 0; i < localStorage.length; i++) {
-        var key = localStorage.key(i);
+    let arr = [];
+    for (let i = 0; i < localStorage.length; i++) {
+        let key = localStorage.key(i);
         arr.push(encodeURIComponent(key) + '=' + encodeURIComponent(localStorage[key]));
     }
     return arr.join('; ');
@@ -750,11 +750,11 @@ function getXHR() {
 }
 
 function xhrRequest(href, postdata, onCallback, retry_delay) {
-    var xhr = getXHR(), type = 'GET', data = null, ls_header;
+    let xhr = getXHR(), type = 'GET', data = null, ls_header;
     if (postdata !== false) {
         type = 'POST';
-        var data_arr = [];
-        for (var field in postdata) {
+        let data_arr = [];
+        for (let field in postdata) {
             data_arr.push(encodeURIComponent(field) + '=' + encodeURIComponent(postdata[field]));
         }
         data = data_arr.join('&');
@@ -784,9 +784,9 @@ function xhrRequest(href, postdata, onCallback, retry_delay) {
             setLS(xhr);
             if (typeof xhr.responseBody == 'undefined' && xhr.responseText) {
                 try {
-                    var result = JSON.parse(xhr.responseText);
+                    let result = JSON.parse(xhr.responseText);
                 } catch (e) {
-                    var result = {};
+                    let result = {};
                 }
                 if (xhr.status == 401) {
                     TWidgetAuth.reload();
@@ -811,7 +811,7 @@ function xhrRequest(href, postdata, onCallback, retry_delay) {
 }
 
 function xhrJsonRequest(href, onCallback) {
-    var xhr = getXHR();
+    let xhr = getXHR();
     xhr.open('get', href);
     if (xhr.overrideMimeType) {
         xhr.overrideMimeType('text/plain; charset=x-user-defined');
@@ -823,7 +823,7 @@ function xhrJsonRequest(href, onCallback) {
     }
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4) {
-            var result;
+            let result;
             if (typeof xhr.responseBody == 'undefined' && xhr.responseText && xhr.status == 200) {
                 try {
                     result = JSON.parse(xhr.responseText);
@@ -841,7 +841,7 @@ function xhrJsonRequest(href, onCallback) {
 }
 
 function xhrUploadRequest(href, params, onCallback, onProgress) {
-    var xhr = getXHR(), data = new FormData(), ls_header;
+    let xhr = getXHR(), data = new FormData(), ls_header;
     xhr.open('POST', href, true);
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     if (ls_header = getLSString()) {
@@ -860,9 +860,9 @@ function xhrUploadRequest(href, params, onCallback, onProgress) {
             setLS(xhr);
             if (typeof xhr.responseBody == 'undefined' && xhr.responseText) {
                 try {
-                    var result = JSON.parse(xhr.responseText);
+                    let result = JSON.parse(xhr.responseText);
                 } catch (e) {
-                    var result = {};
+                    let result = {};
                 }
                 if (result.error && result.flood_wait) {
                     console.log('flood_wait', result.flood_wait);
@@ -877,8 +877,8 @@ function xhrUploadRequest(href, params, onCallback, onProgress) {
             }
         }
     };
-    for (var k in params) {
-        var value = params[k];
+    for (let k in params) {
+        let value = params[k];
         if (value instanceof File) {
             data.append(k, value, value.name);
         } else {
@@ -895,7 +895,7 @@ window.TWidgetAuth = {
         options = options || {};
         TWidgetAuth.options = options;
     }, apiRequest: function (method, params, callback) {
-        var options = TWidgetAuth.options || {};
+        let options = TWidgetAuth.options || {};
         if (!options.api_url) {
             console.warn('API url not found');
             return null;
@@ -903,14 +903,14 @@ window.TWidgetAuth = {
         params.method = method;
         return xhrRequest(options.api_url, params, callback);
     }, uploadRequest: function (params, onCallback, onProgress) {
-        var options = TWidgetAuth.options || {};
+        let options = TWidgetAuth.options || {};
         if (!options.upload_url) {
             console.warn('Upload url not found');
             return null;
         }
         return xhrUploadRequest(options.upload_url, params, onCallback, onProgress);
     }, logIn: function () {
-        var options = TWidgetAuth.options || {};
+        let options = TWidgetAuth.options || {};
         if (!options.bot_id) {
             console.warn('Bot id not found');
             return;
@@ -930,10 +930,10 @@ window.TWidgetAuth = {
             }
         });
     }, reload: function (host, callback) {
-        var xhr = getXHR(), data = null, ls_header;
-        var url = location.href;
+        let xhr = getXHR(), data = null, ls_header;
+        let url = location.href;
         if (host) {
-            var a = newEl('a');
+            let a = newEl('a');
             a.href = url;
             a.hostname = host;
             url = a.href;
@@ -962,7 +962,7 @@ window.TWidgetAuth = {
         xhr.withCredentials = true;
         xhr.send();
     }, isLoggedIn: function () {
-        var options = TWidgetAuth.options || {};
+        let options = TWidgetAuth.options || {};
         return options && !options.unauth;
     }
 };
@@ -970,10 +970,10 @@ window.apiRequest = TWidgetAuth.apiRequest;
 window.uploadRequest = TWidgetAuth.uploadRequest;
 
 function loadImage(file, callback) {
-    var image = new Image();
+    let image = new Image();
     image.onload = function () {
-        var w = image.naturalWidth;
-        var h = image.naturalHeight;
+        let w = image.naturalWidth;
+        let h = image.naturalHeight;
         callback && callback(null, {url: image.src, width: w, height: h, image: image});
     };
     image.onerror = function () {
@@ -998,15 +998,15 @@ function initWidgetFrame(options) {
     PostMessage.send({event: 'ready'});
 }
 
-var frameLastHeight = null, frameLastWidth = null, frameWasVisible = false;
+let frameLastHeight = null, frameLastWidth = null, frameWasVisible = false;
 
 function checkFrameSize() {
-    var height, width, style;
+    let height, width, style;
     if (document.body) {
         if (TWidget.options.include_absolute_elems) {
             if (document.body.querySelectorAll) {
                 document.body.querySelectorAll('*').forEach(function (el) {
-                    var rect = el.getBoundingClientRect();
+                    let rect = el.getBoundingClientRect();
                     if (!width || width < rect.right) width = rect.right;
                     if (!height || height < rect.bottom) height = rect.bottom;
                 });
@@ -1027,7 +1027,7 @@ function checkFrameSize() {
                 width = document.body.offsetWidth;
             }
         }
-        var data = {event: 'resize'}, resized = false;
+        let data = {event: 'resize'}, resized = false;
         if (TWidget.options.auto_height) {
             height = Math.ceil(height);
             if (height != frameLastHeight) {
@@ -1052,8 +1052,8 @@ function checkFrameSize() {
 }
 
 (function () {
-    var ua = navigator.userAgent.toLowerCase();
-    var browser = {
+    let ua = navigator.userAgent.toLowerCase();
+    let browser = {
         opera: (/opera/i.test(ua) || /opr/i.test(ua)),
         msie: (/msie/i.test(ua) && !/opera/i.test(ua) || /trident\//i.test(ua)) || /edge/i.test(ua),
         msie_edge: (/edge/i.test(ua) && !/opera/i.test(ua)),
@@ -1070,11 +1070,11 @@ function checkFrameSize() {
         opera_mini: /opera mini/i.test(ua),
         mac: /mac/i.test(ua),
     };
-    var TBaseUrl = window.TBaseUrl || '//telegram.org/';
+    let TBaseUrl = window.TBaseUrl || '//telegram.org/';
 
     function formatDateTime(datetime) {
-        var date = new Date(datetime);
-        var cur_date = new Date();
+        let date = new Date(datetime);
+        let cur_date = new Date();
         if (cur_date.getFullYear() == date.getFullYear() && cur_date.getMonth() == date.getMonth() && cur_date.getDate() == date.getDate()) {
             return formatTime(datetime);
         }
@@ -1082,11 +1082,11 @@ function checkFrameSize() {
     }
 
     function formatDate(datetime) {
-        var date = new Date(datetime);
-        var cur_date = new Date();
-        var j = date.getDate();
-        var M = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][date.getMonth()];
-        var Y = date.getFullYear();
+        let date = new Date(datetime);
+        let cur_date = new Date();
+        let j = date.getDate();
+        let M = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][date.getMonth()];
+        let Y = date.getFullYear();
         if (cur_date.getFullYear() == date.getFullYear()) {
             return M + ' ' + j;
         }
@@ -1094,10 +1094,10 @@ function checkFrameSize() {
     }
 
     function formatTime(datetime) {
-        var date = new Date(datetime);
-        var H = date.getHours();
+        let date = new Date(datetime);
+        let H = date.getHours();
         if (H < 10) H = '0' + H;
-        var i = date.getMinutes();
+        let i = date.getMinutes();
         if (i < 10) i = '0' + i;
         return H + ':' + i;
     }
@@ -1105,24 +1105,24 @@ function checkFrameSize() {
     function formatDuration(duration) {
         duration = Math.floor(duration);
         duration = Math.max(0, duration);
-        var duration_str = '';
+        let duration_str = '';
         if (duration >= 3600) {
-            var hours = Math.floor(duration / 3600);
+            let hours = Math.floor(duration / 3600);
             duration_str += hours + ':';
-            var minutes = Math.floor((duration % 3600) / 60);
+            let minutes = Math.floor((duration % 3600) / 60);
             if (minutes < 10) minutes = '0' + minutes;
         } else {
-            var minutes = Math.floor(duration / 60);
+            let minutes = Math.floor(duration / 60);
         }
         duration_str += minutes + ':';
-        var seconds = duration % 60;
+        let seconds = duration % 60;
         if (seconds < 10) seconds = '0' + seconds;
         duration_str += seconds;
         return duration_str;
     }
 
     function doesSupportEmoji() {
-        var context, smile, canvas = document.createElement('canvas');
+        let context, smile, canvas = document.createElement('canvas');
         if (!canvas.getContext) return false;
         context = canvas.getContext('2d');
         if (typeof context.fillText != 'function') return false;
@@ -1131,16 +1131,16 @@ function checkFrameSize() {
         context.font = '32px Arial';
         context.fillText(smile, 0, 0);
         if (context.getImageData(16, 16, 1, 1).data[0] === 0) return false;
-        var div = document.createElement('div');
+        let div = document.createElement('div');
         div.style.position = 'absolute';
         div.style.overflow = 'hidden';
         div.style.top = '-1000px';
-        var span = document.createElement('span');
+        let span = document.createElement('span');
         div.style.fontSize = '16px';
         span.innerHTML = smile;
         div.appendChild(span);
         document.body.insertBefore(div, document.body.firstChild);
-        var width = span.offsetWidth;
+        let width = span.offsetWidth;
         document.body.removeChild(div);
         if (width < 18) return false;
         return true;
@@ -1150,12 +1150,12 @@ function checkFrameSize() {
         return Array.prototype.slice.apply(arrLike);
     }
 
-    var loadedLibs = {};
+    let loadedLibs = {};
 
     function loadLib(file, callback) {
         if (!loadedLibs[file]) {
             loadedLibs[file] = {loaded: null, callbacks: [callback]};
-            var script = document.createElement('script');
+            let script = document.createElement('script');
             script.type = 'text/javascript';
             script.async = true;
             script.src = file;
@@ -1167,7 +1167,7 @@ function checkFrameSize() {
                 loadedLibs[file].loaded = true;
                 applyCallbacks(loadedLibs[file].callbacks, loadedLibs[file].loaded);
             }
-            var head = document.getElementsByTagName('head')[0];
+            let head = document.getElementsByTagName('head')[0];
             head.appendChild(script);
             return script;
         } else if (loadedLibs[file].loaded === null) {
@@ -1175,12 +1175,12 @@ function checkFrameSize() {
         } else {
             callback(loadedLibs[file].loaded);
         }
-    };var webpNativeSupport = null, webpFallbackSupport = null, webpImage = null, webpCallbacks = [];
+    };let webpNativeSupport = null, webpFallbackSupport = null, webpImage = null, webpCallbacks = [];
 
     function applyCallbacks(callbacks) {
-        var args = cloneArr(arguments);
+        let args = cloneArr(arguments);
         args.shift();
-        for (var i = 0; i < callbacks.length; i++) {
+        for (let i = 0; i < callbacks.length; i++) {
             callbacks[i].apply(null, args);
         }
     }
@@ -1199,7 +1199,7 @@ function checkFrameSize() {
                         applyCallbacks(webpCallbacks, webpNativeSupport, webpFallbackSupport);
                     } else {
                         webpNativeSupport = false;
-                        var script = document.createElement('script');
+                        let script = document.createElement('script');
                         script.type = 'text/javascript';
                         script.async = true;
                         script.src = TBaseUrl + 'js/libwebp-0.2.0.js';
@@ -1211,7 +1211,7 @@ function checkFrameSize() {
                             webpFallbackSupport = true;
                             applyCallbacks(webpCallbacks, webpNativeSupport, webpFallbackSupport);
                         }
-                        var head = document.getElementsByTagName('head')[0];
+                        let head = document.getElementsByTagName('head')[0];
                         head.appendChild(script);
                     }
                 }
@@ -1221,19 +1221,19 @@ function checkFrameSize() {
     }
 
     function getPngDataUrlFromWebp(data) {
-        var decoder = new WebPDecoder();
-        var config = decoder.WebPDecoderConfig;
-        var buffer = config.j || config.output;
-        var bitstream = config.input;
+        let decoder = new WebPDecoder();
+        let config = decoder.WebPDecoderConfig;
+        let buffer = config.j || config.output;
+        let bitstream = config.input;
         if (!decoder.WebPInitDecoderConfig(config)) {
             throw new Error('[webpjs] Library version mismatch!');
         }
-        var StatusCode = decoder.VP8StatusCode;
+        let StatusCode = decoder.VP8StatusCode;
         status = decoder.WebPGetFeatures(data, data.length, bitstream);
         if (status != (StatusCode.VP8_STATUS_OK || 0)) {
             throw new Error('[webpjs] status error');
         }
-        var mode = decoder.WEBP_CSP_MODE;
+        let mode = decoder.WEBP_CSP_MODE;
         buffer.colorspace = mode.MODE_RGBA;
         buffer.J = 4;
         try {
@@ -1241,24 +1241,24 @@ function checkFrameSize() {
         } catch (e) {
             status = e
         }
-        var ok = (status == 0);
+        let ok = (status == 0);
         if (!ok) {
             throw new Error('[webpjs] decoding failed');
         }
-        var bitmap = buffer.c.RGBA.ma;
+        let bitmap = buffer.c.RGBA.ma;
         if (!bitmap) {
             throw new Error('[webpjs] bitmap error');
         }
-        var biHeight = buffer.height;
-        var biWidth = buffer.width;
-        var canvas = document.createElement('canvas');
-        var context = canvas.getContext('2d');
+        let biHeight = buffer.height;
+        let biWidth = buffer.width;
+        let canvas = document.createElement('canvas');
+        let context = canvas.getContext('2d');
         canvas.height = biHeight;
         canvas.width = biWidth;
-        var output = context.createImageData(canvas.width, canvas.height);
-        var outputData = output.data;
-        for (var h = 0; h < biHeight; h++) {
-            for (var w = 0; w < biWidth; w++) {
+        let output = context.createImageData(canvas.width, canvas.height);
+        let outputData = output.data;
+        for (let h = 0; h < biHeight; h++) {
+            for (let w = 0; w < biWidth; w++) {
                 outputData[0 + w * 4 + (biWidth * 4) * h] = bitmap[1 + w * 4 + (biWidth * 4) * h];
                 outputData[1 + w * 4 + (biWidth * 4) * h] = bitmap[2 + w * 4 + (biWidth * 4) * h];
                 outputData[2 + w * 4 + (biWidth * 4) * h] = bitmap[3 + w * 4 + (biWidth * 4) * h];
@@ -1278,14 +1278,14 @@ function checkFrameSize() {
         success_callback = success_callback || function () {
         };
         doesSupportWebp(function (nativeSupport, fallbackSupport) {
-            var isImage, src;
-            var webpSrc = imgEl.getAttribute('data-webp');
+            let isImage, src;
+            let webpSrc = imgEl.getAttribute('data-webp');
             if (imgEl.tagName && imgEl.tagName.toUpperCase() == 'IMG' && imgEl.src) {
                 isImage = true;
                 src = imgEl.src;
             } else {
                 isImage = false;
-                var bgImage;
+                let bgImage;
                 if (window.getComputedStyle) {
                     bgImage = window.getComputedStyle(imgEl).backgroundImage;
                 } else {
@@ -1293,7 +1293,7 @@ function checkFrameSize() {
                 }
                 src = bgImage.slice(4, -1).replace(/["|']/g, '');
             }
-            var setImgSrc = function (src) {
+            let setImgSrc = function (src) {
                 if (isImage) {
                     imgEl.src = src;
                 } else {
@@ -1303,7 +1303,7 @@ function checkFrameSize() {
             };
             if (nativeSupport) {
                 if (webpSrc) {
-                    var img = new Image();
+                    let img = new Image();
                     img.onload = function () {
                         setImgSrc(webpSrc);
                         success_callback();
@@ -1331,7 +1331,7 @@ function checkFrameSize() {
             if (webpSrc) {
                 src = webpSrc;
             }
-            var xhr = getXHR();
+            let xhr = getXHR();
             xhr.open('get', src);
             if (xhr.overrideMimeType) {
                 xhr.overrideMimeType('text/plain; charset=x-user-defined');
@@ -1341,12 +1341,12 @@ function checkFrameSize() {
             xhr.onreadystatechange = function () {
                 if (xhr.readyState == 4) {
                     if (typeof xhr.responseBody == 'undefined' && xhr.responseText) {
-                        var rlen = xhr.responseText.length, uarr = new Uint8Array(rlen);
-                        for (var i = 0; i < rlen; i++) {
+                        let rlen = xhr.responseText.length, uarr = new Uint8Array(rlen);
+                        for (let i = 0; i < rlen; i++) {
                             uarr[i] = xhr.responseText.charCodeAt(i);
                         }
                         try {
-                            var src = getPngDataUrlFromWebp(uarr);
+                            let src = getPngDataUrlFromWebp(uarr);
                             if (isImage) {
                                 imgEl.src = src;
                             } else {
@@ -1374,14 +1374,14 @@ function checkFrameSize() {
         };
         success_callback = success_callback || function () {
         };
-        var videoEl = ge1('video', imageEl);
-        var imgEl = ge1('img', videoEl);
+        let videoEl = ge1('video', imageEl);
+        let imgEl = ge1('img', videoEl);
         if (!videoEl) return;
-        var fallback = function () {
+        let fallback = function () {
             videoEl.parentNode.removeChild(videoEl);
             imageEl.style.backgroundImage = 'none';
             if (imgEl && imgEl.src) {
-                var img = new Image();
+                let img = new Image();
                 img.onload = function () {
                     imageEl.style.backgroundImage = "url('" + img.src + "')";
                 }
@@ -1414,7 +1414,7 @@ function checkFrameSize() {
         };
         success_callback = success_callback || function () {
         };
-        var emoji_id = emojiEl.getAttribute('emoji-id');
+        let emoji_id = emojiEl.getAttribute('emoji-id');
         if (!emoji_id) {
             failed_callback();
             return;
@@ -1424,10 +1424,10 @@ function checkFrameSize() {
                 failed_callback();
                 return;
             }
-            var emoji_html = '', thumb_url = '', thumb_mime = '';
+            let emoji_html = '', thumb_url = '', thumb_mime = '';
             if (emoji.path) {
-                var size = emoji.size || (emoji.type == 'tgs' ? 512 : 100);
-                var thumb_svg = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 ' + size + ' ' + size + '"><defs><linearGradient id="g" x1="-300%" x2="-200%" y1="0" y2="0"><stop offset="-10%" stop-opacity=".1"/><stop offset="30%" stop-opacity=".07"/><stop offset="70%" stop-opacity=".07"/><stop offset="110%" stop-opacity=".1"/><animate attributeName="x1" from="-300%" to="1200%" dur="3s" repeatCount="indefinite"/><animate attributeName="x2" from="-200%" to="1300%" dur="3s" repeatCount="indefinite"/></linearGradient></defs><path fill="url(#g)" d="' + emoji.path + '"/></svg>';
+                let size = emoji.size || (emoji.type == 'tgs' ? 512 : 100);
+                let thumb_svg = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 ' + size + ' ' + size + '"><defs><linearGradient id="g" x1="-300%" x2="-200%" y1="0" y2="0"><stop offset="-10%" stop-opacity=".1"/><stop offset="30%" stop-opacity=".07"/><stop offset="70%" stop-opacity=".07"/><stop offset="110%" stop-opacity=".1"/><animate attributeName="x1" from="-300%" to="1200%" dur="3s" repeatCount="indefinite"/><animate attributeName="x2" from="-200%" to="1300%" dur="3s" repeatCount="indefinite"/></linearGradient></defs><path fill="url(#g)" d="' + emoji.path + '"/></svg>';
                 thumb_url = 'data:image/svg+xml,' + encodeURIComponent(thumb_svg);
             }
             if (emoji.type == 'tgs') {
@@ -1439,14 +1439,14 @@ function checkFrameSize() {
                 }
                 emoji_html = '<picture class="tg-emoji tg-emoji-tgs"><source type="application/x-tgsticker" srcset="' + emoji.emoji + '"><source type="' + thumb_mime + '" srcset="' + thumb_url + '"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"></picture>';
             } else if (emoji.type == 'webm') {
-                var wrap_attr = thumb_url ? ' style="background-image:url(\'' + thumb_url + '\');"' : '';
+                let wrap_attr = thumb_url ? ' style="background-image:url(\'' + thumb_url + '\');"' : '';
                 emoji_html = '<div class="tg-emoji tg-emoji-webm"' + wrap_attr + '><video src="' + emoji.emoji + '" width="100%" height="100%" preload muted autoplay loop playsinline disablepictureinpicture><img src="' + emoji.thumb + '"></video></div>';
             } else if (emoji.type == 'webp') {
-                var wrap_attr = thumb_url ? ' style="background-image:url(\'' + thumb_url + '\');" data-webp="' + emoji.emoji + '"' : ' style="background-image:url(\'' + emoji.emoji + '\');"';
+                let wrap_attr = thumb_url ? ' style="background-image:url(\'' + thumb_url + '\');" data-webp="' + emoji.emoji + '"' : ' style="background-image:url(\'' + emoji.emoji + '\');"';
                 emoji_html = '<i class="tg-emoji tg-emoji-webp"' + wrap_attr + '></i>';
             }
             if (emoji_html) {
-                var emojiWrapEl = newEl('span', 'tg-emoji-wrap', emoji_html);
+                let emojiWrapEl = newEl('span', 'tg-emoji-wrap', emoji_html);
                 emojiEl.insertBefore(emojiWrapEl, emojiEl.firstChild);
                 if (emoji.type == 'tgs') {
                     gec('.tg-emoji-tgs', function () {
@@ -1473,7 +1473,7 @@ function checkFrameSize() {
     }
 
     function checkVideo(el, error_callback) {
-        var timeout, eventAdded;
+        let timeout, eventAdded;
         if (!eventAdded) {
             function destroyCheck() {
                 clearTimeout(timeout);
@@ -1517,7 +1517,7 @@ function checkFrameSize() {
                 }
             }
             gec('time[datetime]', function () {
-                var datetime = this.getAttribute('datetime');
+                let datetime = this.getAttribute('datetime');
                 if (datetime) {
                     if (hasClass(this, 'datetime')) {
                         this.innerHTML = formatDate(datetime) + ' at ' + formatTime(datetime);
@@ -1531,9 +1531,9 @@ function checkFrameSize() {
             gec('.js-message_text', function () {
                 TPost.initSpoilers(this, !gpeByClass(this, 'service_message'));
                 gec('tg-emoji', function () {
-                    var emojiEl = this;
+                    let emojiEl = this;
                     TEmoji.init(this, function () {
-                        var wrapEl = gpeByClass(emojiEl, 'js-message_media') || postEl;
+                        let wrapEl = gpeByClass(emojiEl, 'js-message_media') || postEl;
                         addClass(wrapEl, 'media_not_supported');
                         removeClass(postEl, 'no_bubble');
                     });
@@ -1546,26 +1546,26 @@ function checkFrameSize() {
                 }, this);
             }, postEl);
             gec('.js-message_footer.compact', function () {
-                var timeEl = ge1('time[datetime]', this), textEl = this.previousElementSibling;
+                let timeEl = ge1('time[datetime]', this), textEl = this.previousElementSibling;
                 if (textEl && hasClass(textEl, 'js-message_media')) {
                     textEl = textEl.lastElementChild;
                 }
                 if (textEl && !textEl.__inited && hasClass(textEl, 'js-message_text')) {
-                    var text_rect = textEl.getBoundingClientRect();
-                    var tnode = textEl.firstChild;
+                    let text_rect = textEl.getBoundingClientRect();
+                    let tnode = textEl.firstChild;
                     while (tnode && tnode.nodeType == tnode.ELEMENT_NODE) {
                         tnode = tnode.firstChild;
                     }
                     if (tnode) {
-                        var r = document.createRange();
+                        let r = document.createRange();
                         r.setStart(tnode, 0);
                         r.setEnd(tnode, 1);
-                        var char_rect = r.getBoundingClientRect();
+                        let char_rect = r.getBoundingClientRect();
                         textEl.__inited = true;
                         if (Math.abs(char_rect.right - text_rect.right) > 3) {
-                            var infoEl = ge1('.js-message_info', this);
+                            let infoEl = ge1('.js-message_info', this);
                             if (infoEl) {
-                                var shadowEl = document.createElement('span');
+                                let shadowEl = document.createElement('span');
                                 shadowEl.style.display = 'inline-block';
                                 shadowEl.style.width = infoEl.offsetWidth + 'px';
                                 textEl.appendChild(shadowEl);
@@ -1600,8 +1600,8 @@ function checkFrameSize() {
                 TSticker.init(this);
             }, postEl);
             gec('.js-tgsticker_image', function () {
-                var stickerEl = this;
-                var effectEl = ge1('.js-tgsticker_effect', postEl);
+                let stickerEl = this;
+                let effectEl = ge1('.js-tgsticker_effect', postEl);
                 if (effectEl) {
                     addEventOnce(this, 'tg:play', function () {
                         RLottie.playOnce(effectEl);
@@ -1615,7 +1615,7 @@ function checkFrameSize() {
             }, postEl);
             gec('.js-tgsticker_effect', function () {
                 RLottie.init(this, {noAutoPlay: true});
-                var effectEl = this;
+                let effectEl = this;
                 addEvent(this, 'tg:play', function () {
                     effectEl.style.visibility = 'visible';
                 });
@@ -1632,15 +1632,15 @@ function checkFrameSize() {
         }, view: function (postEl) {
             postEl = geById(postEl);
             if (!postEl) return;
-            var view = postEl.getAttribute('data-view');
+            let view = postEl.getAttribute('data-view');
             if (view) {
-                var xhr = getXHR();
+                let xhr = getXHR();
                 xhr.open('get', '/v/?views=' + encodeURIComponent(view));
                 xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
                 xhr.send(null);
             }
         }, initSpoilers: function (text_el, active) {
-            var spoilers = ge('tg-spoiler', text_el);
+            let spoilers = ge('tg-spoiler', text_el);
             if (spoilers.length) {
                 TPost.wrapSpoilers(spoilers);
                 TPost.wrapTextNodes(text_el);
@@ -1649,7 +1649,7 @@ function checkFrameSize() {
             TPost.hideSpoilers(text_el, active);
         }, wrapSpoilers: function (spoilers) {
             gec(spoilers, function () {
-                var inner_el = newEl('span', 'tg-spoiler-text');
+                let inner_el = newEl('span', 'tg-spoiler-text');
                 while (this.firstChild) {
                     inner_el.appendChild(this.firstChild);
                 }
@@ -1658,7 +1658,7 @@ function checkFrameSize() {
         }, wrapTextNodes: function (el) {
             gec(el.childNodes, function () {
                 if (this.nodeType == this.TEXT_NODE) {
-                    var text = newEl('span', 'd-text');
+                    let text = newEl('span', 'd-text');
                     this.parentNode.insertBefore(text, this);
                     text.appendChild(this);
                 } else if (!this.classList.contains('tg-spoiler') && this.childNodes) {
@@ -1666,7 +1666,7 @@ function checkFrameSize() {
                 }
             });
         }, hideSpoilers: function (text_el, active) {
-            var spoilers = ge('tg-spoiler', text_el);
+            let spoilers = ge('tg-spoiler', text_el);
             if (spoilers.length) {
                 if (active) {
                     addClass(text_el, 'spoilers_active');
@@ -1675,13 +1675,13 @@ function checkFrameSize() {
                 addClass(text_el, 'spoilers_hidden');
             }
         }, eSpoilerShow: function (e) {
-            var text_el = gpeByClass(this, 'spoilers_hidden');
+            let text_el = gpeByClass(this, 'spoilers_hidden');
             if (!text_el) return false;
             e.preventDefault();
             e.stopImmediatePropagation();
             addClass(text_el, 'spoilers_animate');
             removeClass(text_el, 'spoilers_hidden');
-            var delay = 0;
+            let delay = 0;
             gec('tg-spoiler', function () {
                 removeEvent(this, 'click', TPost.eSpoilerShow);
                 delay += this.innerText.length * 40;
@@ -1693,12 +1693,12 @@ function checkFrameSize() {
             }, delay);
         }
     };
-    var TPhoto = window.TPhoto = {
+    let TPhoto = window.TPhoto = {
         init: function (photoEl) {
             photoEl = geById(photoEl);
             if (!photoEl || photoEl.__inited) return;
             photoEl.__inited = true;
-            var inGroup = hasClass(photoEl, 'grouped_media_wrap'), opened, overTo;
+            let inGroup = hasClass(photoEl, 'grouped_media_wrap'), opened, overTo;
             if (inGroup) {
                 addEvent(photoEl, 'click', function togglePhoto(e) {
                     if (e.metaKey || e.ctrlKey) return true;
@@ -1721,12 +1721,12 @@ function checkFrameSize() {
             }
         }
     };
-    var TVideo = window.TVideo = {
+    let TVideo = window.TVideo = {
         init: function (playerEl) {
             playerEl = geById(playerEl);
             if (!playerEl || playerEl.__inited) return;
             playerEl.__inited = true;
-            var videoEl = ge1('.js-message_video', playerEl), videoBluredEl = ge1('.js-message_video_blured', playerEl),
+            let videoEl = ge1('.js-message_video', playerEl), videoBluredEl = ge1('.js-message_video_blured', playerEl),
                 playEl = ge1('.js-message_video_play', playerEl),
                 durationEl = ge1('.js-message_video_duration', playerEl),
                 inGroup = hasClass(playerEl, 'grouped_media_wrap'), looped, overTo;
@@ -1765,7 +1765,7 @@ function checkFrameSize() {
                 if (videoEl.controls) videoEl.controls = false;
             }
 
-            var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+            let MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
             if (MutationObserver) {
                 (new MutationObserver(fixControls)).observe(videoEl, {attributes: true});
             }
@@ -1821,14 +1821,14 @@ function checkFrameSize() {
                     videoBluredEl.currentTime = videoEl.currentTime;
                 }
                 if (durationEl && videoEl.duration) {
-                    var duration = Math.floor(videoEl.duration);
+                    let duration = Math.floor(videoEl.duration);
                     durationEl.innerHTML = formatDuration(duration - videoEl.currentTime);
                 }
             });
             addEvent(videoEl, 'ended load', function (e) {
                 fixControls();
                 if (durationEl && videoEl.duration) {
-                    var duration = Math.floor(videoEl.duration);
+                    let duration = Math.floor(videoEl.duration);
                     durationEl.innerHTML = formatDuration(duration);
                 }
             });
@@ -1861,12 +1861,12 @@ function checkFrameSize() {
             }
         }
     };
-    var TGrouped = window.TGrouped = {
+    let TGrouped = window.TGrouped = {
         init: function (groupedWrapEl) {
             groupedWrapEl = geById(groupedWrapEl);
             if (!groupedWrapEl || groupedWrapEl.__inited) return;
             groupedWrapEl.__inited = true;
-            var groupedEl = ge1('.js-message_grouped', groupedWrapEl),
+            let groupedEl = ge1('.js-message_grouped', groupedWrapEl),
                 groupedLayerEl = ge1('.js-message_grouped_layer', groupedEl), thumbsEl = groupedLayerEl.children,
                 margin_w = +groupedWrapEl.getAttribute('data-margin-w') || 2,
                 margin_h = +groupedWrapEl.getAttribute('data-margin-h') || 2;
@@ -1882,8 +1882,8 @@ function checkFrameSize() {
 
             function updateThumb(thumbEl, x, y, width, height, th_width, th_height, position) {
                 if (!thumbEl) return;
-                var t = false, r = false, b = false, l = false;
-                for (var i = 0; i < position.length; i++) {
+                let t = false, r = false, b = false, l = false;
+                for (let i = 0; i < position.length; i++) {
                     if (position[i] == 't') t = true; else if (position[i] == 'r') r = true; else if (position[i] == 'b') b = true; else if (position[i] == 'l') l = true;
                 }
                 thumbEl.style.left = x + 'px';
@@ -1892,25 +1892,25 @@ function checkFrameSize() {
                 thumbEl.style.height = height + 'px';
                 thumbEl.style.marginRight = (!r ? margin_w : 0) + 'px';
                 thumbEl.style.marginBottom = (!b ? margin_h : 0) + 'px';
-                var th_ratio = th_width / th_height;
-                var ratio = +thumbEl.getAttribute('data-ratio') || 1.0;
-                var mediaEl = ge1('.grouped_media', thumbEl);
-                var helperEl = ge1('.grouped_media_helper', thumbEl);
+                let th_ratio = th_width / th_height;
+                let ratio = +thumbEl.getAttribute('data-ratio') || 1.0;
+                let mediaEl = ge1('.grouped_media', thumbEl);
+                let helperEl = ge1('.grouped_media_helper', thumbEl);
                 if (mediaEl) {
-                    var media_height = Math.ceil(width / ratio);
-                    var media_tb = height - media_height;
+                    let media_height = Math.ceil(width / ratio);
+                    let media_tb = height - media_height;
                     if (media_tb < 0) {
-                        var media_t = Math.floor(media_tb / 2);
-                        var media_b = media_tb - media_t;
+                        let media_t = Math.floor(media_tb / 2);
+                        let media_b = media_tb - media_t;
                         mediaEl.style.left = 0;
                         mediaEl.style.right = 0;
                         mediaEl.style.top = media_t + 'px';
                         mediaEl.style.bottom = media_b + 'px';
                     } else {
-                        var media_width = Math.ceil(height * ratio);
-                        var media_lr = width - media_width;
-                        var media_l = Math.floor(media_lr / 2);
-                        var media_r = media_lr - media_l;
+                        let media_width = Math.ceil(height * ratio);
+                        let media_lr = width - media_width;
+                        let media_l = Math.floor(media_lr / 2);
+                        let media_r = media_lr - media_l;
                         mediaEl.style.top = 0;
                         mediaEl.style.bottom = 0;
                         mediaEl.style.left = media_l + 'px';
@@ -1918,20 +1918,20 @@ function checkFrameSize() {
                     }
                 }
                 if (helperEl) {
-                    var helper_height = Math.floor(th_width / ratio);
-                    var helper_tb = th_height - helper_height;
+                    let helper_height = Math.floor(th_width / ratio);
+                    let helper_tb = th_height - helper_height;
                     if (helper_tb > 0) {
-                        var helper_t = Math.floor(helper_tb / 2);
-                        var helper_b = helper_tb - helper_t;
+                        let helper_t = Math.floor(helper_tb / 2);
+                        let helper_b = helper_tb - helper_t;
                         helperEl.style.left = 0;
                         helperEl.style.right = 0;
                         helperEl.style.top = helper_t + 'px';
                         helperEl.style.bottom = helper_b + 'px';
                     } else {
-                        var helper_width = Math.ceil(th_height * ratio);
-                        var helper_lr = th_width - helper_width;
-                        var helper_l = Math.floor(helper_lr / 2);
-                        var helper_r = helper_lr - helper_l;
+                        let helper_width = Math.ceil(th_height * ratio);
+                        let helper_lr = th_width - helper_width;
+                        let helper_l = Math.floor(helper_lr / 2);
+                        let helper_r = helper_lr - helper_l;
                         helperEl.style.top = 0;
                         helperEl.style.bottom = 0;
                         helperEl.style.left = helper_l + 'px';
@@ -1941,22 +1941,22 @@ function checkFrameSize() {
             }
 
             function recalcGrouped(max_w) {
-                var orients = '';
-                var ratios = [];
-                var cnt = thumbsEl.length;
-                var ratios_sum = 0;
-                for (var i = 0; i < thumbsEl.length; i++) {
-                    var thumbEl = thumbsEl[i];
-                    var ratio = +thumbEl.getAttribute('data-ratio') || 1.0;
+                let orients = '';
+                let ratios = [];
+                let cnt = thumbsEl.length;
+                let ratios_sum = 0;
+                for (let i = 0; i < thumbsEl.length; i++) {
+                    let thumbEl = thumbsEl[i];
+                    let ratio = +thumbEl.getAttribute('data-ratio') || 1.0;
                     orients += ratio > 1.2 ? 'w' : (ratio < 0.8 ? 'n' : 'q');
                     ratios_sum += ratio;
                     ratios.push(ratio);
                 }
-                var avg_ratio = ratios.length ? ratios_sum / ratios.length : 1.0;
-                var max_ratio = 0.75;
-                var min_w = 75;
-                var max_h = max_w / max_ratio;
-                var w, h, w0, w1, w2, h0, h1, h2, x, y, x1, x2, y1, y2, th_width, th_height;
+                let avg_ratio = ratios.length ? ratios_sum / ratios.length : 1.0;
+                let max_ratio = 0.75;
+                let min_w = 75;
+                let max_h = max_w / max_ratio;
+                let w, h, w0, w1, w2, h0, h1, h2, x, y, x1, x2, y1, y2, th_width, th_height;
                 if (cnt == 2) {
                     if (orients == 'ww' && avg_ratio > 1.4 * max_ratio && (ratios[1] - ratios[0]) < 0.2) {
                         w = max_w;
@@ -2054,9 +2054,9 @@ function checkFrameSize() {
                         updateThumb(thumbsEl[3], x, y2, w, h2, th_width, th_height, 'rb');
                     }
                 } else {
-                    var ratios_cropped = [];
-                    for (var i = 0; i < ratios.length; i++) {
-                        var ratio = ratios[i];
+                    let ratios_cropped = [];
+                    for (let i = 0; i < ratios.length; i++) {
+                        let ratio = ratios[i];
                         if (avg_ratio > 1.1) {
                             ratio_cropped = Math.max(1.0, ratio);
                         } else {
@@ -2065,16 +2065,16 @@ function checkFrameSize() {
                         ratio_cropped = Math.max(0.66667, Math.min(1.7, ratio_cropped));
                         ratios_cropped.push(ratio_cropped);
                     }
-                    var multiHeight = function (ratios) {
-                        var ratios_sum = 0;
-                        for (var i = 0; i < ratios.length; i++) {
-                            var ratio = ratios[i];
+                    let multiHeight = function (ratios) {
+                        let ratios_sum = 0;
+                        for (let i = 0; i < ratios.length; i++) {
+                            let ratio = ratios[i];
                             ratios_sum += ratio;
                         }
                         return (max_w - (ratios.length - 1) * margin_w) / ratios_sum;
                     };
-                    var tries = [];
-                    var first_line, second_line, third_line, fourth_line;
+                    let tries = [];
+                    let first_line, second_line, third_line, fourth_line;
                     for (first_line = 1; first_line <= cnt - 1; first_line++) {
                         second_line = cnt - first_line;
                         if (first_line > 3 || second_line > 3) {
@@ -2102,23 +2102,23 @@ function checkFrameSize() {
                             }
                         }
                     }
-                    var opt_i = false;
-                    var opt_conf = false;
-                    var opt_diff = false;
-                    var opt_h = false;
-                    for (var i = 0; i < tries.length; i++) {
-                        var conf_nums = tries[i][0];
-                        var heights = tries[i][1];
-                        var heights_sum = 0;
-                        var heights_min = Infinity;
-                        for (var j = 0; j < heights.length; j++) {
+                    let opt_i = false;
+                    let opt_conf = false;
+                    let opt_diff = false;
+                    let opt_h = false;
+                    for (let i = 0; i < tries.length; i++) {
+                        let conf_nums = tries[i][0];
+                        let heights = tries[i][1];
+                        let heights_sum = 0;
+                        let heights_min = Infinity;
+                        for (let j = 0; j < heights.length; j++) {
                             heights_sum += heights[j];
                             if (heights_min > heights[j]) {
                                 heights_min = heights[j];
                             }
                         }
-                        var conf_h = Math.floor(heights_sum + margin_h * (heights.length - 1));
-                        var conf_diff = Math.abs(conf_h - max_h);
+                        let conf_h = Math.floor(heights_sum + margin_h * (heights.length - 1));
+                        let conf_diff = Math.abs(conf_h - max_h);
                         if (conf_nums.length > 1) {
                             if (conf_nums[0] > conf_nums[1] || conf_nums[2] && conf_nums[1] > conf_nums[2] || conf_nums[3] && conf_nums[2] > conf_nums[3]) {
                                 conf_diff *= 1.5;
@@ -2136,21 +2136,21 @@ function checkFrameSize() {
                     }
                     th_width = max_w;
                     th_height = opt_h;
-                    var thumbs_remain = cloneArr(thumbsEl);
-                    var ratios_remain = cloneArr(ratios_cropped);
-                    var chunks = cloneArr(opt_conf);
-                    var opt_heights = cloneArr(tries[opt_i][1]);
-                    var chunks_num = chunks.length;
-                    var last_row = chunks_num - 1;
-                    var sy = 0;
-                    for (var i = 0; i < chunks.length; i++) {
-                        var line_chunks_num = chunks[i];
-                        var line_thumbs = thumbs_remain.splice(0, line_chunks_num);
-                        var line_height = opt_heights.shift();
-                        var last_column = line_thumbs.length - 1;
-                        var h = Math.floor(line_height);
-                        var sx = 0;
-                        var t = '', r = '', b = '', l = '';
+                    let thumbs_remain = cloneArr(thumbsEl);
+                    let ratios_remain = cloneArr(ratios_cropped);
+                    let chunks = cloneArr(opt_conf);
+                    let opt_heights = cloneArr(tries[opt_i][1]);
+                    let chunks_num = chunks.length;
+                    let last_row = chunks_num - 1;
+                    let sy = 0;
+                    for (let i = 0; i < chunks.length; i++) {
+                        let line_chunks_num = chunks[i];
+                        let line_thumbs = thumbs_remain.splice(0, line_chunks_num);
+                        let line_height = opt_heights.shift();
+                        let last_column = line_thumbs.length - 1;
+                        let h = Math.floor(line_height);
+                        let sx = 0;
+                        let t = '', r = '', b = '', l = '';
                         if (i == 0) {
                             t = 't';
                         }
@@ -2158,10 +2158,10 @@ function checkFrameSize() {
                             b = 'b';
                             h = th_height - sy;
                         }
-                        for (var j = 0; j < line_thumbs.length; j++) {
-                            var thumbEl = line_thumbs[j];
-                            var thumb_ratio = ratios_remain.shift();
-                            var w = Math.floor(thumb_ratio * h);
+                        for (let j = 0; j < line_thumbs.length; j++) {
+                            let thumbEl = line_thumbs[j];
+                            let thumb_ratio = ratios_remain.shift();
+                            let w = Math.floor(thumb_ratio * h);
                             if (j == 0) {
                                 l = 'l';
                             }
@@ -2181,12 +2181,12 @@ function checkFrameSize() {
             }
         }
     };
-    var TRoundVideo = window.TRoundVideo = {
+    let TRoundVideo = window.TRoundVideo = {
         init: function (playerEl) {
             playerEl = geById(playerEl);
             if (!playerEl || playerEl.__inited) return;
             playerEl.__inited = true;
-            var videoEl = ge1('.js-message_roundvideo', playerEl),
+            let videoEl = ge1('.js-message_roundvideo', playerEl),
                 playEl = ge1('.js-message_roundvideo_play', playerEl),
                 progressEl = ge1('.js-message_roundvideo_progress', playerEl),
                 durationEl = ge1('.js-message_roundvideo_duration', playerEl), playing = false;
@@ -2213,25 +2213,25 @@ function checkFrameSize() {
                 }
                 redrawProgress();
                 if (videoEl.duration) {
-                    var duration = Math.floor(videoEl.duration);
+                    let duration = Math.floor(videoEl.duration);
                     durationEl.innerHTML = formatDuration(duration - videoEl.currentTime);
                 }
             }
 
             function redrawProgress(updateSVG) {
                 if (!videoEl) return;
-                var progress;
+                let progress;
                 if (playing) {
                     progress = videoEl.currentTime / videoEl.duration;
                 } else {
                     progress = 0;
                 }
                 progress = Math.max(0, Math.min(progress, 1));
-                var wrapWidth = playerEl.offsetWidth;
+                let wrapWidth = playerEl.offsetWidth;
                 if (wrapWidth) {
-                    var rd = progressEl.getAttribute('data-rd') || 3;
-                    var d = (wrapWidth - rd);
-                    var l = (d * Math.PI);
+                    let rd = progressEl.getAttribute('data-rd') || 3;
+                    let d = (wrapWidth - rd);
+                    let l = (d * Math.PI);
                     progressEl.setAttribute('r', (d / 2));
                     progressEl.setAttribute('stroke-dasharray', l);
                     progressEl.setAttribute('stroke-dashoffset', l * (1 - progress));
@@ -2243,8 +2243,8 @@ function checkFrameSize() {
 
             function play() {
                 if (!videoEl) return;
-                var video = videoEl;
-                var isPlaying = (video.currentTime > 0) && !video.paused && !video.ended && (video.readyState > 2);
+                let video = videoEl;
+                let isPlaying = (video.currentTime > 0) && !video.paused && !video.ended && (video.readyState > 2);
                 if (!isPlaying) {
                     video.play();
                     if (playing) {
@@ -2306,12 +2306,12 @@ function checkFrameSize() {
             }
         }
     };
-    var TVoice = window.TVoice = {
+    let TVoice = window.TVoice = {
         init: function (playerEl) {
             playerEl = geById(playerEl);
             if (!playerEl || playerEl.__inited) return;
             playerEl.__inited = true;
-            var audioEl = ge1('.js-message_voice', playerEl), durationEl = ge1('.js-message_voice_duration', playerEl),
+            let audioEl = ge1('.js-message_voice', playerEl), durationEl = ge1('.js-message_voice_duration', playerEl),
                 progressEl = ge1('.js-message_voice_progress', playerEl),
                 progressWrapEl = ge1('.js-message_voice_progress_wrap', playerEl), player = null,
                 isOGG = audioEl.hasAttribute('data-ogg'), seekTo = null, seeking = false, disableClick = false;
@@ -2379,14 +2379,14 @@ function checkFrameSize() {
 
             function seek(e) {
                 if (!seeking) return;
-                var px = e.pageX;
-                var op = progressWrapEl;
-                var x = op.offsetLeft;
-                var w = op.offsetWidth;
+                let px = e.pageX;
+                let op = progressWrapEl;
+                let x = op.offsetLeft;
+                let w = op.offsetWidth;
                 while (op = op.offsetParent) {
                     x += op.offsetLeft;
                 }
-                var ct = Math.max(0, Math.min(px - x, w)) / w;
+                let ct = Math.max(0, Math.min(px - x, w)) / w;
                 seekTo = ct;
                 showProgress();
             }
@@ -2394,7 +2394,7 @@ function checkFrameSize() {
             function seekEnd(e) {
                 if (!seeking) return;
                 seek(e);
-                var duration = Math.floor(player.duration);
+                let duration = Math.floor(player.duration);
                 player.currentTime = seekTo * duration;
                 seekTo = null;
                 seeking = false;
@@ -2415,11 +2415,11 @@ function checkFrameSize() {
                     });
                 }
                 if (player.duration && player.duration !== Infinity) {
-                    var duration = Math.floor(player.duration);
+                    let duration = Math.floor(player.duration);
                     if (seeking) {
-                        var currentTime = seekTo * duration;
+                        let currentTime = seekTo * duration;
                     } else {
-                        var currentTime = Math.max(0, player.currentTime);
+                        let currentTime = Math.max(0, player.currentTime);
                     }
                     if (progressEl) {
                         progressEl.style.width = Math.min(100, currentTime / duration * 100) + '%';
@@ -2432,25 +2432,25 @@ function checkFrameSize() {
 
             function redrawProgress() {
                 if (!audioEl) return;
-                var ss = progressWrapEl.getElementsByTagName('S');
-                var ss_count = ss.length / 2;
-                var waveform_str = audioEl.getAttribute('data-waveform') || '';
-                var waveform = waveform_str.split(',');
-                var lines_cnt = Math.floor((progressWrapEl.offsetWidth + 2) / 6);
-                var p = waveform.length / lines_cnt;
-                var values = [];
-                var max_value = 0;
-                for (var i = 0; i < lines_cnt; i++) {
-                    var ws = i * p;
-                    var we = ws + p;
-                    var wsi = Math.floor(ws);
-                    var wei = Math.floor(we);
+                let ss = progressWrapEl.getElementsByTagName('S');
+                let ss_count = ss.length / 2;
+                let waveform_str = audioEl.getAttribute('data-waveform') || '';
+                let waveform = waveform_str.split(',');
+                let lines_cnt = Math.floor((progressWrapEl.offsetWidth + 2) / 6);
+                let p = waveform.length / lines_cnt;
+                let values = [];
+                let max_value = 0;
+                for (let i = 0; i < lines_cnt; i++) {
+                    let ws = i * p;
+                    let we = ws + p;
+                    let wsi = Math.floor(ws);
+                    let wei = Math.floor(we);
                     if (wsi == wei) {
-                        var value = waveform[wsi] * (we - ws);
+                        let value = waveform[wsi] * (we - ws);
                     } else {
-                        var value = 0;
-                        for (var j = wsi; j <= wei; j++) {
-                            var wv = +waveform[j] || 0;
+                        let value = 0;
+                        for (let j = wsi; j <= wei; j++) {
+                            let wv = +waveform[j] || 0;
                             if (j == wsi) {
                                 value += wv * (j + 1 - ws);
                             } else if (j == wei) {
@@ -2464,10 +2464,10 @@ function checkFrameSize() {
                     max_value = Math.max(value, max_value);
                     values.push(value);
                 }
-                for (var i = 0; i < ss.length; i++) {
-                    var li = i % ss_count;
+                for (let i = 0; i < ss.length; i++) {
+                    let li = i % ss_count;
                     if (li < lines_cnt) {
-                        var height = (values[li] / max_value) * 100;
+                        let height = (values[li] / max_value) * 100;
                         ss[i].style.height = height + '%';
                         ss[i].style.display = '';
                     } else {
@@ -2496,9 +2496,9 @@ function checkFrameSize() {
             redrawProgress();
         }
     };
-    var TSticker = window.TSticker = {init: proccessWebpImage};
-    var TVideoSticker = window.TVideoSticker = {init: proccessWebmImage};
-    var TEmoji = window.TEmoji = {init: proccessEmoji}
+    let TSticker = window.TSticker = {init: proccessWebpImage};
+    let TVideoSticker = window.TVideoSticker = {init: proccessWebmImage};
+    let TEmoji = window.TEmoji = {init: proccessEmoji}
     window.TWidgetPost = {
         init: function (options) {
             if (!doesSupportEmoji()) {
@@ -2521,13 +2521,13 @@ function checkFrameSize() {
             });
             addEvent(window, 'tg:optionschange', TWidgetPost.onOptionsChange);
         }, onOptionsChange: function (e) {
-            var new_options = e.detail, transition_off = false;
+            let new_options = e.detail, transition_off = false;
             if (typeof new_options.dark !== undefined) {
                 transition_off = true;
                 addClass(document.body, 'no_transitions');
                 toggleClass(document.body, 'dark', !!new_options.dark);
                 toggleClass(document.body, 'nodark', !new_options.dark);
-                var root = document.documentElement;
+                let root = document.documentElement;
                 if (root && root.style) {
                     root.style.colorScheme = !new_options.dark ? 'light' : 'dark';
                 }
@@ -2542,7 +2542,7 @@ function checkFrameSize() {
             if (!TWidgetAuth.isLoggedIn()) {
                 return TWidgetAuth.logIn();
             }
-            var poll_el = gpeByClass(this, 'js-poll');
+            let poll_el = gpeByClass(this, 'js-poll');
             if (!poll_el) {
                 return false;
             }
@@ -2556,7 +2556,7 @@ function checkFrameSize() {
             if (!TWidgetAuth.isLoggedIn()) {
                 return TWidgetAuth.logIn();
             }
-            var poll_el = gpeByClass(this, 'js-poll');
+            let poll_el = gpeByClass(this, 'js-poll');
             if (!poll_el) {
                 return false;
             }
@@ -2565,19 +2565,19 @@ function checkFrameSize() {
             if (!poll_el || hasClass(poll_el, 'sending')) {
                 return false;
             }
-            var option_els = ge('.js-poll_option.selected', poll_el);
-            var options = TWidgetPost.options || {};
-            var post_el = gpeByClass(option_el, 'js-widget_message');
+            let option_els = ge('.js-poll_option.selected', poll_el);
+            let options = TWidgetPost.options || {};
+            let post_el = gpeByClass(option_el, 'js-widget_message');
             if (!post_el) {
                 return false;
             }
-            var peer = getAttr(post_el, 'data-peer');
-            var peer_hash = getAttr(post_el, 'data-peer-hash');
-            var post_id = getAttr(post_el, 'data-post-id');
+            let peer = getAttr(post_el, 'data-peer');
+            let peer_hash = getAttr(post_el, 'data-peer-hash');
+            let post_id = getAttr(post_el, 'data-post-id');
             if (!peer || !peer_hash || !post_id) {
                 return false;
             }
-            var poll_options = [];
+            let poll_options = [];
             gec(option_els, function () {
                 poll_options.push(getAttr(this, 'data-value'));
             });
@@ -2591,8 +2591,8 @@ function checkFrameSize() {
             }, function (err, result) {
                 removeClass(poll_el, 'sending');
                 if (result.media_html) {
-                    var media_wrap = newEl('div', '', result.media_html);
-                    var media_html = getHtml('.js-poll', media_wrap);
+                    let media_wrap = newEl('div', '', result.media_html);
+                    let media_html = getHtml('.js-poll', media_wrap);
                     setHtml(poll_el, media_html);
                     addEvent(ge('.js-poll_option', poll_el), 'click', TWidgetPost.eSelectPollOption);
                     addEvent(ge('.js-poll_vote_btn', poll_el), 'click', TWidgetPost.eSendVotes);
@@ -2601,15 +2601,15 @@ function checkFrameSize() {
             });
         }
     };
-    var TWidgetLogin = {
+    let TWidgetLogin = {
         init: function (id, bot_id, params, init_auth) {
             initWidgetFrame({auto_height: true, auto_width: true});
             TWidgetLogin.widgetEl = document.getElementById(id);
             TWidgetLogin.botId = bot_id;
             TWidgetLogin.params = params;
             TWidgetLogin.lang = (params || {}).lang;
-            var params_encoded = '', params_arr = [];
-            for (var k in params) {
+            let params_encoded = '', params_arr = [];
+            for (let k in params) {
                 params_arr.push(encodeURIComponent(k) + '=' + encodeURIComponent(params[k]));
             }
             TWidgetLogin.paramsEncoded = params_arr.join('&');
@@ -2618,9 +2618,9 @@ function checkFrameSize() {
             }
             addEvent(window, 'message', function (event) {
                 try {
-                    var data = JSON.parse(event.data);
+                    let data = JSON.parse(event.data);
                 } catch (e) {
-                    var data = {};
+                    let data = {};
                 }
                 if (event.source !== TWidgetLogin.activePopup) return;
                 if (data.event == 'auth_result') {
@@ -2628,9 +2628,9 @@ function checkFrameSize() {
                 }
             });
         }, auth: function () {
-            var width = 550;
-            var height = 470;
-            var left = Math.max(0, (screen.width - width) / 2) + (screen.availLeft | 0),
+            let width = 550;
+            let height = 470;
+            let left = Math.max(0, (screen.width - width) / 2) + (screen.availLeft | 0),
                 top = Math.max(0, (screen.height - height) / 2) + (screen.availTop | 0);
 
             function checkClose() {
@@ -2647,7 +2647,7 @@ function checkFrameSize() {
                 checkClose();
             }
         }, getAuth: function (init) {
-            var xhr = getXHR();
+            let xhr = getXHR();
             xhr.open('POST', '/auth/get?bot_id=' + TWidgetLogin.botId + (TWidgetLogin.lang ? '&lang=' + encodeURIComponent(TWidgetLogin.lang) : ''));
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
             xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
@@ -2655,9 +2655,9 @@ function checkFrameSize() {
                 if (xhr.readyState == 4) {
                     if (typeof xhr.responseBody == 'undefined' && xhr.responseText) {
                         try {
-                            var result = JSON.parse(xhr.responseText);
+                            let result = JSON.parse(xhr.responseText);
                         } catch (e) {
-                            var result = {};
+                            let result = {};
                         }
                         if (result.html && TWidgetLogin.widgetEl.innerHTML != result.html) {
                             TWidgetLogin.widgetEl.innerHTML = result.html;
@@ -2680,9 +2680,9 @@ function checkFrameSize() {
         }, onAuth: function (origin, authData, init) {
             if (TWidgetLogin.authFinished) return;
             if (authData) {
-                var data = {event: 'auth_user', auth_data: authData};
+                let data = {event: 'auth_user', auth_data: authData};
             } else {
-                var data = {event: 'unauthorized'};
+                let data = {event: 'unauthorized'};
             }
             if (init) {
                 data.init = true;
@@ -2694,7 +2694,7 @@ function checkFrameSize() {
         }
     };
     window.TWidgetLogin = TWidgetLogin;
-    var TStats = {
+    let TStats = {
         init: function () {
             if (!doesSupportEmoji()) {
                 removeClass(document.body, 'emoji_default');

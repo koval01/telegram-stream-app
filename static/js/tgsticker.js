@@ -1,7 +1,7 @@
-var RLottie = (function () {
-    var rlottie = {}, apiInitStarted = false, apiInited = false, initCallbacks = [];
-    var deviceRatio = window.devicePixelRatio || 1;
-    var startTime = +(new Date());
+let RLottie = (function () {
+    let rlottie = {}, apiInitStarted = false, apiInited = false, initCallbacks = [];
+    let deviceRatio = window.devicePixelRatio || 1;
+    let startTime = +(new Date());
 
     function dT() {
         return '[' + ((+(new Date()) - startTime) / 1000.0) + '] ';
@@ -10,15 +10,15 @@ var RLottie = (function () {
     rlottie.Api = {};
     rlottie.players = Object.create(null);
     ;rlottie.WORKERS_LIMIT = 4;
-    var reqId = 0;
-    var mainLoopAf = false;
-    var mainLoopTo = false;
-    var mainLoopInited = false;
-    var checkViewportDate = false;
-    var lastRenderDate = false;
-    var userAgent = window.navigator.userAgent;
-    var isSafari = !!window.safari || !!(userAgent && (/\b(iPad|iPhone|iPod)\b/.test(userAgent) || (!!userAgent.match('Safari') && !userAgent.match('Chrome'))));
-    var isRAF = isSafari;
+    let reqId = 0;
+    let mainLoopAf = false;
+    let mainLoopTo = false;
+    let mainLoopInited = false;
+    let checkViewportDate = false;
+    let lastRenderDate = false;
+    let userAgent = window.navigator.userAgent;
+    let isSafari = !!window.safari || !!(userAgent && (/\b(iPad|iPhone|iPod)\b/.test(userAgent) || (!!userAgent.match('Safari') && !userAgent.match('Chrome'))));
+    let isRAF = isSafari;
     rlottie.isSafari = isSafari;
 
     function wasmIsSupported() {
@@ -41,10 +41,10 @@ var RLottie = (function () {
     rlottie.isSupported = isSupported();
 
     function mainLoop() {
-        var key, rlPlayer, delta, rendered;
-        var isEmpty = true;
-        var now = +Date.now();
-        var checkViewport = !checkViewportDate || (now - checkViewportDate) > 1000;
+        let key, rlPlayer, delta, rendered;
+        let isEmpty = true;
+        let now = +Date.now();
+        let checkViewport = !checkViewportDate || (now - checkViewportDate) > 1000;
         for (key in rlottie.players) {
             rlPlayer = rlottie.players[key];
             if (rlPlayer && rlPlayer.frameCount) {
@@ -57,7 +57,7 @@ var RLottie = (function () {
                 }
             }
         }
-        var delay = 16;
+        let delay = 16;
         if (delay < 20 && isRAF) {
             mainLoopAf = requestAnimationFrame(mainLoop)
         } else {
@@ -70,7 +70,7 @@ var RLottie = (function () {
     }
 
     function setupMainLoop() {
-        var isEmpty = true, forceRender = false, rlPlayer;
+        let isEmpty = true, forceRender = false, rlPlayer;
         for (key in rlottie.players) {
             rlPlayer = rlottie.players[key];
             if (rlPlayer && rlPlayer.frameCount) {
@@ -104,9 +104,9 @@ var RLottie = (function () {
             if (!apiInitStarted) {
                 console.log(dT(), 'tgsticker init');
                 apiInitStarted = true;
-                QueryableWorkerProxy.init('/static/js/tgsticker-worker.js', rlottie.WORKERS_LIMIT, function () {
+                QueryableWorkerProxy.init('/js/tgsticker-worker.js', rlottie.WORKERS_LIMIT, function () {
                     apiInited = true;
-                    for (var i = 0; i < initCallbacks.length; i++) {
+                    for (let i = 0; i < initCallbacks.length; i++) {
                         initCallbacks[i]();
                     }
                     initCallbacks = [];
@@ -127,15 +127,15 @@ var RLottie = (function () {
             return;
         }
         options = options || {};
-        var rlPlayer = el.rlPlayer = {};
+        let rlPlayer = el.rlPlayer = {};
         rlPlayer.thumb = el.querySelector('img');
-        var tgs_sources = el.querySelectorAll('source[type="application/x-tgsticker"]');
-        var multi_source = el.hasAttribute('data-multi-source');
-        var urls = [], urls_map = {};
-        for (var i = 0; i < tgs_sources.length; i++) {
-            var tgs_source = tgs_sources[i];
-            var url = tgs_source && tgs_source.getAttribute('srcset') || '';
-            var frames_align = tgs_source && tgs_source.getAttribute('data-frames-align') || '';
+        let tgs_sources = el.querySelectorAll('source[type="application/x-tgsticker"]');
+        let multi_source = el.hasAttribute('data-multi-source');
+        let urls = [], urls_map = {};
+        for (let i = 0; i < tgs_sources.length; i++) {
+            let tgs_source = tgs_sources[i];
+            let url = tgs_source && tgs_source.getAttribute('srcset') || '';
+            let frames_align = tgs_source && tgs_source.getAttribute('data-frames-align') || '';
             if (url && !urls_map[url]) {
                 urls_map[url] = true;
                 urls.push({url: url, framesAlign: frames_align});
@@ -148,9 +148,9 @@ var RLottie = (function () {
             console.warn('picture source application/x-tgsticker not found');
             return;
         }
-        var pic_width = el.clientWidth || el.getAttribute('width');
-        var pic_height = el.clientHeight || el.getAttribute('height');
-        var curDeviceRatio = options.maxDeviceRatio ? Math.min(options.maxDeviceRatio, deviceRatio) : deviceRatio;
+        let pic_width = el.clientWidth || el.getAttribute('width');
+        let pic_height = el.clientHeight || el.getAttribute('height');
+        let curDeviceRatio = options.maxDeviceRatio ? Math.min(options.maxDeviceRatio, deviceRatio) : deviceRatio;
         if (!pic_width || !pic_height) {
             pic_width = pic_height = 256;
         }
@@ -181,7 +181,7 @@ var RLottie = (function () {
 
     function destroyPlayer(el) {
         if (!el.rlPlayer) return;
-        var rlPlayer = el.rlPlayer;
+        let rlPlayer = el.rlPlayer;
         delete rlottie.players[rlPlayer.reqId];
         delete rlPlayer;
         setupMainLoop();
@@ -192,13 +192,13 @@ var RLottie = (function () {
             return false;
         }
         if (!rlPlayer.forceRender) {
-            var focused = window.isFocused ? isFocused() : document.hasFocus();
+            let focused = window.isFocused ? isFocused() : document.hasFocus();
             if (!focused || rlPlayer.paused || !rlPlayer.isVisible || !rlPlayer.frameCount) {
                 return false;
             }
-            var isInViewport = rlPlayer.isInViewport;
+            let isInViewport = rlPlayer.isInViewport;
             if (isInViewport === undefined || checkViewport) {
-                var rect = rlPlayer.el.getBoundingClientRect();
+                let rect = rlPlayer.el.getBoundingClientRect();
                 if (rect.bottom < 0 || rect.right < 0 || rect.top > (window.innerHeight || document.documentElement.clientHeight) || rect.left > (window.innerWidth || document.documentElement.clientWidth)) {
                     isInViewport = false;
                 } else {
@@ -210,10 +210,10 @@ var RLottie = (function () {
                 return false;
             }
         }
-        var frame = rlPlayer.frameQueue.shift();
+        let frame = rlPlayer.frameQueue.shift();
         if (frame !== null) {
             doRender(rlPlayer, frame);
-            var nextFrameNo = rlPlayer.nextFrameNo;
+            let nextFrameNo = rlPlayer.nextFrameNo;
             if (rlPlayer.stopOnLastFrame && frame.no == rlPlayer.frameCount - 1) {
                 rlPlayer.stopOnLastFrame = false;
                 if (!rlPlayer.paused) {
@@ -245,7 +245,7 @@ var RLottie = (function () {
         rlPlayer.imageData.data.set(frame.frame);
         rlPlayer.context.putImageData(rlPlayer.imageData, 0, 0);
         rlPlayer.frameNo = frame.no;
-        var now = +(new Date());
+        let now = +(new Date());
         if (rlPlayer.frameThen) {
             rlPlayer.times.push(now - rlPlayer.frameThen)
         }
@@ -257,8 +257,8 @@ var RLottie = (function () {
     }
 
     function requestFrame(reqId, frameNo) {
-        var rlPlayer = rlottie.players[reqId];
-        var frame = rlPlayer.frames[frameNo];
+        let rlPlayer = rlottie.players[reqId];
+        let frame = rlPlayer.frames[frameNo];
         if (frame) {
             onFrame(reqId, frameNo, frame);
         } else {
@@ -267,20 +267,20 @@ var RLottie = (function () {
     }
 
     function onFrame(reqId, frameNo, frame) {
-        var rlPlayer = rlottie.players[reqId];
+        let rlPlayer = rlottie.players[reqId];
         if (!rlPlayer || !rlPlayer.frames) {
             return;
         }
         if (!rlPlayer.frames[frameNo] && (!frameNo || (rlPlayer.options.cachingModulo && ((reqId + frameNo) % rlPlayer.options.cachingModulo)))) {
             rlPlayer.frames[frameNo] = new Uint8ClampedArray(frame)
         }
-        var prevNo = frameNo > 0 ? frameNo - 1 : rlPlayer.frameCount - 1;
-        var lastQueueFrame = rlPlayer.frameQueue.last();
+        let prevNo = frameNo > 0 ? frameNo - 1 : rlPlayer.frameCount - 1;
+        let lastQueueFrame = rlPlayer.frameQueue.last();
         if (lastQueueFrame && lastQueueFrame.no != prevNo) {
             return;
         }
         rlPlayer.frameQueue.push({no: frameNo, frame: frame});
-        var nextFrameNo = ++frameNo;
+        let nextFrameNo = ++frameNo;
         if (nextFrameNo >= rlPlayer.frameCount) {
             nextFrameNo = 0;
             if (rlPlayer.times.length) {
@@ -295,7 +295,7 @@ var RLottie = (function () {
     }
 
     function onLoaded(reqId, frameCount, fps) {
-        var rlPlayer = rlottie.players[reqId];
+        let rlPlayer = rlottie.players[reqId];
         rlPlayer.canvas = document.createElement('canvas');
         rlPlayer.canvas.width = rlPlayer.width;
         rlPlayer.canvas.height = rlPlayer.height;
@@ -346,7 +346,7 @@ var RLottie = (function () {
     }
     rlottie.playOnce = function (el) {
         if (el && el.rlPlayer) {
-            var rlPlayer = el.rlPlayer;
+            let rlPlayer = el.rlPlayer;
             if (rlPlayer.frameCount > 0) {
                 rlPlayer.stopOnFirstFrame = true;
                 rlPlayer.stopOnLastFrame = false;
@@ -364,7 +364,7 @@ var RLottie = (function () {
     }
     rlottie.playUntilEnd = function (el) {
         if (el && el.rlPlayer) {
-            var rlPlayer = el.rlPlayer;
+            let rlPlayer = el.rlPlayer;
             if (rlPlayer.frameCount > 0) {
                 rlPlayer.stopOnFirstFrame = false;
                 rlPlayer.stopOnLastFrame = true;
@@ -392,7 +392,7 @@ var RLottie = (function () {
     }
     rlottie.reset = function (el) {
         if (el && el.rlPlayer) {
-            var rlPlayer = el.rlPlayer;
+            let rlPlayer = el.rlPlayer;
             rlPlayer.frameQueue.clear();
             rlPlayer.forceRender = true;
             requestFrame(rlPlayer.reqId, 0);
@@ -404,15 +404,15 @@ var RLottie = (function () {
     }
     return rlottie;
 }());
-var QueryableWorkerProxy = (function () {
-    var workerproxy = {};
-    var proxyId = 0;
-    var wReqId = 0;
-    var rObjs = {};
-    var wrMap = {};
-    var proxies = {};
-    var rlottieWorkers = [], curWorkerNum = 0;
-    var startTime = +(new Date());
+let QueryableWorkerProxy = (function () {
+    let workerproxy = {};
+    let proxyId = 0;
+    let wReqId = 0;
+    let rObjs = {};
+    let wrMap = {};
+    let proxies = {};
+    let rlottieWorkers = [], curWorkerNum = 0;
+    let startTime = +(new Date());
 
     function dT() {
         return '[' + ((+(new Date()) - startTime) / 1000.0) + '] ';
@@ -433,15 +433,15 @@ var QueryableWorkerProxy = (function () {
             return;
         }
         this.clampedSize = width * height * 4;
-        for (var i = 0; i < urls.length; i++) {
-            var url = urls[i];
-            var _wReqId = ++wReqId;
-            var worker = rlottieWorkers[curWorkerNum++];
+        for (let i = 0; i < urls.length; i++) {
+            let url = urls[i];
+            let _wReqId = ++wReqId;
+            let worker = rlottieWorkers[curWorkerNum++];
             if (curWorkerNum >= rlottieWorkers.length) {
                 curWorkerNum = 0;
             }
             worker.sendQuery('loadFromData', _wReqId, url.url, width, height);
-            var item = {
+            let item = {
                 reqId: _wReqId,
                 worker: worker,
                 url: url.url,
@@ -465,9 +465,9 @@ var QueryableWorkerProxy = (function () {
         }
     };
     Proxy.prototype.renderFrame = function (frameNo, need_clamped) {
-        for (var i = 0; i < this.items.length; i++) {
-            var item = this.items[i];
-            var realFrameNo = frameNo;
+        for (let i = 0; i < this.items.length; i++) {
+            let item = this.items[i];
+            let realFrameNo = frameNo;
             if (item.framesAlign == 'right') {
                 realFrameNo = frameNo - (this.frameCount - item.frameCount);
             }
@@ -483,18 +483,18 @@ var QueryableWorkerProxy = (function () {
     };
 
     function onFrame(wReqId, realFrameNo, frame) {
-        var proxyId = wrMap[wReqId];
-        var proxy = proxies[proxyId];
-        var item = proxy.itemsMap[wReqId];
-        var frameNo = realFrameNo;
+        let proxyId = wrMap[wReqId];
+        let proxy = proxies[proxyId];
+        let item = proxy.itemsMap[wReqId];
+        let frameNo = realFrameNo;
         if (item.framesAlign == 'right') {
             frameNo = realFrameNo + (proxy.frameCount - item.frameCount);
         }
         item.frameLoaded[frameNo] = frame;
-        var finished = true;
-        for (var i = 0; i < proxy.items.length; i++) {
-            var item = proxy.items[i];
-            var loadedFrame = item.frameLoaded[frameNo];
+        let finished = true;
+        for (let i = 0; i < proxy.items.length; i++) {
+            let item = proxy.items[i];
+            let loadedFrame = item.frameLoaded[frameNo];
             if (!loadedFrame) {
                 finished = false;
                 break;
@@ -502,25 +502,25 @@ var QueryableWorkerProxy = (function () {
         }
         if (finished) {
             if (proxy.items.length == 1) {
-                var loadedFrame = proxy.items[0].frameLoaded[frameNo];
+                let loadedFrame = proxy.items[0].frameLoaded[frameNo];
                 proxy.onFrame(proxy.playerId, frameNo, loadedFrame);
                 delete proxy.items[0].frameLoaded[frameNo];
             } else {
-                var promises = [];
-                for (var i = 0; i < proxy.items.length; i++) {
-                    var item = proxy.items[i];
-                    var loadedFrame = item.frameLoaded[frameNo];
+                let promises = [];
+                for (let i = 0; i < proxy.items.length; i++) {
+                    let item = proxy.items[i];
+                    let loadedFrame = item.frameLoaded[frameNo];
                     proxy.imageData.data.set(loadedFrame);
-                    var promise = createImageBitmap(proxy.imageData);
+                    let promise = createImageBitmap(proxy.imageData);
                     promises.push(promise);
                     delete item.frameLoaded[frameNo];
                 }
                 Promise.all(promises).then(function (bitmaps) {
                     proxy.context.clearRect(0, 0, proxy.canvas.width, proxy.canvas.height);
-                    for (var i = 0; i < bitmaps.length; i++) {
+                    for (let i = 0; i < bitmaps.length; i++) {
                         proxy.context.drawImage(bitmaps[i], 0, 0);
                     }
-                    var imageData = proxy.context.getImageData(0, 0, proxy.canvas.width, proxy.canvas.height);
+                    let imageData = proxy.context.getImageData(0, 0, proxy.canvas.width, proxy.canvas.height);
                     proxy.onFrame(proxy.playerId, frameNo, imageData.data);
                 });
             }
@@ -530,17 +530,17 @@ var QueryableWorkerProxy = (function () {
     }
 
     function onLoaded(wReqId, frameCount, fps) {
-        var proxyId = wrMap[wReqId];
-        var proxy = proxies[proxyId];
-        var item = proxy.itemsMap[wReqId];
+        let proxyId = wrMap[wReqId];
+        let proxy = proxies[proxyId];
+        let item = proxy.itemsMap[wReqId];
         item.loaded = true;
         item.frameCount = frameCount;
         item.fps = fps;
-        var finished = true;
+        let finished = true;
         frameCount = null;
         fps = null;
-        for (var i = 0; i < proxy.items.length; i++) {
-            var item = proxy.items[i];
+        for (let i = 0; i < proxy.items.length; i++) {
+            let item = proxy.items[i];
             if (!item.framesAlign) {
                 if (frameCount === null) {
                     frameCount = item.frameCount;
@@ -582,8 +582,8 @@ var QueryableWorkerProxy = (function () {
     }
 
     workerproxy.init = function (worker_url, workers_limit, callback) {
-        var workersRemain = workers_limit;
-        var firstWorker = rlottieWorkers[0] = new QueryableWorker(worker_url);
+        let workersRemain = workers_limit;
+        let firstWorker = rlottieWorkers[0] = new QueryableWorker(worker_url);
         firstWorker.addListener('ready', function () {
             console.log(dT(), 'worker #0 ready');
             firstWorker.addListener('frame', onFrame);
@@ -593,9 +593,9 @@ var QueryableWorkerProxy = (function () {
                 console.log(dT(), 'workers ready');
                 callback && callback();
             } else {
-                for (var workerNum = 1; workerNum < workers_limit; workerNum++) {
+                for (let workerNum = 1; workerNum < workers_limit; workerNum++) {
                     (function (workerNum) {
-                        var rlottieWorker = rlottieWorkers[workerNum] = new QueryableWorker(worker_url);
+                        let rlottieWorker = rlottieWorkers[workerNum] = new QueryableWorker(worker_url);
                         rlottieWorker.addListener('ready', function () {
                             console.log(dT(), 'worker #' + workerNum + ' ready');
                             rlottieWorker.addListener('frame', onFrame);
@@ -615,7 +615,7 @@ var QueryableWorkerProxy = (function () {
         return new Proxy(playerId, onFrame, onLoaded);
     };
     workerproxy.destroy = function () {
-        for (var workerNum = 0; workerNum < rlottieWorkers.length; workerNum++) {
+        for (let workerNum = 0; workerNum < rlottieWorkers.length; workerNum++) {
             rlottieWorkers[workerNum].terminate();
             console.log('worker #' + workerNum + ' terminated');
         }
@@ -626,9 +626,9 @@ var QueryableWorkerProxy = (function () {
 }());
 
 function QueryableWorker(url, defaultListener, onError) {
-    var instance = this;
-    var worker = new Worker(url);
-    var listeners = {};
+    let instance = this;
+    let worker = new Worker(url);
+    let listeners = {};
     this.defaultListener = defaultListener || function () {
     };
     if (onError) {
@@ -652,12 +652,12 @@ function QueryableWorker(url, defaultListener, onError) {
             return;
         }
         var queryMethod = arguments[0];
-        var args = Array.prototype.slice.call(arguments, 1);
+        let args = Array.prototype.slice.call(arguments, 1);
         if (RLottie.isSafari) {
             worker.postMessage({'queryMethod': queryMethod, 'queryMethodArguments': args});
         } else {
-            var transfer = [];
-            for (var i = 0; i < args.length; i++) {
+            let transfer = [];
+            for (let i = 0; i < args.length; i++) {
                 if (args[i] instanceof ArrayBuffer) {
                     transfer.push(args[i]);
                 }
@@ -707,7 +707,7 @@ FrameQueue.prototype.clear = function frameQueueClear() {
 if (!this.CustomEvent || typeof this.CustomEvent === "object") {
     (function () {
         this.CustomEvent = function CustomEvent(type, eventInitDict) {
-            var event;
+            let event;
             eventInitDict = eventInitDict || {bubbles: false, cancelable: false, detail: undefined};
             try {
                 event = document.createEvent('CustomEvent');
@@ -723,6 +723,6 @@ if (!this.CustomEvent || typeof this.CustomEvent === "object") {
 }
 
 function triggerEvent(el, event_type, init_dict) {
-    var event = new CustomEvent(event_type, init_dict);
+    let event = new CustomEvent(event_type, init_dict);
     el.dispatchEvent(event);
 }
