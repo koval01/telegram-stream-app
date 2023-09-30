@@ -1,32 +1,106 @@
-// Helper function to check if the browser supports thin box shadow
+(function($) {
+    $.fn.redraw = function() {
+        return this.map(function() {
+            this.offsetTop;
+            return this;
+        });
+    };
+    $.fn.scrollIntoView = function(options) {
+        options = options || {}
+        return this.first().each(function() {
+            var position = options.position || 'auto',
+                padding = options.padding || 0,
+                duration = options.duration || 0;
+            var $item = $(this),
+                $cont = $item.scrollParent(),
+                scrollTop = $cont.scrollTop(),
+                positionTop = 0,
+                paddingTop = 0,
+                itemHeight = $item.outerHeight(),
+                isBody = false;
+            if ($cont.get(0) === document) {
+                isBody = true;
+                $cont = $(window);
+                positionTop = $item.offset().top;
+                paddingTop = $('header').height() + 1;
+            } else {
+                positionTop = $item.offset().top - $cont.offset().top + scrollTop;
+            }
+            if (options.slidedEl) {
+                if (options.slidedEl === 'this') {
+                    options.slidedEl = this;
+                }
+                $(options.slidedEl, this).each(function() {
+                    itemHeight += (this.scrollHeight - this.clientHeight);
+                });
+            }
+            var itemTop = positionTop,
+                itemBottom = itemTop + itemHeight,
+                contHeight = $cont.height(),
+                contTop = scrollTop + padding + paddingTop,
+                contBottom = scrollTop + contHeight - padding,
+                scrollTo = null;
+            if (position == 'auto') {
+                if (itemTop < contTop) {
+                    scrollTo = itemTop - padding - paddingTop;
+                } else if (itemBottom > contBottom) {
+                    if (itemHeight > contHeight - padding - padding) {
+                        scrollTo = itemTop - padding - paddingTop;
+                    } else {
+                        scrollTo = itemBottom - contHeight + padding;
+                    }
+                }
+            } else if (position == 'top' || position == 'center') {
+                if (contHeight > itemHeight) {
+                    padding = (contHeight - paddingTop - itemHeight) / 2;
+                }
+                scrollTo = itemTop - padding - paddingTop;
+            } else if (position == 'bottom') {
+                if (itemHeight > contHeight - padding - padding) {
+                    scrollTo = itemTop - padding - paddingTop;
+                } else {
+                    scrollTo = itemBottom - contHeight + padding;
+                }
+            }
+            if (scrollTo) {
+                if (duration) {
+                    if (isBody) {
+                        $cont = $('html');
+                    }
+                    $cont.stop().animate({
+                        scrollTop: scrollTo
+                    }, duration);
+                } else {
+                    $cont.scrollTop(scrollTo);
+                }
+            }
+        });
+    };
+})(jQuery);
+
 function doesSupportThinBoxShadow() {
     if (!window.getComputedStyle) return;
     var div = document.createElement('div');
     div.style.boxShadow = '0 0 0 0.5px black';
     div.style.display = 'none';
     document.body.appendChild(div);
-    var boxShadow = window.getComputedStyle(div).boxShadow;
+    var box_shadow = window.getComputedStyle(div).boxShadow;
     document.body.removeChild(div);
-    return boxShadow.indexOf('0.5') >= 0;
+    return box_shadow.indexOf('0.5') >= 0;
 }
 
-// Helper function to format a date
 function formatDate(datetime) {
     var date = new Date(datetime);
-    var curDate = new Date();
+    var cur_date = new Date();
     var j = date.getDate();
-    var M = [
-        'January', 'February', 'March', 'April', 'May', 'June',
-        'July', 'August', 'September', 'October', 'November', 'December'
-    ][date.getMonth()];
+    var M = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][date.getMonth()];
     var Y = date.getFullYear();
-    if (curDate.getFullYear() == date.getFullYear()) {
+    if (cur_date.getFullYear() == date.getFullYear()) {
         return M + ' ' + j;
     }
     return M + ' ' + j + ', ' + Y;
 }
 
-// Helper function to get a CSS property value
 function getCssProperty(el, prop) {
     if (window.getComputedStyle) {
         return window.getComputedStyle(el, '').getPropertyValue(prop) || null;
@@ -36,9 +110,9 @@ function getCssProperty(el, prop) {
     return null;
 }
 
-// Helper function to check if an element is visible
 function isVisible(el, padding) {
-    var node = el;
+    var node = el,
+        val;
     var visibility = getCssProperty(node, 'visibility');
     if (visibility == 'hidden') return false;
     while (node) {
@@ -53,7 +127,8 @@ function isVisible(el, padding) {
         padding = +padding || 0;
         var rect = el.getBoundingClientRect();
         var html = document.documentElement;
-        if (rect.bottom < padding || rect.right < padding ||
+        if (rect.bottom < padding ||
+            rect.right < padding ||
             rect.top > (window.innerHeight || html.clientHeight) - padding ||
             rect.left > (window.innerWidth || html.clientWidth) - padding) {
             return false;
@@ -62,32 +137,30 @@ function isVisible(el, padding) {
     return true;
 }
 
-// Vanilla JavaScript equivalent of the jQuery code
 var TWeb = {
     init: function(options) {
         options = options || {};
         if (!doesSupportThinBoxShadow()) {
-            document.body.classList.add('thin_box_shadow');
+            $('body').addClass('thin_box_shadow');
         }
-        var widgetMessages = document.querySelectorAll('.js-widget_message');
-        widgetMessages.forEach(function(widgetMessage) {
-            TPost.init(widgetMessage);
+        $('.js-widget_message').each(function() {
+            TPost.init(this);
         });
-        TWeb.updateServiceDate(document.querySelectorAll('.js-widget_message_wrap'));
+        TWeb.updateServiceDate($('.js-widget_message_wrap'));
         if (options.scrollToPost) {
             TWeb.highlightPost(options.scrollToPost, true);
         } else {
-            var widgetMessageWraps = document.querySelectorAll('.js-widget_message_wrap');
-            widgetMessageWraps[widgetMessageWraps.length - 1].scrollIntoView({ behavior: 'smooth', block: 'start' });
+            $('.js-widget_message_wrap').last().scrollIntoView({
+                position: 'top'
+            });
         }
-        document.body.classList.remove('no_transitions');
-        var headerSearch = document.querySelector('.js-header_search');
-        headerSearch.addEventListener('focus', function() {
-            document.querySelector('header.tgme_header').classList.remove('search_collapsed');
-            this.select();
+        $('body').removeClass('no_transitions');
+        $('.js-header_search').on('focus', function() {
+            $('header.tgme_header').removeClass('search_collapsed');
+            $(this).select();
         });
-        headerSearch.addEventListener('blur', function() {
-            document.querySelector('header.tgme_header').classList.add('search_collapsed');
+        $('.js-header_search').on('blur', function() {
+            $('header.tgme_header').addClass('search_collapsed');
         });
         TWeb.initScroll();
         TWeb.initViews();
@@ -100,74 +173,55 @@ var TWeb = {
         }
     },
     toggleTheme: function(dark) {
-        document.documentElement.classList.toggle('theme_dark', dark);
-    },
+        $('html').toggleClass('theme_dark', dark);
+        },
     initScroll: function() {
-        var beforeElements = document.querySelectorAll('.js-messages_more[data-before]');
-        var afterElements = document.querySelectorAll('.js-messages_more[data-after]');
-        var wheight = window.innerHeight;
-        var scrollTop = window.scrollY;
-
-        function loadMore($el) {
-            var bottom = $el.offsetTop + $el.offsetHeight - scrollTop;
-            if (bottom > -wheight * 3) {
-                TWeb.loadMore($el);
+        var $document = $(document);
+        $document.on('scroll', function() {
+            $before = $('.js-messages_more[data-before]');
+            $after = $('.js-messages_more[data-after]');
+            var wheight = $(window).height();
+            var scrollTop = $(window).scrollTop();
+            if ($before.length) {
+                var bottom = $before.offset().top + $before.height() - scrollTop;
+                if (bottom > -wheight * 3) {
+                    TWeb.loadMore($before);
+                }
             }
-        }
-
-        beforeElements.forEach(function($before) {
-            loadMore($before);
-        });
-
-        afterElements.forEach(function($after) {
-            var top = $after.offsetTop - scrollTop;
-            if (top < wheight * 3) {
-                TWeb.loadMore($after);
-            }
-        });
-
-        document.addEventListener('scroll', function() {
-            beforeElements.forEach(function($before) {
-                loadMore($before);
-            });
-
-            afterElements.forEach(function($after) {
-                var top = $after.offsetTop - scrollTop;
+            if ($after.length) {
+                var top = $after.offset().top - scrollTop;
                 if (top < wheight * 3) {
                     TWeb.loadMore($after);
                 }
-            });
-        });
-
-        document.addEventListener('click', function(event) {
-            if (event.target.classList.contains('js-messages_more')) {
-                TWeb.loadMore(event.target);
             }
         });
-    },
+        $document.on('click', '.js-messages_more', function() {
+            var $el = $(this);
+            TWeb.loadMore($el);
+        });
+        },
     initViews: function() {
         TWeb.viewsMap = {};
         TWeb.viewsQueue = [];
         TWeb.viewsLastLoad = 0;
-
-        document.addEventListener('DOMContentLoaded', function() {
-            window.addEventListener('scroll', TWeb.checkVisiblePosts);
-            window.addEventListener('resize', TWeb.checkVisiblePosts);
+        var $document = $(document),
+            $window = $(window);
+        $document.ready(function() {
+            $window.on('scroll resize', TWeb.checkVisiblePosts);
             TWeb.checkVisiblePosts();
         });
-    },
+        },
     checkVisiblePosts: function() {
-        var widgetMessages = document.querySelectorAll('.js-widget_message[data-view]');
-        widgetMessages.forEach(function(widgetMessage) {
-            if (isVisible(widgetMessage, 50)) {
-                var view = widgetMessage.getAttribute('data-view');
+        $('.js-widget_message[data-view]').each(function() {
+            if (isVisible(this, 50)) {
+                var view = this.getAttribute('data-view');
                 if (view) {
                     TWeb.addViewToQueue(view);
                 }
-                widgetMessage.removeAttribute('data-view');
+                this.removeAttribute('data-view');
             }
         });
-    },
+        },
     addViewToQueue: function(view) {
         if (!TWeb.viewsMap[view]) {
             TWeb.viewsMap[view] = true;
@@ -183,116 +237,111 @@ var TWeb = {
         if (TWeb.viewsQueue.length > 0) {
             var views = TWeb.viewsQueue.join(';');
             TWeb.viewsQueue = [];
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', '/v/', true);
-            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            xhr.send('views=' + views);
+            $.ajax('/v/', {
+                type: 'POST',
+                data: {
+                    views: views
+                }
+            });
             TWeb.viewsLastLoad = now;
         }
     },
     highlightPost: function(post_id, scroll) {
-        var postWrap = document.querySelector('.js-widget_message[data-post="' + post_id + '"]').closest('.js-widget_message_wrap');
+        var $postWrap = $('.js-widget_message[data-post="' + post_id + '"]').parents('.js-widget_message_wrap');
         if (scroll) {
-            postWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            $postWrap.scrollIntoView({
+                position: 'top'
+            });
         }
-        postWrap.classList.add('prepare_highlight');
-        postWrap.offsetWidth; // Trigger a reflow
-        postWrap.classList.add('highlight');
+        $postWrap.addClass('prepare_highlight').redraw().addClass('highlight');
         setTimeout(function() {
-            postWrap.classList.remove('highlight');
+            $postWrap.removeClass('highlight');
             setTimeout(function() {
-                postWrap.classList.remove('prepare_highlight');
-            }, 300);
-        }, 1500);
-    },
-    updateServiceDate: function(wrapEls, skip_first) {
-        wrapEls.forEach(function(wrapEl, index) {
-            if (!wrapEl.dataset.msg_date) {
-                var datetime = wrapEl.querySelector('time[datetime]').getAttribute('datetime');
+                $postWrap.removeClass('prepare_highlight');
+                }, 300);
+            }, 1500);
+        },
+    updateServiceDate: function($wrapEls, skip_first) {
+        $wrapEls.each(function() {
+            if (!$(this).data('msg_date')) {
+                var datetime = $('time[datetime]', this).attr('datetime');
                 if (datetime) {
                     var date_formatted = formatDate(datetime);
-                    var dateDiv = document.createElement('div');
-                    dateDiv.className = 'tgme_widget_message_service_date_wrap';
-                    dateDiv.innerHTML = '<div class="tgme_widget_message_service_date">' + date_formatted + '</div>';
-                    wrapEl.appendChild(dateDiv);
-                    wrapEl.dataset.msg_date = date_formatted;
+                    $('<div class="tgme_widget_message_service_date_wrap"><div class="tgme_widget_message_service_date">' + date_formatted + '</div></div>').appendTo(this);
+                    $(this).data('msg_date', date_formatted);
                 }
             }
-            if (index > 0 || !skip_first) {
-                var date_visible = !wrapEls[index - 1] || wrapEls[index - 1].dataset.msg_date != wrapEl.dataset.msg_date;
-                wrapEl.classList.toggle('date_visible', date_visible);
-            }
         });
+        var len = $wrapEls.size();
+        for (var i = len - 1; i >= 0; i--) {
+            var $wrapEl = $wrapEls.eq(i);
+            var $prevWrapEl = i > 0 ? $wrapEls.eq(i - 1) : null;
+            if (!$prevWrapEl && skip_first) continue;
+            var date_visible = !$prevWrapEl || $prevWrapEl.data('msg_date') != $wrapEl.data('msg_date');
+            $wrapEl.toggleClass('date_visible', date_visible);
+        }
     },
     loadMore: function($moreEl) {
-        var loading = $moreEl.dataset.loading;
+        var loading = $moreEl.data('loading');
         if (loading) {
             return false;
         }
-        var before = $moreEl.getAttribute('data-before');
-        var after = $moreEl.getAttribute('data-after');
-        var url = $moreEl.getAttribute('href');
-        $moreEl.dataset.loading = true;
-        $moreEl.classList.add('dots-animated');
+        var before = $moreEl.attr('data-before');
+        var after = $moreEl.attr('data-after');
+        var url = $moreEl.attr('href');
+        $moreEl.data('loading', true);
+        $moreEl.addClass('dots-animated');
+
         var time0 = +(new Date);
         console.log('loading...', before, after);
-
-        function _load(url, before, after) {
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', url, true);
-            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4 && xhr.status === 200) {
+        var _load = function(url, before, after) {
+            $.ajax(url, {
+                type: 'POST',
+                dataType: 'json',
+                success: function(data) {
                     var time1 = +(new Date);
                     console.log('loaded ' + (time1 - time0) + 'ms');
-                    var response = JSON.parse(xhr.responseText);
-                    var wrapper = document.createElement('div');
-                    wrapper.innerHTML = response;
-                    var $helper = document.createElement('div');
-                    $helper.className = 'tgme_widget_messages_helper';
-                    $helper.appendChild(wrapper);
-                    var messageHistory = document.querySelector('.js-message_history');
-                    messageHistory.appendChild($helper);
-                    var $widgetMessages = $helper.querySelectorAll('.js-widget_message');
-                    $widgetMessages.forEach(function(widgetMessage) {
-                        TPost.init(widgetMessage);
+                    var $data = $(data);
+                    var $helper = $('<div class="tgme_widget_messages_helper"></div>');
+                    $helper.append($data);
+                    $('.js-message_history').append($helper);
+                    $helper.find('.js-widget_message').each(function() {
+                        TPost.init(this);
                     });
                     $helper.remove();
-                    var wrapEls = Array.from(wrapper.querySelectorAll('.js-widget_message_wrap'));
+                    var wrapEls = $data.filter('.js-widget_message_wrap').get();
                     var time2 = +(new Date);
                     console.log('prepared ' + (time2 - time1) + 'ms');
-                    var moreElWrap = $moreEl.closest('.js-messages_more_wrap');
+                    var $moreElWrap = $moreEl.parents('.js-messages_more_wrap');
                     if (before) {
-                        var firstWrapEl = moreElWrap.nextElementSibling;
-                        var $wrapEls = [firstWrapEl].concat(wrapEls);
+                        var firstWrapEl = $moreElWrap.next('.js-widget_message_wrap').get();
+                        var $wrapEls = $(wrapEls.concat(firstWrapEl));
                         TWeb.updateServiceDate($wrapEls);
-                        var y = moreElWrap.offsetTop + moreElWrap.offsetHeight - window.scrollY;
-                        messageHistory.insertBefore(wrapper, moreElWrap);
-                        var st = moreElWrap.offsetTop - y;
-                        moreElWrap.remove();
-                        window.scrollTo(0, st);
+                        var y = $moreElWrap.offset().top + $moreElWrap.outerHeight(true) - $(document).scrollTop();
+                        $data.insertBefore($moreElWrap);
+                        var st = $moreElWrap.offset().top - y;
+                        $moreElWrap.remove();
+                        $(window).scrollTop(st);
                     } else {
-                        var lastWrapEl = moreElWrap.previousElementSibling;
-                        var $wrapEls = [lastWrapEl].concat(wrapEls);
-                        TWeb.updateServiceDate($wrapEls, !!lastWrapEl);
-                        messageHistory.insertBefore(wrapper, moreElWrap);
-                        moreElWrap.remove();
+                        var lastWrapEl = $moreElWrap.prev('.js-widget_message_wrap').get();
+                        var $wrapEls = $(lastWrapEl.concat(wrapEls));
+                        TWeb.updateServiceDate($wrapEls, lastWrapEl.length > 0);
+                        $data.insertBefore($moreElWrap);
+                        $moreElWrap.remove();
                     }
                     var time3 = +(new Date);
                     console.log('inserted ' + (time3 - time2) + 'ms');
-                } else if (xhr.readyState === 4) {
-                    var timeout = $moreEl.dataset.timeout || 1000;
-                    $moreEl.dataset.timeout = timeout > 60000 ? timeout : timeout * 2;
+                    },
+                error: function(data) {
+                    var timeout = $moreEl.data('timeout') || 1000;
+                    $moreEl.data('timeout', timeout > 60000 ? timeout : timeout * 2);
                     setTimeout(function() {
                         _load(url, before, after);
-                    }, timeout);
+                        }, timeout);
                 }
-            };
-            xhr.send();
-        }
-
+            });
+        };
         _load(url, before, after);
     }
-};
-
+}
 window.TWeb = TWeb;

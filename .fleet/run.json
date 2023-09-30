@@ -3,7 +3,8 @@
         {
             "type": "flask",
             "name": "Flask",
-            "target": "app:app"
+            "target": "app:app",
+            "arguments": ["--debug"],
         },
 
     ]

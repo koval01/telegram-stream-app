@@ -75,11 +75,8 @@ def proxy(url: str, internal_call: bool = False) -> Response | typing.NoReturn:
 
     allowed_hosts = ['telegram.org', 'cdn4.telegram-cdn.org']
 
-    if internal_call:
-        allowed_hosts.append('t.me')
-
     host = urlparse(url).netloc.split(":")[0]
-    if host not in allowed_hosts:
+    if (host not in allowed_hosts) and not internal_call:
         return abort(403, f"Host {host} is not allowed")
 
     try:

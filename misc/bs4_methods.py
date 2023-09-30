@@ -87,7 +87,7 @@ def remove_by_cls(body: str, cls_list: list) -> str:
 def static_js(body: str) -> str:
     return _updater(
         body=body,
-        exclude=["tgwallpaper", "jquery"],
+        exclude=["tgwallpaper"],
         selectors={"src": True},
         tag_s="script",
         data="src",
