@@ -7,7 +7,7 @@ import validators
 
 from flask import Response, abort
 
-from misc.bs4_methods import *
+from misc.bs4_methods import Bs4Updater
 from misc.regex import *
 
 
@@ -35,8 +35,8 @@ def __style(res: requests.Response) -> bytes | str:
 
         elif c_type == "text/html":
             # Apply custom CSS and manipulate the HTML content
-            body = bs_prepare(body)
-            body = remove_by_cls(body, [
+            body = str(Bs4Updater(body))
+            body = Bs4Updater(body).remove_by_cls([
                 'tgme_widget_message_bubble_tail',
                 'tgme_widget_message_user',
                 'tgme_header_right_column'
@@ -45,7 +45,7 @@ def __style(res: requests.Response) -> bytes | str:
         elif position:
             # Manipulate JSON response
             body = json.loads(body)
-            body = remove_by_cls(body, [
+            body = Bs4Updater(body).remove_by_cls([
                 'tgme_widget_message_bubble_tail',
                 'tgme_widget_message_user'
             ])
