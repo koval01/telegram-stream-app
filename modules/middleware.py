@@ -1,6 +1,6 @@
 from time import time
 
-from flask import Response, request
+from flask import Response, g
 from flask_log_request_id import current_request_id
 
 from app import app
@@ -18,7 +18,7 @@ def start_timer():
     Returns:
         None
     """
-    request.start_time = time()
+    g.start_time = time()
 
 
 @app.after_request
@@ -38,7 +38,7 @@ def add_processing_time(response):
         response: The response object with processing time added to headers.
     """
     # Calculate the processing time in milliseconds
-    processing_time = (time() - request.start_time) * 1000
+    processing_time = (time() - g.start_time) * 1000
 
     # Add the processing time to the response headers
     response.headers['X-Processing-Time'] = f"{processing_time:.0f} ms"

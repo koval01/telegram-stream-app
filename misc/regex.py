@@ -24,8 +24,9 @@ class MiscRegex:
     def _clean_html_for_json(html: str) -> str:
         return re.sub(r"</?html>|</?body>", "", html)
 
-    def _url_pack(self, url: str) -> str:
-        return f"{request.host_url}{self._schema_remove(url)}"
+    @staticmethod
+    def _url_pack(url: str) -> str:
+        return f"{request.host_url}{MiscRegex._schema_remove(url)}"
 
     @classmethod
     def process_json(cls, data: dict | list | str, url_pack=_url_pack) -> dict | list | str:
