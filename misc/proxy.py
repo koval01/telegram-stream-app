@@ -1,14 +1,17 @@
 import typing
 from urllib.parse import urlparse
 
+import json
 import requests
 import sentry_sdk
 import validators
 
-from flask import Response, abort
+from flask import Response, abort, request
+
+from app import app
 
 from misc.bs4_methods import Bs4Updater
-from misc.regex import *
+from misc.regex import MiscRegex
 
 
 def __style(res: requests.Response) -> bytes | str:
@@ -31,7 +34,7 @@ def __style(res: requests.Response) -> bytes | str:
         body = res.text
 
         if (c_type == "application/json") and (not position):
-            body = process_json(body)
+            body = MiscRegex.process_json(body)
 
         elif c_type == "text/html":
             # Apply custom CSS and manipulate the HTML content
@@ -98,7 +101,7 @@ def proxy(url: str, internal_call: bool = False) -> Response | typing.NoReturn:
 
         excluded_headers = ['content-encoding', 'content-length', 'transfer-encoding', 'connection']
         headers = {
-            k: process_location_header(v) if k.lower() == "location" else v
+            k: MiscRegex.process_location_header(v) if k.lower() == "location" else v
             for k, v in res.raw.headers.items()
             if k.lower() not in excluded_headers
         }
@@ -113,7 +116,7 @@ def proxy(url: str, internal_call: bool = False) -> Response | typing.NoReturn:
         position = request.args.get("before") or request.args.get("after")
 
         if (isinstance(body, str) and (content_type == "text/html")) or position:
-            body = replace_origin_host(body)
+            body = MiscRegex.replace_origin_host(body)
 
         response = Response(body, res.status_code, headers)
         return response

@@ -21,7 +21,7 @@ class Bs4Updater:
     def __init__(self, body: str) -> None:
         self.soup = BeautifulSoup(body, 'lxml')
 
-    def _updater(
+    def _path_updater(
             self, exclude: list, selectors: dict,
             tag_s: str = "script", data: str = "src", location: str = "js"
     ) -> None:
@@ -79,7 +79,7 @@ class Bs4Updater:
         return str(self.soup)
 
     def _static_js(self) -> None:
-        self._updater(
+        self._path_updater(
             exclude=["tgwallpaper"],
             selectors={"src": True},
             tag_s="script",
@@ -88,7 +88,7 @@ class Bs4Updater:
         )
 
     def _static_css(self) -> None:
-        self._updater(
+        self._path_updater(
             exclude=[],
             selectors={"href": True, "rel": "stylesheet"},
             tag_s="link",
