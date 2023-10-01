@@ -111,8 +111,8 @@ html.theme_dark body.twallpaper .tgme_background_pattern {
     z-index: 100;
     background: var(--box-bg-blured);
     box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
-    -webkit-backdrop-filter: saturate(180%) blur(20px);
-    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(16px);
+    backdrop-filter: saturate(180%) blur(16px);
     height: 48px;
 }
 
@@ -803,8 +803,8 @@ body.twallpaper .tgme_widget_message_roundvideo_border {
     top: 0;
     border-radius: 7px;
     background: var(--service-bg-blured) !important;
-    -webkit-backdrop-filter: blur(25px);
-    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
     color: #fff;
     padding: 8px;
     margin: 0 0 0 9px;
@@ -873,8 +873,8 @@ body .no_bubble .tgme_widget_message_forwarded_from, .no_bubble .tgme_widget_mes
     bottom: 100%;
     border-radius: 7px;
     background: var(--service-bg-blured);
-    -webkit-backdrop-filter: blur(25px);
-    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
     color: #fff;
     padding: 3px 7px;
     margin: 0 0 3px 9px;
@@ -907,8 +907,8 @@ body .no_bubble .tgme_widget_message_forwarded_from, .no_bubble .tgme_widget_mes
     margin: 0 0 3px;
     border-radius: 7px;
     background: var(--service-bg-blured);
-    -webkit-backdrop-filter: blur(25px);
-    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
     color: #fff;
     padding: 3px 6px
 }
@@ -968,8 +968,8 @@ body .no_bubble .tgme_widget_message_forwarded_from, .no_bubble .tgme_widget_mes
     display: inline-block;
     font-weight: 500;
     background: var(--service-bg-blured);
-    -webkit-backdrop-filter: blur(25px);
-    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
     box-shadow: none;
     color: #fff;
     border-radius: 13px;
@@ -992,8 +992,8 @@ body .no_bubble .tgme_widget_message_forwarded_from, .no_bubble .tgme_widget_mes
 
 .tgme_widget_message_inline_button {
     background: var(--service-bg-blured);
-    -webkit-backdrop-filter: blur(25px);
-    backdrop-filter: blur(25px)
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px)
 }
 
 .date_visible .tgme_widget_message_service_date_wrap {
