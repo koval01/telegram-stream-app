@@ -39,7 +39,7 @@ def favicon() -> Response:
 
 
 @app.route('/v/', methods=['POST'])
-@limiter.limit("1 per 2 seconds")
+@limiter.limit("1 per 3 seconds")
 def view_send() -> Response | typing.NoReturn:
     """
     Proxy a POST request to send data to an external view endpoint.
@@ -56,7 +56,7 @@ def view_send() -> Response | typing.NoReturn:
     This function is decorated with the following route pattern:
     - '/v/' for handling POST requests.
 
-    It is also rate-limited to allow only 1 request every 2 seconds using the 'limiter.limit' decorator.
+    It is also rate-limited to allow only 1 request every 3 seconds using the 'limiter.limit' decorator.
 
     Example usage:
     - A POST request to '/v/' will proxy the request to 'https://t.me/v/' and return the response.
@@ -66,7 +66,7 @@ def view_send() -> Response | typing.NoReturn:
 
 @app.route('/i/<path:path>', methods=['GET'])
 @app.route('/js/<path:path>', methods=['GET'])
-@limiter.limit("50 per minute")
+@limiter.limit("60 per minute")
 def proxy_static(path: str) -> Response | typing.NoReturn:
     """
     Proxy static files from external sources to the current server.
@@ -84,7 +84,7 @@ def proxy_static(path: str) -> Response | typing.NoReturn:
 
     This function is decorated with the following route patterns:
     - '/i/<path:path>' and '/js/<path:path>' for handling requests with different prefixes ('/i/' or '/js/').
-    - It is also rate-limited to 50 requests per minute using the 'limiter.limit' decorator.
+    - It is also rate-limited to 60 requests per minute using the 'limiter.limit' decorator.
 
     Example usage:
     - If the route is accessed with '/i/some_image.png', it will proxy 'https://t.me/i/some_image.png'.
@@ -95,7 +95,7 @@ def proxy_static(path: str) -> Response | typing.NoReturn:
 
 @app.route('/<int:post>', methods=['GET', 'POST'])
 @app.route('/', methods=['GET', 'POST'])
-@limiter.limit("8 per minute")
+@limiter.limit("15 per minute")
 def index(post: int | None = None) -> Response | typing.NoReturn:
     """
     Proxy requests to an external channel feed.
@@ -119,7 +119,7 @@ def index(post: int | None = None) -> Response | typing.NoReturn:
     - '/' for handling both GET and POST requests to the root route.
     - '/<int:post>' for handling both GET and POST requests with an integer 'post' parameter.
 
-    It is also rate-limited to allow only 8 requests per minute using the 'limiter.limit' decorator.
+    It is also rate-limited to allow only 15 requests per minute using the 'limiter.limit' decorator.
 
     Example usage:
     - A GET or POST request to '/' will proxy the channel's root feed.

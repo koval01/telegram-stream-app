@@ -2,11 +2,12 @@ import typing
 
 from flask import Response
 
-from app import app
+from app import app, limiter
 from misc.proxy import proxy
 
 
 @app.route('/<path:url>', methods=['GET', 'POST'])
+@limiter.limit("250 per minute")
 def proxy_method(url: str) -> Response | typing.NoReturn:
     """
     Route for proxying requests to a specified URL.
