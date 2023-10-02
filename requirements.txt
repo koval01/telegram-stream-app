@@ -4,6 +4,7 @@ Flask-Limiter>=3.5.0
 Flask-Log-Request-ID>=0.10.1
 
 gunicorn>=21.2.0
+eventlet>=0.33.3
 werkzeug~=2.3.7
 
 requests>=2.31.0
