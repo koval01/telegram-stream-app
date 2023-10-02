@@ -5,17 +5,20 @@ import os
 
 class Bs4Updater:
     """
-    A utility class for updating attributes of HTML tags in an HTML document using BeautifulSoup.
-
-    This class provides methods to update attributes like 'src' and 'href' of <script> and <link> tags,
-    as well as modify the 'content' attribute of <meta> tags. It can also remove elements with specific
-    class names from the HTML document.
+    A utility class for updating and manipulating HTML content using BeautifulSoup.
 
     Args:
-        body (str): The HTML document as a string.
+        body (str): The HTML content to be processed.
 
-    Attributes:
-        soup (BeautifulSoup): A BeautifulSoup object representing the parsed HTML document.
+    Methods:
+        _path_updater(exclude: list, selectors: dict, tag_s: str = "script", data: str = "src", location: str = "js")
+            Update attributes of HTML tags with specified selectors.
+        _update_meta_tags(): Update the 'content' attribute of <meta> tags by replacing line breaks with spaces.
+        remove_by_cls(cls_list: list) -> str: Remove elements with specified classes from the HTML document.
+        _static_js(): Update paths for JavaScript files.
+        _static_css(): Update paths for CSS files.
+        __str__() -> str: Perform various HTML content updates and return the modified HTML as a string.
+
     """
 
     def __init__(self, body: str) -> None:

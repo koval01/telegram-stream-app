@@ -10,6 +10,21 @@ from app import app
 class MiscRegex:
     """
     A utility class for handling various operations related to JSON data processing and URL manipulation in HTML content
+
+    Methods:
+        _schema_remove(url: str) -> str: Remove 'http://' or 'https://' from the beginning of a URL.
+        _should_json() -> bool: Check if request arguments include 'before' or 'after'.
+        _clean_html_for_json(html: str) -> str: Clean HTML tags '<html>' and '<body>' from the HTML content.
+        _url_pack(url: str) -> str: Pack a URL with the host URL.
+        process_json(data: dict | list | str, url_pack=_url_pack) -> dict | list | str: Process JSON data by recursively
+    modifying URLs within it.
+        process_location_header(location_header: str) -> str: Process the 'Location' header in HTTP responses.
+        replace_origin_host(html_content: str) -> str: Replace URLs in HTML content with proxy URLs.
+        replace_url_attributes(soup: BeautifulSoup, proxy_url: str) -> None: Replace URLs in specified HTML tag
+    attributes with proxy URLs.
+        replace_style_urls(soup: BeautifulSoup, proxy_url: str) -> None: Replace URLs in style attributes of HTML tags
+    with proxy URLs.
+
     """
 
     @staticmethod

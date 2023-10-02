@@ -3,7 +3,7 @@ import typing
 from flask import Response, request, redirect, url_for
 
 from app import app, limiter
-from misc.proxy import proxy
+from misc.proxy import Proxy
 
 
 @app.route("/healthz", methods=["GET", "HEAD"])
@@ -17,6 +17,7 @@ def healthz() -> str:
         Response: An empty string response. The response is used to indicate the health status of the application during
         health checks.
     """
+
     return ""
 
 
@@ -35,6 +36,7 @@ def favicon() -> Response:
     Example usage:
     - A GET request to '/favicon.ico' will be redirected to the favicon.ico file located in the 'static' folder.
     """
+
     return redirect(url_for('static', filename='images/favicon.ico'))
 
 
@@ -61,7 +63,8 @@ def view_send() -> Response | typing.NoReturn:
     Example usage:
     - A POST request to '/v/' will proxy the request to 'https://t.me/v/' and return the response.
     """
-    return proxy("t.me/v/", internal_call=True)
+
+    return Proxy("t.me/v/", internal_call=True).make_request()
 
 
 @app.route('/i/<path:path>', methods=['GET'])
@@ -90,7 +93,8 @@ def proxy_static(path: str) -> Response | typing.NoReturn:
     - If the route is accessed with '/i/some_image.png', it will proxy 'https://t.me/i/some_image.png'.
     - If the route is accessed with '/js/some_script.js', it will proxy 'https://t.me/js/some_script.js'.
     """
-    return proxy(f"t.me/{'i' if request.path.startswith('/i/') else 'js'}/{path}", internal_call=True)
+
+    return Proxy(f"t.me/{'i' if request.path.startswith('/i/') else 'js'}/{path}", internal_call=True).make_request()
 
 
 @app.route('/<int:post>', methods=['GET', 'POST'])
@@ -125,4 +129,5 @@ def index(post: int | None = None) -> Response | typing.NoReturn:
     - A GET or POST request to '/' will proxy the channel's root feed.
     - A GET or POST request to '/123' will proxy to the specific post with ID 123.
     """
-    return proxy(f"t.me/s/{app.config['CHANNEL_NAME']}/{post if post else ''}", internal_call=True)
+
+    return Proxy(f"t.me/s/{app.config['CHANNEL_NAME']}/{post if post else ''}", internal_call=True).make_request()

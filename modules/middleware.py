@@ -18,6 +18,7 @@ def start_timer():
     Returns:
         None
     """
+
     g.start_time = time()
 
 
@@ -37,6 +38,7 @@ def add_processing_time(response):
     Returns:
         response: The response object with processing time added to headers.
     """
+
     # Calculate the processing time in milliseconds
     processing_time = (time() - g.start_time) * 1000
 
@@ -60,6 +62,7 @@ def append_request_id(response: Response) -> Response:
     Returns:
         Response: The modified response object with the request ID header added.
     """
+
     response.headers.add('X-App-Request-ID', current_request_id())
 
     return response

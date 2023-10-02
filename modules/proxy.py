@@ -3,7 +3,7 @@ import typing
 from flask import Response
 
 from app import app, limiter
-from misc.proxy import proxy
+from misc.proxy import Proxy
 
 
 @app.route('/<path:url>', methods=['GET', 'POST'])
@@ -25,4 +25,5 @@ def proxy_method(url: str) -> Response | typing.NoReturn:
     - A GET or POST request to '/some_url' will proxy the request to 'some_url' and return the response.
     Examples: /cdn4.telegram.net/path/file.ext or /t.me/api_endpoint
     """
-    return proxy(url)
+
+    return Proxy(url).make_request()
