@@ -4,7 +4,6 @@ import sentry_sdk
 import validators
 
 from urllib.parse import urlparse
-from datetime import timedelta
 
 from flask import Response, abort, request
 
@@ -155,8 +154,7 @@ class Proxy:
                     k: v
                     for k, v in request.headers
                     if k.lower() != 'host'
-                },
-                expire_after=timedelta(minutes=5)
+                }
             )
 
             headers = self._headers_rebuild(res)
