@@ -1,1 +1,1 @@
-web: gunicorn --workers=5 app:app
+web: gunicorn -w 5 -k eventlet -n lugaapp app:app
