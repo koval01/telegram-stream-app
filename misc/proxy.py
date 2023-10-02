@@ -1,4 +1,3 @@
-import os
 import json
 import typing
 import sentry_sdk
@@ -14,9 +13,8 @@ from app import app
 from misc.bs4_methods import Bs4Updater
 from misc.regex import MiscRegex
 
+import requests
 from requests.exceptions import RequestException
-from requests_cache import CachedSession, RedisCache
-from requests_cache import CachedResponse, OriginalResponse
 
 from typing import Any
 
@@ -54,13 +52,8 @@ class Proxy:
         self.internal_call: bool = internal_call
         self.allowed_hosts: list = ['telegram.org', 'cdn4.telegram-cdn.org']
 
-        self.session = CachedSession(
-            'proxy_cache',
-            backend=RedisCache(os.getenv("REDIS_URL")) if os.getenv("REDIS_URL") else "memory"
-        )
-
     @staticmethod
-    def _headers_rebuild(res: CachedResponse | OriginalResponse) -> dict[str | Any, Any]:
+    def _headers_rebuild(res: requests.Response) -> dict[str | Any, Any]:
         excluded_headers = ['content-encoding', 'content-length', 'transfer-encoding', 'connection']
         return {
             k: MiscRegex.process_location_header(v) if k.lower() == "location" else v
@@ -81,7 +74,7 @@ class Proxy:
         return headers.get('Content-Type').split(';')[0]
 
     @staticmethod
-    def _style(res: CachedResponse | OriginalResponse) -> typing.Union[bytes, str]:
+    def _style(res: requests.Response) -> typing.Union[bytes, str]:
         """
         Style the response content based on Content-Type.
 
@@ -151,7 +144,7 @@ class Proxy:
         self._request_validate()
 
         try:
-            res = self.session.request(
+            res = requests.request(
                 url=self.url,
                 params=request.args,
                 method=request.method,
