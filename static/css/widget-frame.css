@@ -446,9 +446,9 @@ a.inline_flex_ellipsis:hover:before {
     float: left;
     text-rendering: auto;
     /*-webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;*/
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;*/
 }
 
 .file-upload {
@@ -515,18 +515,23 @@ a.inline_flex_ellipsis:hover:before {
 .tgme_widget_message_bubble {
     position: relative;
     border: 1px solid var(--bubble-border-color);
-    border-radius: 0 10px 10px 10px;
+    border-radius: 10px;
     background: var(--bubble-bgcolor);
     padding: 12px 17px;
+    margin: auto;
 }
 
-.tgme_widget_message_bubble,
 .tgme_widget_message_inline_keyboard {
-    margin: auto
+    margin-left: 45px;
 }
 
 .no_userpic .tgme_widget_message_user {
     display: none;
+}
+
+.no_userpic .tgme_widget_message_bubble,
+.no_userpic .tgme_widget_message_inline_keyboard {
+    margin-left: 7px;
 }
 
 @media (max-width: 354px) {
@@ -534,8 +539,18 @@ a.inline_flex_ellipsis:hover:before {
         display: none;
     }
 
+    .tgme_widget_message_bubble,
+    .tgme_widget_message_inline_keyboard {
+        margin-left: 7px;
+    }
+
     .force_userpic .tgme_widget_message_user {
         display: block;
+    }
+
+    .force_userpic .tgme_widget_message_bubble,
+    .force_userpic .tgme_widget_message_inline_keyboard {
+        margin-left: 45px;
     }
 }
 
@@ -638,10 +653,6 @@ a.tgme_widget_message_action_btn.accent_color {
     display: flex;
 }
 
-.tgme_widget_message_forwarded_from {
-    color: var(--second-color) !important;
-}
-
 .widget_frame_base .tgme_widget_message_author a,
 .widget_frame_base .tgme_widget_message_author a:hover,
 .widget_frame_base .tgme_widget_message_forwarded_from a,
@@ -741,7 +752,7 @@ a.tgme_widget_message_action_btn.accent_color {
     max-width: calc(100% + 34px) !important;
     text-align: center;
     position: relative;
-    overflow: hidden
+    overflow: hidden;
 }
 
 .tgme_widget_message_photo_wrap:hover {
@@ -1423,7 +1434,7 @@ a.tgme_widget_message_contact_wrap:focus:hover {
     font-size: 16px;
     line-height: 21px;
     word-break: break-word;
-    margin: 1em 0;
+    margin-top: 6px;
 }
 
 .tgme_widget_message_text b {
@@ -1598,11 +1609,11 @@ a.tgme_widget_message_contact_wrap:focus:hover {
     margin-top: 4px;
     margin-bottom: 1px;
     /*display: -webkit-box;
-    max-height: 85px;
-    -webkit-line-clamp: 5;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;*/
+  max-height: 85px;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;*/
 }
 
 .tgme_widget_message_link_button {
@@ -2506,6 +2517,11 @@ body.tme_mode {
     --service-bg-blured: rgba(0, 0, 0, 0.2);
 }
 
+body.tme_mode .tgme_widget_message_bubble {
+    border: none;
+    filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.1));
+}
+
 body.tme_mode .no_bubble .tgme_widget_message_bubble {
     filter: none;
 }
@@ -2531,7 +2547,7 @@ html.theme_dark body.tme_mode {
     --views-icon-svg: url('data:image/svg+xml,%3Csvg%20height%3D%2210%22%20viewBox%3D%220%200%2016%2010%22%20width%3D%2216%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22m8%200c2.8897625%200%205.2230958%201.66666667%207%205-1.7769042%203.33333333-4.1102375%205-7%205-2.88976248%200-5.22309581-1.66666667-7-5%201.77690419-3.33333333%204.11023752-5%207-5zm0%201.48148148c-1.98523978%200-3.59459459%201.5752944-3.59459459%203.51851852s1.60935481%203.51851852%203.59459459%203.51851852%203.5945946-1.5752944%203.5945946-3.51851852-1.60935482-3.51851852-3.5945946-3.51851852zm0%201.85185185c.94037674%200%201.7027027.74619209%201.7027027%201.66666667s-.76232596%201.66666667-1.7027027%201.66666667-1.7027027-.74619209-1.7027027-1.66666667.76232596-1.66666667%201.7027027-1.66666667z%22%20fill%3D%22%237d7f81%22%20fill-rule%3D%22evenodd%22%2F%3E%3C%2Fsvg%3E');
     --voters-icon-svg: url('data:image/svg+xml,%3Csvg%20height%3D%2212%22%20viewBox%3D%220%200%2012%2012%22%20width%3D%2212%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22m3.60486756.00162755%204.54930464-.00162755c1.33727811%200%201.82220747.13923842%202.3110964.40069906.4888888.26146064.8725717.6451435%201.1340323%201.13403238l.0922854.18482021c.2018093.43861897.3084137.9561578.3084137%202.12627615v4.3083444c0%201.33727811-.1392384%201.82220747-.4006991%202.3110964-.2614606.4888888-.6451435.8725717-1.1340323%201.1340323l-.1848203.0922854c-.43861892.2018093-.95615775.3084137-2.1262761.3084137h-4.3083444c-1.33727811%200-1.82220747-.1392384-2.31109636-.4006991-.48888888-.2614606-.87257174-.6451435-1.13403238-1.1340323l-.09228534-.1848203c-.18739436-.407289-.29269878-.88262629-.30678617-1.88531586l-.00162755-4.54930464c0-1.33727811.13923842-1.82220747.40069906-2.31109636.26146064-.48888888.6451435-.87257174%201.13403238-1.13403238l.18482021-.09228534c.40728905-.18739436.88262634-.29269878%201.88531591-.30678617zm6.42546254%202.96804236c-.26626658-.26626656-.68293026-.29047261-.97654175-.07261815l-.08411844.07261815-3.96966991%203.96933009-1.46966991-1.46933009-.08411844-.07261815c-.29361149-.21785446-.71027517-.19364841-.97654174.07261815-.26626656.26626657-.29047261.68293025-.07261815.97654174l.07261815.08411844%202%202%20.08411844.07261815c.26098799.19364841.61920241.19603913.88259105.00717216l.09395069-.07979031%204.50000001-4.5.0726181-.08411844c.2178545-.29361149.1936484-.71027517-.0726181-.97654174z%22%20fill%3D%22%237d7f81%22%20fill-rule%3D%22evenodd%22%2F%3E%3C%2Fsvg%3E');
 
-    --box-bg: #000;
+    --box-bg: #1e1e1e;
     --box-bg-blured: rgba(34, 34, 34, .84);
     --service-bg-blured: rgba(255, 255, 255, 0.1);
 }
@@ -2553,4 +2569,3 @@ html.theme_dark body.dark_accent_light {
     --pollopt-incorrect-icon-svg: url('data:image/svg+xml,%3Csvg%20height%3D%228%22%20viewBox%3D%220%200%208%208%22%20width%3D%228%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20stroke%3D%22none%22%20stroke-width%3D%221%22%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M%201.6%206.4%20L%206.4%201.6%20M%206.4%206.4%20L%201.6%201.6%22%20stroke%3D%22%2315202b%22%20stroke-width%3D%221.2%22%3E%3C%2Fpath%3E%3C%2Fg%3E%3C%2Fsvg%3E');
     --radio-item-icon-svg: url('data:image/svg+xml,%3Csvg%20height%3D%2220%22%20viewBox%3D%220%200%2020%2020%22%20width%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22%2315202b%22%20fill-rule%3D%22evenodd%22%3E%3Crect%20height%3D%225.5%22%20rx%3D%221.1%22%20transform%3D%22matrix%28.70710678%20-.70710678%20.70710678%20.70710678%20-6.903479%208.428501%29%22%20width%3D%222.2%22%20x%3D%225.622361%22%20y%3D%229.797487%22%2F%3E%3Crect%20height%3D%2211%22%20rx%3D%221.1%22%20transform%3D%22matrix%28.70710678%20.70710678%20-.70710678%20.70710678%2010.937311%20-5.071194%29%22%20width%3D%222.2%22%20x%3D%2210.490128%22%20y%3D%225.166905%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E');
 }
-
