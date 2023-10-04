@@ -39,7 +39,7 @@
                 contTop = scrollTop + padding + paddingTop,
                 contBottom = scrollTop + contHeight - padding,
                 scrollTo = null;
-            if (position == 'auto') {
+            if (position === 'auto') {
                 if (itemTop < contTop) {
                     scrollTo = itemTop - padding - paddingTop;
                 } else if (itemBottom > contBottom) {
@@ -49,12 +49,12 @@
                         scrollTo = itemBottom - contHeight + padding;
                     }
                 }
-            } else if (position == 'top' || position == 'center') {
+            } else if (position === 'top' || position === 'center') {
                 if (contHeight > itemHeight) {
                     padding = (contHeight - paddingTop - itemHeight) / 2;
                 }
                 scrollTo = itemTop - padding - paddingTop;
-            } else if (position == 'bottom') {
+            } else if (position === 'bottom') {
                 if (itemHeight > contHeight - padding - padding) {
                     scrollTo = itemTop - padding - paddingTop;
                 } else {
@@ -110,14 +110,13 @@ function getCssProperty(el, prop) {
 }
 
 function isVisible(el, padding) {
-    let node = el,
-        val;
+    let node = el;
     let visibility = getCssProperty(node, 'visibility');
-    if (visibility == 'hidden') return false;
+    if (visibility === 'hidden') return false;
     while (node) {
         if (node === document.documentElement) break;
         let display = getCssProperty(node, 'display');
-        if (display == 'none') return false;
+        if (display === 'none') return false;
         let opacity = getCssProperty(node, 'opacity');
         if (opacity !== null && opacity < 0.1) return false;
         node = node.parentNode;
@@ -276,7 +275,7 @@ let TWeb = {
             let $wrapEl = $wrapEls.eq(i);
             let $prevWrapEl = i > 0 ? $wrapEls.eq(i - 1) : null;
             if (!$prevWrapEl && skip_first) continue;
-            let date_visible = !$prevWrapEl || $prevWrapEl.data('msg_date') != $wrapEl.data('msg_date');
+            let date_visible = !$prevWrapEl || $prevWrapEl.data('msg_date') !== $wrapEl.data('msg_date');
             $wrapEl.toggleClass('date_visible', date_visible);
         }
     },
