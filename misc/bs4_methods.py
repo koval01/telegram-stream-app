@@ -10,16 +10,6 @@ class Bs4Updater:
 
     Args:
         body (str): The HTML content to be processed.
-
-    Methods:
-        _path_updater(exclude: list, selectors: dict, tag_s: str = "script", data: str = "src", location: str = "js")
-            Update attributes of HTML tags with specified selectors.
-        _update_meta_tags(): Update the 'content' attribute of <meta> tags by replacing line breaks with spaces.
-        remove_by_cls(cls_list: list) -> str: Remove elements with specified classes from the HTML document.
-        _static_js(): Update paths for JavaScript files.
-        _static_css(): Update paths for CSS files.
-        __str__() -> str: Perform various HTML content updates and return the modified HTML as a string.
-
     """
 
     def __init__(self, body: str) -> None:

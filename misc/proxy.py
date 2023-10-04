@@ -28,22 +28,6 @@ class Proxy:
     Args:
         url (str): The URL to proxy.
         internal_call (bool, optional): Whether it's an internal call. Defaults to False.
-
-    Attributes:
-        url (str): The URL to proxy.
-        internal_call (bool): Whether it's an internal call.
-        allowed_hosts (list): A list of allowed hostnames for validation.
-
-    Methods:
-        make_request(): Proxy an HTTP request and return the proxied response.
-        _request_validate(): Validate the URL and host based on allowed hosts.
-
-    Static Methods:
-        _headers_rebuild(res: requests.Response) -> dict: Rebuild response headers.
-        _remove_headers_duplicate(headers: dict) -> dict: Remove duplicate response headers.
-        _content_type_get(headers: dict) -> str | None: Get the primary Content-Type from headers.
-        _style(res: requests.Response) -> Union[bytes, str]: Style the response content based on Content-Type.
-
     """
 
     def __init__(self, url: str, internal_call: bool = False) -> None:
