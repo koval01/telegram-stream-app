@@ -14,7 +14,6 @@
             let $item = $(this),
                 $cont = $item.scrollParent(),
                 scrollTop = $cont.scrollTop(),
-                positionTop = 0,
                 paddingTop = 0,
                 itemHeight = $item.outerHeight(),
                 isBody = false;
@@ -95,10 +94,10 @@ function formatDate(datetime) {
     let j = date.getDate();
     let M = ['Cічня', 'Лютого', 'Березня', 'Квітня', 'Травня', 'Червня', 'Липня', 'Серпня', 'Вересня', 'Жовтня', 'Листопада', 'Грудня'][date.getMonth()];
     let Y = date.getFullYear();
-    if (cur_date.getFullYear() == date.getFullYear()) {
-        return M + ' ' + j;
+    if (cur_date.getFullYear() === date.getFullYear()) {
+        return j + ' ' + M;
     }
-    return M + ' ' + j + ', ' + Y;
+    return j + ', ' + Y + ' ' + M;
 }
 
 function getCssProperty(el, prop) {
