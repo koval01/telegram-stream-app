@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 from flask import url_for
+from app import app
 import os
 
 
@@ -23,6 +24,7 @@ class Bs4Updater:
 
     def __init__(self, body: str) -> None:
         self.soup = BeautifulSoup(body, 'lxml')
+        self.channel_name: str = app.config.get("CHANNEL_NAME")
 
     def _path_updater(
             self, exclude: list, selectors: dict,
@@ -54,14 +56,15 @@ class Bs4Updater:
             tag[data] = new_src
 
     def _update_meta_tags(self) -> None:
-        """
-        Update the 'content' attribute of <meta> tags in an HTML document by replacing line breaks with spaces.
-        """
-
         for tag in self.soup.find_all('meta'):
             if 'content' in tag.attrs:
                 # Replace newline characters with spaces in the 'content' attribute
                 tag['content'] = tag['content'].replace('\n', ' ')
+
+    def _replace_links(self) -> None:
+        for a_tag in self.soup.find_all('a', href=True):
+            # Replace the href attribute with a new link
+            a_tag['href'] = a_tag['href'].replace(f"https://t.me/{self.channel_name}/", "/")
 
     def remove_by_cls(self, cls_list: list) -> str:
         """
@@ -101,6 +104,7 @@ class Bs4Updater:
 
     def __str__(self) -> str:
         self._update_meta_tags()
+        self._replace_links()
         self._static_js()
         self._static_css()
 
