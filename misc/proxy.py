@@ -33,7 +33,7 @@ class Proxy:
     def __init__(self, url: str, internal_call: bool = False) -> None:
         self.url: str = f"https://{url}"
         self.internal_call: bool = internal_call
-        self.allowed_hosts: list = ['telegram.org', 'cdn4.telegram-cdn.org']
+        self.allowed_hosts: list = ['telegram.org', 'cdn4.telegram-cdn.org', 'cdn1.telegram-cdn.org']
 
     @staticmethod
     def _headers_rebuild(res: requests.Response) -> dict[str | Any, Any]:
