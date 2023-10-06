@@ -92,12 +92,13 @@ function formatDate(datetime) {
     let date = new Date(datetime);
     let cur_date = new Date();
     let j = date.getDate();
-    let M = ['Cічня', 'Лютого', 'Березня', 'Квітня', 'Травня', 'Червня', 'Липня', 'Серпня', 'Вересня', 'Жовтня', 'Листопада', 'Грудня'][date.getMonth()];
+    let M = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][date.getMonth()];
     let Y = date.getFullYear();
+
     if (cur_date.getFullYear() === date.getFullYear()) {
-        return j + ' ' + M;
+        return M + ' ' + j;
     }
-    return j + ', ' + Y + ' ' + M;
+    return M + ' ' + j + ', ' + Y;
 }
 
 function getCssProperty(el, prop) {
