@@ -1,5 +1,5 @@
 # pull official base image
-FROM python:3.11.5-slim
+FROM python:3.11.6-slim
 
 # set work directory
 WORKDIR /usr/src/app
