@@ -136,7 +136,7 @@ class MiscRegex:
             original_url = tag_element.get(attribute)
             if cls._is_static(original_url):
                 return
-            if original_url.startswith("data:"):
+            if any([original_url.startswith(v) for v in ["data:", "svg+"]]):
                 return
             if original_url:
                 if original_url.startswith('//'):
