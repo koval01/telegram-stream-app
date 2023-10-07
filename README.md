@@ -20,19 +20,19 @@
 <details><summary>Heroku.com 🚀</summary>
 <br>
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/koval01/luga)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/koval01/telegram-stream-app)
 </details>
  
 <details><summary>Replit.com 🌀</summary>
 <br>
 
-[![Run on Repl.it](https://repl.it/badge/github/koval01/luga)](https://repl.it/github/koval01/luga)
+[![Run on Repl.it](https://repl.it/badge/github/koval01/telegram-stream-app)](https://repl.it/github/koval01/telegram-stream-app)
 </details>
 
 <details><summary>Zeet.co 💪</summary>
 <br>
  
-[![Deploy](https://deploy.zeet.co/Flask-Example.svg)](https://deploy.zeet.co?url=https://github.com/koval01/luga)
+[![Deploy](https://deploy.zeet.co/Flask-Example.svg)](https://deploy.zeet.co?url=https://github.com/koval01/telegram-stream-app)
 </details>
 
 #### Adding some other hosting providers too 🤧 soon.
