@@ -101,6 +101,10 @@
             document.body.removeChild(tempInput);
             alert("Link copied to clipboard!");
         });
+
+        if (window.location.hash === "#invalid-url") {
+            alert("You followed an invalid link");
+        }
     </script>
 </body>
 </html>

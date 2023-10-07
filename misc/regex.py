@@ -83,6 +83,9 @@ class MiscRegex:
                 location_header
         ):
             original_url = re.sub(r'^http://', '', location_header)
+            if original_url.replace("https:", "").startswith("//t.me/"):
+                return f"{request.host_url}#invalid-url"
+
             location_header = f'{proxy_url}{cls._schema_remove(original_url)}'
 
         return location_header
