@@ -1106,13 +1106,14 @@ function checkFrameSize() {
         duration = Math.floor(duration);
         duration = Math.max(0, duration);
         let duration_str = '';
+        let hours, minutes;
         if (duration >= 3600) {
-            let hours = Math.floor(duration / 3600);
+            hours = Math.floor(duration / 3600);
             duration_str += hours + ':';
-            let minutes = Math.floor((duration % 3600) / 60);
+            minutes = Math.floor((duration % 3600) / 60);
             if (minutes < 10) minutes = '0' + minutes;
         } else {
-            let minutes = Math.floor(duration / 60);
+            minutes = Math.floor(duration / 60);
         }
         duration_str += minutes + ':';
         let seconds = duration % 60;
@@ -2416,10 +2417,11 @@ function checkFrameSize() {
                 }
                 if (player.duration && player.duration !== Infinity) {
                     let duration = Math.floor(player.duration);
+                    let currentTime;
                     if (seeking) {
-                        let currentTime = seekTo * duration;
+                        currentTime = seekTo * duration;
                     } else {
-                        let currentTime = Math.max(0, player.currentTime);
+                        currentTime = Math.max(0, player.currentTime);
                     }
                     if (progressEl) {
                         progressEl.style.width = Math.min(100, currentTime / duration * 100) + '%';
@@ -2445,10 +2447,11 @@ function checkFrameSize() {
                     let we = ws + p;
                     let wsi = Math.floor(ws);
                     let wei = Math.floor(we);
+                    let value;
                     if (wsi == wei) {
-                        let value = waveform[wsi] * (we - ws);
+                        value = waveform[wsi] * (we - ws);
                     } else {
-                        let value = 0;
+                        value = 0;
                         for (let j = wsi; j <= wei; j++) {
                             let wv = +waveform[j] || 0;
                             if (j == wsi) {
