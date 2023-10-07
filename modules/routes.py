@@ -9,6 +9,10 @@ from misc.proxy import Proxy
 
 @app.route("/", methods=["GET"])
 def welcome() -> Response:
+    """
+    Handle GET requests to the root ("/") route.
+    """
+    
     return render_template("welcome.html")
 
 
