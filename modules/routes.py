@@ -1,9 +1,15 @@
 import typing
 
-from flask import Response, request, redirect, url_for, g
+from flask import Response, request, redirect, url_for, g, render_template
 
 from app import app, limiter
 from misc.proxy import Proxy
+
+
+
+@app.route("/", methods=["GET"])
+def welcome() -> Response:
+    return render_template("welcome.html")
 
 
 @app.route("/healthz", methods=["GET", "HEAD"])
@@ -123,7 +129,7 @@ def proxy_method(url: str) -> Response | typing.NoReturn:
 @app.route('/<path:channel>/<int:post>', methods=['GET', 'POST'])
 @app.route('/<path:channel>', methods=['GET', 'POST'])
 @limiter.limit("15 per minute")
-def index(channel: str, post: int | None = None) -> Response | typing.NoReturn:
+def channel_view(channel: str, post: int | None = None) -> Response | typing.NoReturn:
     """
     Proxy requests to an external channel feed.
 
