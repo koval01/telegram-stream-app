@@ -1,0 +1,122 @@
+body {
+    --bg-splash: #fff;
+    --color-splash: #000;
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        --bg-splash: #000;
+        --color-splash: #fff;
+    }
+}
+
+.splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--bg-splash);
+    color: var(--color-splash);
+}
+
+.splash-back-image {
+    background-position: center;
+    background-size: contain;
+    width: 25vh;
+    height: 25vh;
+    position: relative;
+    opacity: .5;
+    left: 50%;
+    transform: translateX(-50%);
+    -webkit-animation: fadeInFromNone 2s cubic-bezier(0, 0, .2, 1) infinite;
+    -moz-animation: fadeInFromNone 2s cubic-bezier(0, 0, .2, 1) infinite;
+    -o-animation: fadeInFromNone 2s cubic-bezier(0, 0, .2, 1) infinite;
+    animation: fadeInFromNone 2s cubic-bezier(0, 0, .2, 1) infinite;
+}
+
+.telegram-logo {
+    background-image: url(/static/images/telegram-logo.webp);
+}
+
+.splash-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    padding-bottom: 2em;
+    opacity: .25;
+}
+
+.splash-footer > small {
+    padding-top: .8em;
+    opacity: .8;
+    font-family: system-ui, sans-serif;
+    display: block;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+@-webkit-keyframes fadeInFromNone {
+    0% {
+        opacity: .3;
+    }
+
+    50% {
+        opacity: .6;
+    }
+
+    100% {
+        opacity: .3;
+    }
+}
+
+@-moz-keyframes fadeInFromNone {
+    0% {
+        opacity: .3;
+    }
+
+    50% {
+        opacity: .6;
+    }
+
+    100% {
+        opacity: .3;
+    }
+}
+
+@-o-keyframes fadeInFromNone {
+    0% {
+        opacity: .3;
+    }
+
+    50% {
+        opacity: .6;
+    }
+
+    100% {
+        opacity: .3;
+    }
+}
+
+@keyframes fadeInFromNone {
+    0% {
+        opacity: .3;
+    }
+
+    50% {
+        opacity: .6;
+    }
+
+    100% {
+        opacity: .3;
+    }
+}
