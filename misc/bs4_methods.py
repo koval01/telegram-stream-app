@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from flask import url_for
+from flask import url_for, g, request
 from app import app
 import os
 
@@ -14,7 +14,7 @@ class Bs4Updater:
 
     def __init__(self, body: str) -> None:
         self.soup = BeautifulSoup(body, 'lxml')
-        self.channel_name: str = app.config.get("CHANNEL_NAME")
+        self.channel_name: str = g.channel_name
 
     def _path_updater(
             self, exclude: list, selectors: dict,
@@ -42,8 +42,7 @@ class Bs4Updater:
                 continue
 
             # set new var
-            new_src = url_for('static', filename=f'{location}/{file_name}')[1:]
-            tag[data] = new_src
+            tag[data] = url_for('static', filename=f'{location}/{file_name}')
 
     def _update_meta_tags(self) -> None:
         for tag in self.soup.find_all('meta'):

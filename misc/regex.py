@@ -2,7 +2,7 @@ import json
 import re
 
 from bs4 import BeautifulSoup
-from flask import request
+from flask import request, g
 
 from app import app
 
@@ -11,6 +11,7 @@ class MiscRegex:
     """
     A utility class for handling various operations related to JSON data processing and URL manipulation in HTML content
     """
+    proxy_path: str = app.config["PROXY_PATH"]
 
     @staticmethod
     def _schema_remove(url: str) -> str:
@@ -26,7 +27,7 @@ class MiscRegex:
 
     @staticmethod
     def _url_pack(url: str) -> str:
-        return f"{request.host_url}{MiscRegex._schema_remove(url)}"
+        return f"{request.host_url}{MiscRegex.proxy_path}/{MiscRegex._schema_remove(url)}"
 
     @classmethod
     def process_json(cls, data: dict | list | str, url_pack=_url_pack) -> dict | list | str:
@@ -75,16 +76,20 @@ class MiscRegex:
             str: The processed 'Location' header value with the proxy URL if needed.
         """
 
-        proxy_url = request.host_url
+        proxy_url = f"{request.host_url}{cls.proxy_path}/"
 
         if not re.match(
-                r'^' + re.escape(proxy_url) + r'/http://',
+                r'^' + re.escape(proxy_url) + r'http://',
                 location_header
         ):
             original_url = re.sub(r'^http://', '', location_header)
             location_header = f'{proxy_url}{cls._schema_remove(original_url)}'
 
         return location_header
+
+    @staticmethod
+    def _is_static(url: str) -> bool:
+        return url.startswith(f"{app.static_url_path}/")
 
     @classmethod
     def replace_origin_host(cls, html_content: str) -> str:
@@ -98,7 +103,7 @@ class MiscRegex:
             str: The HTML content with replaced URLs.
         """
 
-        proxy_url = request.host_url
+        proxy_url = f"{request.host_url}{cls.proxy_path}/"
 
         if cls._should_json():
             html_content = json.loads(html_content)
@@ -109,7 +114,7 @@ class MiscRegex:
         cls.replace_style_urls(soup, proxy_url)
 
         output = str(soup)
-        output = output.replace(f'/s/{app.config["CHANNEL_NAME"]}', '')
+        output = output.replace(f'/s/{g.channel_name}'[:-1], '')
 
         if cls._should_json():
             output = cls._clean_html_for_json(output)
@@ -129,7 +134,9 @@ class MiscRegex:
 
         def _update_link(tag_element: BeautifulSoup, attribute: str) -> None:
             original_url = tag_element.get(attribute)
-            if original_url.split("/")[0] == "static":
+            if cls._is_static(original_url):
+                return
+            if original_url.startswith("data:"):
                 return
             if original_url:
                 if original_url.startswith('//'):
@@ -141,6 +148,9 @@ class MiscRegex:
 
         for tag in soup.find_all('link', href=True):
             _update_link(tag, 'href')
+
+        for tag in soup.find_all('source', srcset=True):
+            _update_link(tag, 'srcset')
 
     @classmethod
     def replace_style_urls(cls, soup: BeautifulSoup, proxy_url: str) -> None:
@@ -154,7 +164,7 @@ class MiscRegex:
 
         def replace_url(match: re.Match) -> str:
             original_url = match.group(1)
-            new_url = f'url("{proxy_url}{cls._schema_remove(original_url)}")'
+            new_url = f'url("{proxy_url}{cls._schema_remove(original_url).replace("//", "")}")'
             return new_url
 
         for tag in soup.find_all(style=True):

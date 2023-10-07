@@ -19,6 +19,7 @@ def start_timer():
         None
     """
 
+    # set global flask var
     g.start_time = time()
 
 

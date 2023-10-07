@@ -1,6 +1,6 @@
 import typing
 
-from flask import Response, request, redirect, url_for
+from flask import Response, request, redirect, url_for, g
 
 from app import app, limiter
 from misc.proxy import Proxy
@@ -69,7 +69,7 @@ def view_send() -> Response | typing.NoReturn:
 
 @app.route('/i/<path:path>', methods=['GET'])
 @app.route('/js/<path:path>', methods=['GET'])
-@limiter.limit("60 per minute")
+@limiter.limit("150 per minute")
 def proxy_static(path: str) -> Response | typing.NoReturn:
     """
     Proxy static files from external sources to the current server.
@@ -87,7 +87,7 @@ def proxy_static(path: str) -> Response | typing.NoReturn:
 
     This function is decorated with the following route patterns:
     - '/i/<path:path>' and '/js/<path:path>' for handling requests with different prefixes ('/i/' or '/js/').
-    - It is also rate-limited to 60 requests per minute using the 'limiter.limit' decorator.
+    - It is also rate-limited to 150 requests per minute using the 'limiter.limit' decorator.
 
     Example usage:
     - If the route is accessed with '/i/some_image.png', it will proxy 'https://t.me/i/some_image.png'.
@@ -97,10 +97,33 @@ def proxy_static(path: str) -> Response | typing.NoReturn:
     return Proxy(f"t.me/{'i' if request.path.startswith('/i/') else 'js'}/{path}", internal_call=True).make_request()
 
 
-@app.route('/<int:post>', methods=['GET', 'POST'])
-@app.route('/', methods=['GET', 'POST'])
+@app.route(f'/{app.config["PROXY_PATH"]}/<path:url>', methods=['GET', 'POST'])
+@limiter.limit("250 per minute")
+def proxy_method(url: str) -> Response | typing.NoReturn:
+    """
+    Route for proxying requests to a specified URL.
+
+    This function is used as a route handler for proxying requests to a specified URL.
+    It handles both GET and POST requests and takes the 'url' parameter, which is the URL to be proxied.
+
+    Args:
+        url (str): The URL to be proxied.
+
+    Returns:
+        Response | typing.NoReturn: The response object or None.
+
+    Example usage:
+    - A GET or POST request to '/proxy_route/some_url' will proxy the request to 'some_url' and return the response.
+    Examples: /proxy_route/cdn4.telegram.net/path/file.ext or /proxy_route/t.me/api_endpoint
+    """
+
+    return Proxy(url).make_request()
+
+
+@app.route('/<path:channel>/<int:post>', methods=['GET', 'POST'])
+@app.route('/<path:channel>', methods=['GET', 'POST'])
 @limiter.limit("15 per minute")
-def index(post: int | None = None) -> Response | typing.NoReturn:
+def index(channel: str, post: int | None = None) -> Response | typing.NoReturn:
     """
     Proxy requests to an external channel feed.
 
@@ -109,6 +132,7 @@ def index(post: int | None = None) -> Response | typing.NoReturn:
     It can handle both GET and POST requests to the root route ('/') and routes with an integer 'post'
     parameter.
 
+    :param channel: Channel username.
     :param post: An optional integer representing the post-ID.
     If provided, the function will proxy to a specific post.
                  If not provided (defaulting to None), the function will proxy to the channel's root feed.
@@ -120,14 +144,17 @@ def index(post: int | None = None) -> Response | typing.NoReturn:
     :raises: RateLimitExceeded if the rate limit imposed by the 'limiter.limit' decorator is exceeded.
 
     This function is decorated with the following route patterns:
-    - '/' for handling both GET and POST requests to the root route.
-    - '/<int:post>' for handling both GET and POST requests with an integer 'post' parameter.
+    - '/<str:channel>' for handling both GET and POST requests to the root route.
+    - '/<str:channel>/<int:post>' for handling both GET and POST requests with an integer 'post' parameter.
 
     It is also rate-limited to allow only 15 requests per minute using the 'limiter.limit' decorator.
 
     Example usage:
-    - A GET or POST request to '/' will proxy the channel's root feed.
-    - A GET or POST request to '/123' will proxy to the specific post with ID 123.
+    - A GET or POST request to '/durov' will proxy the channel's root feed.
+    - A GET or POST request to '/durov/123' will proxy to the specific post with ID 123.
     """
 
-    return Proxy(f"t.me/s/{app.config['CHANNEL_NAME']}/{post if post else ''}", internal_call=True).make_request()
+    # set global flask var
+    g.channel_name = channel
+
+    return Proxy(f"t.me/s/{channel}/{post if post else ''}", internal_call=True).make_request()

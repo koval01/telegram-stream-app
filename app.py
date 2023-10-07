@@ -26,7 +26,7 @@ sentry_sdk.init(
 
 app = Flask(__name__)
 app.config['LOG_REQUEST_ID_LOG_ALL_REQUESTS'] = True
-app.config['CHANNEL_NAME'] = 'telelug'
+app.config['PROXY_PATH'] = 'route'
 
 app.logger.setLevel(logging.INFO)
 
