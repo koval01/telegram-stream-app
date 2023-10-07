@@ -1,13 +1,14 @@
 
-|   🗺 Routes 🗺    |                   🚧 Usage 🚧                    | 🍕 Method 🍕 |
-|:-----------------:|:------------------------------------------------:|:------------:|
-|        `/`        |                    Home page.                    |  GET, POST   |
-|   `/<int:post>`   |              For select post by ID.              |  GET, POST   |
-|       `/v`        |            For send view to Telegram.            |     POST     |
-| `/i/<path:path>`  |                 Proxy t.me/i/...                 |     GET      |
-| `/js/<path:path>` |                Proxy t.me/js/...                 |     GET      |
-|  `/favicon.ico`   |            Redirect to local static.             |     GET      |
-|   `/<path:url>`   | Proxy other source (example /host.net/path/...). |  GET, POST   |
+|            🗺 Routes 🗺          |                           🚧 Usage 🚧                         | 🍕 Method 🍕 |
+|:--------------------------------:|:------------------------------------------------------------:|:------------:|
+|               `/`                |                           Home page.                         |     GET      |
+|        `/{channel_name}`         |                         Channel view.                        |  GET, POST   |
+|   `/{channel_name}/<int:post>`   |                    For select post by ID.                    |  GET, POST   |
+|              `/v`                |                  For send view to Telegram.                  |     POST     |
+|        `/i/<path:path>`          |                         Proxy t.me/i/...                     |     GET      |
+|        `/js/<path:path>`         |                         Proxy t.me/js/...                    |     GET      |
+|         `/favicon.ico`           |                   Redirect to local static.                  |     GET      |
+|   `/{proxy_route}/<path:url>`    | Proxy other source (example /proxy_route/host.net/path/...). |  GET, POST   |
 
 ---
 
