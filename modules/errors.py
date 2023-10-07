@@ -54,6 +54,7 @@ def handle_exception(e: HTTPException) -> Response | tuple[render_template, int]
         "code": e.code,
         "name": e.name,
         "description": e.description,
+        "app_request_id": e.current_request_id
     })
 
     # Set the content type of the response to JSON
