@@ -1,17 +1,20 @@
 {
-   "name":"Luga View App",
-   "description":"Web application for viewing Lugansky blogger's news",
-   "keywords":[
+   "name": "Telegram Stream App",
+   "description": "Lightweight and improved web application for viewing streams in Telegram channels",
+   "keywords": [
       "Flask",
       "API",
-      "Python3"
+      "Python3",
+      "Telegram",
+      "News",
+      "Stream"
    ],
-   "website":"https://koval.page/",
-   "repository":"https://github.com/koval01/luga",
-   "formation":{
-      "web":{
-         "quantity":1,
-         "size":"free"
+   "website": "https://koval.page/",
+   "repository": "https://github.com/koval01/telegram-stream-app",
+   "formation": {
+      "web": {
+         "quantity": 1,
+         "size": "free"
       }
    }
 }

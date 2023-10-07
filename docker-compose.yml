@@ -3,7 +3,7 @@ version: '3.8'
 services:
     web:
         build: ./
-        command: gunicorn -w 5 -b 0.0.0.0:3000 -k eventlet -n lugaapp app:app
+        command: gunicorn -w 5 -b 0.0.0.0:3000 -k eventlet -n telegramstreamapp app:app
         volumes:
             - ./:/usr/src/app/
         ports:
