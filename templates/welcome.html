@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Stream</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            display: block;
+        }
+        #channelInput {
+            margin: 20px;
+        }
+        #generateButton {
+            padding: 10px 20px;
+            background-color: #229ed9;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            margin-top: 1em;
+            cursor: pointer;
+        }
+        #channelLink {
+            margin: 20px;
+            background: #707070;
+            color: #fff;
+            padding: 8px;
+            border-radius: 6px;
+            max-width: 400px;
+            margin: auto;
+            margin-bottom: 1em;
+            display: none
+        }
+        input {
+            padding: 3px;
+            border: none;
+            box-shadow: 0 0 1px 0 #000;
+            border-radius: 6px;
+            margin-left: .5em;
+        }
+        div {
+            margin-top: .5em;
+        }
+        a {
+            color: #fff
+        }
+        #copyButton {
+            padding: 5px 10px;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Telegram Stream</h1>
+    <p>Enter the channel name and post ID (optional) below:</p>
+    <div id="channelInput">
+        <div>
+            <label for="channelName">Channel Name:</label>
+            <input type="text" id="channelName" placeholder="durov">
+        </div>
+        <div>
+            <label for="postID">Post ID (optional):</label>
+            <input type="text" id="postID" placeholder="150">
+        </div>
+        <br>
+        <button id="generateButton">Generate Link</button>
+    </div>
+    <div id="channelLink"></div>
+    <button id="copyButton">Copy Link</button>
+
+    <script>
+        const generateLink = () => {
+            const channelName = document.getElementById("channelName").value;
+            const postID = document.getElementById("postID").value;
+            let link = `${window.location.href}${channelName}`;
+            if (postID) {
+                link += `/${postID}`;
+            }
+            const channelLink = document.getElementById("channelLink");
+            channelLink.innerHTML = `Your Channel Link: <a href="${link}">${link.split("//")[1]}</a>`;
+            channelLink.style.display = "block";
+
+            // Store the generated link in a global variable for copying.
+            window.generatedLink = link;
+        };
+
+        document.getElementById("generateButton").addEventListener("click", generateLink);
+
+        document.getElementById("copyButton").addEventListener("click", () => {
+            const tempInput = document.createElement("input");
+            tempInput.value = window.generatedLink;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+            alert("Link copied to clipboard!");
+        });
+    </script>
+</body>
+</html>
