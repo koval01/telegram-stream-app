@@ -13,14 +13,16 @@
         #channelInput {
             margin: 20px;
         }
-        #generateButton {
+        .primary-button {
             padding: 10px 20px;
             background-color: #229ed9;
             color: #fff;
             border: none;
             border-radius: 10px;
             margin-top: 1em;
+            margin-right: .4em;
             cursor: pointer;
+            font-weight: bold;
         }
         #channelLink {
             margin: 20px;
@@ -34,11 +36,12 @@
             display: none
         }
         input {
-            padding: 3px;
+            padding: 4px;
             border: none;
             box-shadow: 0 0 1px 0 #000;
             border-radius: 6px;
             margin-left: .5em;
+            font-size: 18px;
         }
         div {
             margin-top: .5em;
@@ -47,12 +50,20 @@
             color: #fff
         }
         #copyButton {
-            padding: 5px 10px;
+            padding: 8px 12px;
             background-color: #4caf50;
             color: #fff;
             border: none;
             border-radius: 6px;
             cursor: pointer;
+            font-weight: bold;
+        }
+        #channelName {
+            margin-left: 0;
+            padding-left: 0;
+        }
+        #postID {
+            width: 80px;
         }
     </style>
 </head>
@@ -61,7 +72,7 @@
     <p>Enter the channel name and post ID (optional) below:</p>
     <div id="channelInput">
         <div>
-            <label for="channelName">Channel Name:</label>
+            <label for="channelName" id="channelNameLabel">Channel Name:</label>
             <input type="text" id="channelName" placeholder="durov">
         </div>
         <div>
@@ -69,28 +80,37 @@
             <input type="text" id="postID" placeholder="150">
         </div>
         <br>
-        <button id="generateButton">Generate Link</button>
+        <button class="primary-button" id="generateButton">Generate Link</button>
+        <button class="primary-button" id="goToButton">Go to Link</button>
     </div>
     <div id="channelLink"></div>
     <button id="copyButton">Copy Link</button>
 
     <script>
-        const generateLink = () => {
+        const generateLink = (redirect_call=false) => {
             const channelName = document.getElementById("channelName").value;
             const postID = document.getElementById("postID").value;
             let link = `${window.location.href}${channelName}`;
             if (postID) {
                 link += `/${postID}`;
             }
-            const channelLink = document.getElementById("channelLink");
-            channelLink.innerHTML = `Your Channel Link: <a href="${link}">${link.split("//")[1]}</a>`;
-            channelLink.style.display = "block";
+
+            if (!redirect_call) {
+                const channelLink = document.getElementById("channelLink");
+                channelLink.innerHTML = `Your Channel Link: <a href="${link}">${link.split("//")[1]}</a>`;
+                channelLink.style.display = "block";
+            } else {
+                window.location.replace(link)
+            }
 
             // Store the generated link in a global variable for copying.
             window.generatedLink = link;
         };
 
-        document.getElementById("generateButton").addEventListener("click", generateLink);
+        document.getElementById("generateButton").addEventListener("click", function(){generateLink()});
+        document.getElementById("goToButton").addEventListener("click", function(){generateLink(redirect_call=true)});
+
+        document.getElementById("channelNameLabel").innerText = window.location.href.split("//")[1];
 
         document.getElementById("copyButton").addEventListener("click", () => {
             const tempInput = document.createElement("input");
