@@ -1,1 +1,1 @@
-web: gunicorn -w 5 -k eventlet -n lugaapp app:app
+web: gunicorn -w 5 -k eventlet -n telegramviewapp app:app
