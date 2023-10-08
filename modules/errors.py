@@ -53,7 +53,7 @@ def handle_exception(e: HTTPException) -> Response | tuple[render_template, int]
     response.data = json.dumps({
         "code": e.code,
         "name": e.name,
-        "description": e.description,
+        "description": e.description if e.description != "hidden" else None,
         "app_request_id": e.current_request_id
     })
 

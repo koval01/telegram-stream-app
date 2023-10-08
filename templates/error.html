@@ -197,6 +197,7 @@
     </div>
 </div>
 <footer>
+    <code style="display: {% if e.description %} block {% else %} none {% endif %}">Description: {{ e.description|safe }}</code>
     <code>App Request ID: {{ e.current_request_id }}</code>
     <small class="no-select">Developed by <a href="https://github.koval.page/" target="_blank">Koval</a></small>
 </footer>
