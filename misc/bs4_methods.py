@@ -52,6 +52,9 @@ class Bs4Updater:
 
     def _replace_links(self) -> None:
         for a_tag in self.soup.find_all('a', href=True):
+            if a_tag['rel'] in ("canonical", "prev",):
+                return
+
             # Replace the href attribute with a new link
             a_tag['href'] = a_tag['href'].replace(f"https://t.me/{self.channel_name}/", "/")
 
