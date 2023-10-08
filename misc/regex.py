@@ -117,7 +117,7 @@ class MiscRegex:
         cls.replace_style_urls(soup, proxy_url)
 
         output = str(soup)
-        output = output.replace("/".join([s for s in f'/s/{g.channel_name}'.split('/') if s]), g.channel_name)
+        output = output.replace("/"+"/".join([s for s in f'/s/{g.channel_name}'.split('/') if s]), g.channel_name)
 
         if cls._should_json():
             output = cls._clean_html_for_json(output)
