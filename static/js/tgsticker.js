@@ -102,7 +102,6 @@ let RLottie = (function () {
         } else {
             callback && initCallbacks.push(callback);
             if (!apiInitStarted) {
-                console.log(dT(), 'tgsticker init');
                 apiInitStarted = true;
                 QueryableWorkerProxy.init('/js/tgsticker-worker.js', rlottie.WORKERS_LIMIT, function () {
                     apiInited = true;
@@ -585,24 +584,20 @@ let QueryableWorkerProxy = (function () {
         let workersRemain = workers_limit;
         let firstWorker = rlottieWorkers[0] = new QueryableWorker(worker_url);
         firstWorker.addListener('ready', function () {
-            console.log(dT(), 'worker #0 ready');
             firstWorker.addListener('frame', onFrame);
             firstWorker.addListener('loaded', onLoaded);
             --workersRemain;
             if (!workersRemain) {
-                console.log(dT(), 'workers ready');
                 callback && callback();
             } else {
                 for (let workerNum = 1; workerNum < workers_limit; workerNum++) {
                     (function (workerNum) {
                         let rlottieWorker = rlottieWorkers[workerNum] = new QueryableWorker(worker_url);
                         rlottieWorker.addListener('ready', function () {
-                            console.log(dT(), 'worker #' + workerNum + ' ready');
                             rlottieWorker.addListener('frame', onFrame);
                             rlottieWorker.addListener('loaded', onLoaded);
                             --workersRemain;
                             if (!workersRemain) {
-                                console.log(dT(), 'workers ready');
                                 callback && callback();
                             }
                         });
@@ -617,9 +612,7 @@ let QueryableWorkerProxy = (function () {
     workerproxy.destroy = function () {
         for (let workerNum = 0; workerNum < rlottieWorkers.length; workerNum++) {
             rlottieWorkers[workerNum].terminate();
-            console.log('worker #' + workerNum + ' terminated');
         }
-        console.log('workers destroyed');
         rlottieWorkers = [];
     };
     return workerproxy;

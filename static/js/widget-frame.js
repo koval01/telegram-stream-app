@@ -793,7 +793,6 @@ function xhrRequest(href, postdata, onCallback, retry_delay) {
                     return;
                 }
                 if (result.error && result.flood_wait) {
-                    console.log('flood_wait', result.flood_wait);
                     setTimeout(function () {
                         xhrRequest(href, postdata, onCallback);
                     }, result.flood_wait * 1000);
@@ -865,7 +864,6 @@ function xhrUploadRequest(href, params, onCallback, onProgress) {
                     let result = {};
                 }
                 if (result.error && result.flood_wait) {
-                    console.log('flood_wait', result.flood_wait);
                     setTimeout(function () {
                         xhrUploadRequest(href, params, onCallback, onProgress);
                     }, result.flood_wait * 1000);
