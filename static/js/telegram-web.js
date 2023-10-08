@@ -278,7 +278,6 @@ let TWeb = {
 
     let time0 = +(new Date);
     let _load = function(url, before, after) {
-      console.log(url);
       $.ajax(url, {
         type: 'POST',
         dataType: 'json',
