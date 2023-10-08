@@ -51,7 +51,7 @@ class Bs4Updater:
                 tag['content'] = tag['content'].replace('\n', ' ')
 
     def _replace_links(self) -> None:
-        for a_tag in self.soup.find_all('a', href=True):
+        for a_tag in self.soup.find_all('a', href=True, rel=True):
             if a_tag['rel'] in ("canonical", "prev",):
                 return
 
