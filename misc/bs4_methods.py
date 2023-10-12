@@ -53,7 +53,7 @@ class Bs4Updater:
     def _replace_links(self) -> None:
         for a_tag in self.soup.find_all('a', href=True):
             # Replace the href attribute with a new link
-            a_tag['href'] = a_tag['href'].replace(f"https://t.me/{self.channel_name}/", "/")
+            a_tag['href'] = a_tag['href'].replace(f"https://t.me/{self.channel_name}", f"/{self.channel_name}")
 
     def remove_by_cls(self, cls_list: list) -> str:
         """
