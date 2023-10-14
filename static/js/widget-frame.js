@@ -1761,7 +1761,7 @@ function checkFrameSize() {
             }
 
             function fixControls() {
-                if (!videoEl.controls) videoEl.controls = true;
+                if (!videoEl.controls) videoEl.controls = false;
             }
 
             let MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
