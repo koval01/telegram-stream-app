@@ -6,18 +6,17 @@ from app import app, limiter
 from misc.proxy import Proxy
 
 
-
 @app.route("/", methods=["GET"])
 def welcome() -> Response:
     """
     Handle GET requests to the root ("/") route.
     """
-    
+
     return render_template("welcome.html")
 
 
 @app.route("/healthz", methods=["GET", "HEAD"])
-def healthz() -> str:
+def healthz() -> tuple[str, int]:
     """
     Endpoint for health checks (healthz).
 
@@ -28,7 +27,7 @@ def healthz() -> str:
         health checks.
     """
 
-    return ""
+    return "", 204
 
 
 @app.route('/favicon.ico', methods=['GET'])
